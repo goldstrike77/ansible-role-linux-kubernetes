@@ -1,0 +1,10 @@
+---
+kube_kernel_parameters:
+  - { variable: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+
+kube_registry_server: 'gcr.azk8s.cn/google_containers'
+#kube_registry_server: 'registry.aliyuncs.com/google_containers'
+
+kube_pod_network_manifest:
+  calico:
+    - 'http://docs.projectcalico.org/v{{ kube_pod_network_version }}/manifests/calico.yaml'

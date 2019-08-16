@@ -1,0 +1,31 @@
+---
+- name: Include OS-specific variables
+  include_vars: '{{ ansible_os_family }}.yml'
+
+- name: Add Kubernetes YUM repositories
+  yum_repository:
+    name: '{{ kube_repo_name }}'
+    description: '{{ kube_repo_name }} YUM repository'
+    file: '{{ kube_repo_name }}'
+    baseurl: '{{ kube_repo_url }}'
+    gpgcheck: 'no'
+    timeout: '60'
+
+- name: Install the Kubernetes packages
+  yum:
+    name: 'kubernetes-cni,kubeadm-{{ kube_version }}-0,kubelet-{{ kube_version }}-0,kubectl-{{ kube_version }}-0'
+    state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
+  register: soft_update
+  until: soft_update is succeeded
+  retries: 3
+  delay: 5
+
+- name: Enable kubernetes service
+  systemd:
+    name: 'kubelet.service'
+    enabled: 'yes'
+    state: 'restarted'
+    daemon_reload: 'yes'
+  when: soft_update is changed

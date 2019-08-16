@@ -1,0 +1,25 @@
+---
+kubernetes_is_install: false
+kube_version: '1.15.2'
+kube_pod_network_solution: 'calico'
+kube_pod_network_version: '3.8'
+kube_pod_network_cidr: '10.244.0.0/16'
+kube_node_role: 'node'
+kube_cgroup_driver: 'systemd'
+
+# Role dependencies #
+kube_docker_dept: false
+
+# Docker parameters #
+kube_docker_version: '18.09.8'
+kube_docker_edition: 'ce'
+kube_docker_channel: 'stable'
+
+# Listen port #
+kube_port_arg:
+  etcd: '2379-2380' # etcd server client API.
+  cadvisor: '4149' # cAdvisor port used to query container metrics.
+  api_server: '6443' # Kubernetes API Server.
+  calico: '9099' # Health check server for Calico (if using Calico/Canal).
+  kube: '10250-10256' # All of kubelet services.
+  node: '30000-32767' # Default range for external service ports.

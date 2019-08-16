@@ -1,0 +1,9 @@
+---
+- name: Allow Kubernetes service port
+  firewalld:
+    port: '{{ item.value }}/tcp'
+    zone: 'public'
+    permanent: 'true'
+    immediate: 'true'
+    state: 'enabled'
+  loop: '{{ kube_port_arg|dict2items }}'

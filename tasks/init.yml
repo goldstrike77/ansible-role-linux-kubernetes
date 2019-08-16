@@ -1,0 +1,33 @@
+---
+- name: Check if Kubernetes has already been initialized
+  stat:
+    path: '/etc/kubernetes/admin.conf'
+  register: kube_init_stat
+
+- name: Initialize Kubernetes master
+  command: >
+    kubeadm init
+    --image-repository {{ kube_registry_server }}
+    --pod-network-cidr={{ kube_pod_network_cidr }}
+    --apiserver-advertise-address={{ ansible_default_ipv4.address }}
+    --kubernetes-version v{{ kube_version }}
+  register: kube_adm_init_status
+  failed_when: false
+  when: not kube_init_stat.stat.exists
+
+- name: Ensure .kube directory exists
+  file:
+    path: '{{ ansible_env.PWD }}/.kube'
+    state: 'directory'
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
+    mode: '0755'
+
+- name: Symlink the kubectl admin.conf
+  copy:
+    src: '/etc/kubernetes/admin.conf'
+    dest: '{{ ansible_env.PWD }}/.kube/config'
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
+    mode: '0644'
+    remote_src: 'yes'

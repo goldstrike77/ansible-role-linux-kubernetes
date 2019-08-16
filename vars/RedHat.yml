@@ -1,0 +1,3 @@
+---
+kube_repo_name: 'kubernetes'
+kube_repo_url: 'https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el{{ansible_distribution_version.split(".")[0]}}-{{ ansible_architecture }}/'

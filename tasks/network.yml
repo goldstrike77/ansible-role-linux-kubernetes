@@ -1,0 +1,23 @@
+---
+- name: 'Download the {{ kube_pod_network_solution }} networking manifest for the Kubernetes API datastore'
+  get_url:
+    url: '{{ item }}'
+    dest: '/tmp/network_{{ kube_pod_network_solution }}_{{ index }}.yaml'
+    timeout: '60'
+    mode: '0777'
+  loop: '{{ kube_pod_network_manifest[kube_pod_network_solution] }}'
+  loop_control:
+    index_var: index
+  register: download_manifest_status
+  until: download_manifest_status is succeeded
+  retries: 5
+  delay: 3
+
+- name: Set pod CIDR environment variable
+  replace:
+    path: '/tmp/network_{{ kube_pod_network_solution }}_{{ index }}.yaml'
+    regexp: '^192'
+    replace: '{{ kube_pod_network_cidr }}'
+  loop: '{{ kube_pod_network_manifest[kube_pod_network_solution] }}'
+  loop_control:
+    index_var: index
