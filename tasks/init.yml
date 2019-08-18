@@ -1,9 +1,4 @@
 ---
-- name: Check if Kubernetes has already been initialized
-  stat:
-    path: '/etc/kubernetes/admin.conf'
-  register: kube_init_stat
-
 - name: Initialize Kubernetes master
   command: >
     kubeadm init

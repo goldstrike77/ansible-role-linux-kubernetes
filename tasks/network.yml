@@ -4,6 +4,7 @@
     url: '{{ item }}'
     dest: '/tmp/network_{{ kube_pod_network_solution }}_{{ index }}.yaml'
     timeout: '60'
+    force: 'yes'
     mode: '0777'
   loop: '{{ kube_pod_network_manifest[kube_pod_network_solution] }}'
   loop_control:
@@ -16,7 +17,7 @@
 - name: Set pod CIDR environment variable
   replace:
     path: '/tmp/network_{{ kube_pod_network_solution }}_{{ index }}.yaml'
-    regexp: '^192'
+    regexp: '192.168.0.0/16'
     replace: '{{ kube_pod_network_cidr }}'
   loop: '{{ kube_pod_network_manifest[kube_pod_network_solution] }}'
   loop_control:

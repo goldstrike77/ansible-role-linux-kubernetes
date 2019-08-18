@@ -1,42 +1,42 @@
 ---
-- name: Remove swapfile from /etc/fstab
-  mount:
-    name: 'swap'
-    fstype: 'swap'
-    state: 'absent'
+- name: Check if Kubernetes has already been initialized
+  stat:
+    path: '/etc/kubernetes/admin.conf'
+  register: kube_init_stat
 
-- name: Disable swap
-  command: 'swapoff -a'
-  when: ansible_swaptotal_mb > 0
-
-- name: Add the 802.1q module
-  modprobe:
-    name: 'br_netfilter'
-    state: 'present'
-
-- name: Set Netfilter bridge
-  sysctl:
-    name: '{{ item.variable }}'
-    value: '{{ item.value }}'
-    state: 'present'
-    reload: 'yes'
-    sysctl_set: 'yes'
-    sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
-  loop: '{{ kube_kernel_parameters }}'
-
-- name: Configure the Kubernetes firewall
-  include: 'firewall.yml'
-
-- name: Include tasks for specific OS
-  include: '{{ ansible_os_family }}.yml'
-
-- name: Include images pull tasks
-  include: 'images.yml'
-
-- name: Include Master operation
-  include: 'init.yml'
-  when: kube_node_role == 'master'
-
-- name: Include Networking operation
-  include: 'network.yml'
-  when: kube_node_role == 'master'
+- name: Kubernetes operations
+  block:
+    - name: Remove swapfile from /etc/fstab
+      mount:
+        name: 'swap'
+        fstype: 'swap'
+        state: 'absent'
+    - name: Disable swap
+      command: 'swapoff -a'
+      when: ansible_swaptotal_mb > 0
+    - name: Add the 802.1q module
+      modprobe:
+        name: 'br_netfilter'
+        state: 'present'
+    - name: Set Netfilter bridge
+      sysctl:
+        name: '{{ item.variable }}'
+        value: '{{ item.value }}'
+        state: 'present'
+        reload: 'yes'
+        sysctl_set: 'yes'
+        sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
+      loop: '{{ kube_kernel_parameters }}'
+    - name: Configure the Kubernetes firewall
+      include: 'firewall.yml'
+    - name: Include tasks for specific OS
+      include: '{{ ansible_os_family }}.yml'
+    - name: Include images pull tasks
+      include: 'images.yml'
+    - name: Include Master operation
+      include: 'init.yml'
+      when: kube_node_role == 'master'
+    - name: Include Networking operation
+      include: 'network.yml'
+      when: kube_node_role == 'master'
+  when: not kube_init_stat.stat.exists
