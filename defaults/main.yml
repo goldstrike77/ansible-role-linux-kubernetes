@@ -3,7 +3,8 @@ kubernetes_is_install: false
 kube_version: '1.15.2'
 kube_pod_network_solution: 'calico'
 kube_pod_network_version: '3.8'
-kube_pod_network_cidr: '10.244.0.0/16'
+kube_pod_network_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
+kube_srv_network_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 
