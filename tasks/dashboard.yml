@@ -1,0 +1,54 @@
+---
+- name: Remove the Dashboard previous version by namespace delete
+  command: 'kubectl delete ns kubernetes-dashboard'
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+  changed_when: false
+  failed_when: false
+
+- name: Enable the Kubernetes Web Dashboard
+  command: 'kubectl apply -f "https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml"'
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+
+- name: Create Admin Service Account
+  k8s:
+    state: 'present'
+    kubeconfig: '/etc/kubernetes/admin.conf'
+    definition:
+      apiVersion: v1
+      kind: ServiceAccount
+      metadata:
+        name: kubernetes-dashboard-admin
+        namespace: kubernetes-dashboard
+        labels:
+          k8s-app: kubernetes-dashboard
+
+- name: Create ClusterRoleBinding
+  k8s:
+    state: 'present'
+    kubeconfig: '/etc/kubernetes/admin.conf'
+    definition:
+      apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: kubernetes-dashboard-admin
+        namespace: kubernetes-dashboard
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: cluster-admin
+      subjects:
+      - kind: ServiceAccount
+        name: kubernetes-dashboard-admin
+        namespace: kubernetes-dashboard
+
+- name: Get access token
+  shell: "kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard-admin | awk '{print $1}') | grep 'token:' | sed 's/.*://' | sed 's/^[ \t]*//g'"
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+  register: kube_dashboard_token
+
+- name: Access token display
+  debug:
+    var: kube_dashboard_token.stdout_lines

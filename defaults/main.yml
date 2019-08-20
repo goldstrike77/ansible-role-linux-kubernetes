@@ -8,6 +8,9 @@ kube_srv_network_cidr: '10.96.0.0/12' # Use alternative range of IP address for 
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 
+# Dashboard parameters #
+kube_dashboard_install: true
+
 # Role dependencies #
 kube_docker_dept: false
 
@@ -21,6 +24,7 @@ kube_port_arg:
   etcd: '2379-2380' # etcd server client API.
   cadvisor: '4149' # cAdvisor port used to query container metrics.
   api_server: '6443' # Kubernetes API Server.
+  dashboard: '8001' # Kubernetes Dashboard Web UI.
   calico: '9099' # Health check server for Calico (if using Calico/Canal).
   kube: '10250-10256' # All of kubelet services.
   node: '30000-32767' # Default range for external service ports.

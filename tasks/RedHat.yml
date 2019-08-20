@@ -11,7 +11,18 @@
     gpgcheck: 'no'
     timeout: '60'
 
-- name: Install the Kubernetes master packages
+- name: Install the Kubernetes dependent packages
+  yum:
+    name: 'python-openshift'
+    state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
+  register: soft_update
+  until: soft_update is succeeded
+  retries: 3
+  delay: 5
+
+- name: Install the Kubernetes packages
   yum:
     name: 'kubernetes-cni,kubeadm-{{ kube_version }}-0,kubelet-{{ kube_version }}-0,kubectl-{{ kube_version }}-0'
     state: 'present'
@@ -21,19 +32,6 @@
   until: soft_update is succeeded
   retries: 3
   delay: 5
-  when: kube_node_role == 'master'
-
-- name: Install the Kubernetes node packages
-  yum:
-    name: 'kubernetes-cni,kubectl-{{ kube_version }}-0'
-    state: 'present'
-    validate_certs: 'no'
-    disable_gpg_check: 'yes'
-  register: soft_update
-  until: soft_update is succeeded
-  retries: 3
-  delay: 5
-  when: kube_node_role == 'node'
 
 - name: Enable kubernetes service
   systemd:

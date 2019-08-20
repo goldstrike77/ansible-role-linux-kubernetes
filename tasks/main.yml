@@ -39,4 +39,9 @@
     - name: Include Networking operation
       include: 'network.yml'
       when: kube_node_role == 'master'
+    - name: Include Dashboard operation
+      include: 'dashboard.yml'
+      when:
+        - kube_dashboard_install | bool
+        - kube_node_role == 'master'
   when: not kube_init_stat.stat.exists

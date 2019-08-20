@@ -22,3 +22,19 @@
   loop: '{{ kube_pod_network_manifest[kube_pod_network_solution] }}'
   loop_control:
     index_var: index
+
+- name: 'Apply the {{ kube_pod_network_solution }} networking manifest'
+  command: 'kubectl apply -f "/tmp/network_{{ kube_pod_network_solution }}_{{ index }}.yaml"'
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+  loop: '{{ kube_pod_network_manifest[kube_pod_network_solution] }}'
+  loop_control:
+    index_var: index
+
+- name: 'Delete the {{ kube_pod_network_solution }} networking manifest'
+  file:
+    path: '/tmp/network_{{ kube_pod_network_solution }}_{{ index }}.yaml'
+    state: 'absent'
+  loop: '{{ kube_pod_network_manifest[kube_pod_network_solution] }}'
+  loop_control:
+    index_var: index
