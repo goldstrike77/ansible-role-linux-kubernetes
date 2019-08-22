@@ -5,6 +5,15 @@ kube_kernel_parameters:
 kube_registry_server: 'gcr.azk8s.cn/google_containers'
 #kube_registry_server: 'registry.aliyuncs.com/google_containers'
 
-kube_pod_network_manifest:
+kube_cni_plugins:
   calico:
-    - 'http://docs.projectcalico.org/v{{ kube_pod_network_version }}/manifests/calico.yaml'
+    cidr: '192.168.0.0/16'
+    manifests:
+      - 'http://docs.projectcalico.org/v{{ kube_network.version }}/manifests/calico.yaml'
+  flannel:
+    cidr: '10.244.0.0/16'
+    manifests:
+      - 'http://raw.githubusercontent.com/coreos/flannel/v{{ kube_network.version }}/Documentation/kube-flannel.yml'
+  kube-router:
+    manifests:
+      - 'http://raw.githubusercontent.com/cloudnativelabs/kube-router/v{{ kube_network.version }}/daemonset/kubeadm-kuberouter.yaml'

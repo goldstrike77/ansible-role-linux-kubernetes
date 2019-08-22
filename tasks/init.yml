@@ -3,8 +3,8 @@
   command: >
     kubeadm init
     --image-repository {{ kube_registry_server | default('gcr.azk8s.cn/google_containers') }}
-    --pod-network-cidr={{ kube_pod_network_cidr | default('10.244.0.0/16') }}
-    --service-cidr={{ kube_srv_network_cidr | default('10.96.0.0/12') }}
+    --pod-network-cidr={{ kube_network.pod_cidr | default('10.244.0.0/16') }}
+    --service-cidr={{ kube_network.srv_cidr | default('10.96.0.0/12') }}
     --apiserver-advertise-address={{ ansible_default_ipv4.address }}
     --kubernetes-version v{{ kube_version | default('1.15.2') }}
     --ignore-preflight-errors=Swap

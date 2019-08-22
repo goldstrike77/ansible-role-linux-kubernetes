@@ -52,6 +52,12 @@
     - kube_node_role == 'master'
     - not kube_init_stat.stat.exists | bool
 
+- name: Create bootstrap token from the master
+  command: 'kubeadm token create'
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+  when: kube_node_role == 'master'
+
 - name: Get the kubeadm join command from the master
   command: 'kubeadm token create --print-join-command'
   environment:
