@@ -9,7 +9,6 @@
     --kubernetes-version v{{ kube_version | default('1.15.2') }}
     --ignore-preflight-errors=Swap
     --ignore-preflight-errors=NumCPU
-  register: kube_adm_init_status
   failed_when: false
   when: not kube_init_stat.stat.exists
 

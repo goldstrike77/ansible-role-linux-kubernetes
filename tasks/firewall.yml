@@ -1,4 +1,8 @@
 ---
+- name: Gathering service facts
+  service_facts:
+  register: services_state
+
 - name: Allow Kubernetes service port
   firewalld:
     port: '{{ item.value }}/tcp'
@@ -6,4 +10,5 @@
     permanent: 'true'
     immediate: 'true'
     state: 'enabled'
-  loop: '{{ kube_port_arg|dict2items }}'
+  loop: '{{ kube_port_arg | dict2items }}'
+  when: services_state.ansible_facts.services["firewalld.service"].state == 'running'

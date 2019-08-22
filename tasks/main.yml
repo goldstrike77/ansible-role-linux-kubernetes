@@ -1,47 +1,81 @@
 ---
-- name: Check if Kubernetes has already been initialized
+- name: Remove swapfile from /etc/fstab
+  mount:
+    name: 'swap'
+    fstype: 'swap'
+    state: 'absent'
+
+- name: Disable swap
+  command: 'swapoff -a'
+  when: ansible_swaptotal_mb > 0
+
+- name: Add the 802.1q module
+  modprobe:
+    name: 'br_netfilter'
+    state: 'present'
+
+- name: Set Netfilter bridge
+  sysctl:
+    name: '{{ item.variable }}'
+    value: '{{ item.value }}'
+    state: 'present'
+    reload: 'yes'
+    sysctl_set: 'yes'
+    sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
+  loop: '{{ kube_kernel_parameters }}'
+
+- name: Include firewall tasks
+  include: 'firewall.yml'
+
+- name: Include tasks for specific OS
+  include: '{{ ansible_os_family }}.yml'
+
+- name: Include images pull tasks
+  include: 'images.yml'
+
+- name: Check if master has already been initialized
   stat:
     path: '/etc/kubernetes/admin.conf'
   register: kube_init_stat
+  when: kube_node_role == 'master'
 
-- name: Kubernetes operations
+- name: Kubernetes master operations
   block:
-    - name: Remove swapfile from /etc/fstab
-      mount:
-        name: 'swap'
-        fstype: 'swap'
-        state: 'absent'
-    - name: Disable swap
-      command: 'swapoff -a'
-      when: ansible_swaptotal_mb > 0
-    - name: Add the 802.1q module
-      modprobe:
-        name: 'br_netfilter'
-        state: 'present'
-    - name: Set Netfilter bridge
-      sysctl:
-        name: '{{ item.variable }}'
-        value: '{{ item.value }}'
-        state: 'present'
-        reload: 'yes'
-        sysctl_set: 'yes'
-        sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
-      loop: '{{ kube_kernel_parameters }}'
-    - name: Configure the Kubernetes firewall
-      include: 'firewall.yml'
-    - name: Include tasks for specific OS
-      include: '{{ ansible_os_family }}.yml'
-    - name: Include images pull tasks
-      include: 'images.yml'
-    - name: Include Master operation
+    - name: Initialize Kubernetes
       include: 'init.yml'
-      when: kube_node_role == 'master'
     - name: Include Networking operation
       include: 'network.yml'
-      when: kube_node_role == 'master'
     - name: Include Dashboard operation
       include: 'dashboard.yml'
-      when:
-        - kube_dashboard_install | bool
-        - kube_node_role == 'master'
-  when: not kube_init_stat.stat.exists
+      when: kube_dashboard_install | bool
+  when:
+    - kube_node_role == 'master'
+    - not kube_init_stat.stat.exists | bool
+
+- name: Get the kubeadm join command from the master
+  command: 'kubeadm token create --print-join-command'
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+  changed_when: false
+  when: kube_node_role == 'master'
+  register: kuber_join_command_result
+
+- name: Set the kubeadm join command
+  set_fact:
+    kube_join_command: "{{ kuber_join_command_result.stdout }}"
+  when: kuber_join_command_result.stdout is defined
+  delegate_to: '{{ item }}'
+  delegate_facts: true
+  loop: '{{ groups[group_names[-1]] }}'
+
+- name: Check if node has already been joined
+  stat:
+    path: '/etc/kubernetes/kubelet.conf'
+  register: kube_join_stat
+  when: kube_node_role == 'node'
+
+- name: Include Node operation
+  include: 'node.yml'
+  when:
+    - kube_node_role == 'node'
+    - not kube_join_stat.stat.exists | bool
