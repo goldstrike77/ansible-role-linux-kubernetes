@@ -9,10 +9,11 @@
   command: 'swapoff -a'
   when: ansible_swaptotal_mb > 0
 
-- name: Add the 802.1q module
+- name: Installs necessary runtime module
   modprobe:
-    name: 'br_netfilter'
+    name: '{{ item }}'
     state: 'present'
+  loop: '{{ kube_module_dependent }}'
 
 - name: Set Netfilter bridge
   sysctl:

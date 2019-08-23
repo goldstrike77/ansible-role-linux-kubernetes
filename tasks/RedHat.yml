@@ -17,8 +17,8 @@
     state: 'present'
     validate_certs: 'no'
     disable_gpg_check: 'yes'
-  register: soft_update
-  until: soft_update is succeeded
+  register: kube_soft_update
+  until: kube_soft_update is succeeded
   retries: 3
   delay: 5
 
@@ -28,8 +28,8 @@
     state: 'present'
     validate_certs: 'no'
     disable_gpg_check: 'yes'
-  register: soft_update
-  until: soft_update is succeeded
+  register: kube_soft_update
+  until: kube_soft_update is succeeded
   retries: 3
   delay: 5
 
@@ -39,4 +39,4 @@
     enabled: 'yes'
     state: 'restarted'
     daemon_reload: 'yes'
-  when: soft_update is changed
+  when: kube_soft_update is changed

@@ -1,6 +1,11 @@
 ---
+kube_module_dependent:
+  - 'overlay'
+  - 'br_netfilter'
+
 kube_kernel_parameters:
   - { variable: 'net.bridge.bridge-nf-call-iptables', value: '1' }
+  - { variable: 'net.bridge.bridge-nf-call-ip6tables', value: '1', create: '{{ ansible_all_ipv6_addresses is none }}' }
 
 kube_registry_server: 'gcr.azk8s.cn/google_containers'
 #kube_registry_server: 'registry.aliyuncs.com/google_containers'
