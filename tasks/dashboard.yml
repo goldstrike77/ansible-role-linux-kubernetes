@@ -1,4 +1,12 @@
 ---
+- name: Kubernetes dashboard configuration file transfer
+  copy:
+    src: 'dashboard.yaml'
+    dest: '/tmp/dashboard.yaml'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
 - name: Remove the Dashboard previous version by namespace delete
   command: 'kubectl delete ns kubernetes-dashboard'
   environment:
@@ -7,7 +15,7 @@
   failed_when: false
 
 - name: Enable the Kubernetes Web Dashboard
-  command: 'kubectl apply -f "https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended.yaml"'
+  command: 'kubectl apply -f "/tmp/dashboard.yaml"'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
 
@@ -52,3 +60,8 @@
 - name: Access token display
   debug:
     var: kube_dashboard_token.stdout_lines
+
+- name: Remove the kubernetes dashboard configuration.
+  file:
+    path: '/tmp/dashboard.yaml'
+    state: 'absent'

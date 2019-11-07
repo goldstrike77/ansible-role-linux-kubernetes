@@ -1,7 +1,7 @@
 ---
 # General parameters #
 kubernetes_is_install: false
-kube_version: '1.15.3'
+kube_version: '1.15.5'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 
@@ -19,7 +19,7 @@ kube_dashboard_install: true
 kube_docker_dept: false
 
 # Docker parameters #
-kube_docker_version: '18.09.8'
+kube_docker_version: '18.09.9'
 kube_docker_edition: 'ce'
 kube_docker_channel: 'stable'
 
