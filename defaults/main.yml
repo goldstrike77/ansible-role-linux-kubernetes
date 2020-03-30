@@ -1,14 +1,15 @@
 ---
 # General parameters #
 kubernetes_is_install: false
-kube_version: '1.15.5'
+kube_version: '1.15.11'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
+kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:6443' # The address or DNS and port of the load balancer.
 
 # Kubernetes networking #
 kube_network:
   cni: 'calico' # calico / flannel / kube-router
-  version: '3.8' # Specify the CNI version.
+  version: '3.12' # Specify the CNI version.
   pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
   srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
 
@@ -19,7 +20,7 @@ kube_dashboard_install: true
 kube_docker_dept: false
 
 # Docker parameters #
-kube_docker_version: '18.09.9'
+kube_docker_version: '19.03.8'
 kube_docker_edition: 'ce'
 kube_docker_channel: 'stable'
 
@@ -32,3 +33,16 @@ kube_port_arg:
   calico: '9099' # Health check server for Calico (if using Calico/Canal).
   kube: '10250-10256' # All of kubelet services.
   node: '30000-32767' # Default range for external service ports.
+
+# Service Mesh #
+environments: 'Development' # Define the service environment.
+#tags: # Define the service custom label.
+#  subscription: 'default'
+#  owner: 'nobody'
+#  department: 'Infrastructure'
+#  organization: 'The Company'
+#  region: 'IDC01'
+consul_public_register: false # Whether register a exporter service with public consul client.
+consul_public_exporter_token: '00000000-0000-0000-0000-000000000000' # Public Consul client ACL token.
+consul_public_http_prot: 'https' # The consul Hypertext Transfer Protocol.
+consul_public_http_port: '8500' # The consul HTTP API port.

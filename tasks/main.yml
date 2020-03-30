@@ -33,6 +33,8 @@
 
 - name: Include images pull tasks
   include: 'images.yml'
+  when:
+    - kube_node_role == 'master'
 
 - name: Check if master has already been initialized
   stat:
@@ -40,40 +42,67 @@
   register: kube_init_stat
   when: kube_node_role == 'master'
 
-- name: Kubernetes master operations
+- name: Kubernetes master initialization operations
   block:
     - name: Initialize Kubernetes
       include: 'init.yml'
-    - name: Include Networking operation
-      include: 'network.yml'
-    - name: Include Dashboard operation
-      include: 'dashboard.yml'
-      when: kube_dashboard_install | bool
+#    - name: Include Networking operation
+#      include: 'network.yml'
+#    - name: Include Dashboard operation
+#      include: 'dashboard.yml'
+#      when: kube_dashboard_install | bool
   when:
-    - kube_node_role == 'master'
+    - kube_servers[0] in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
+
+- name: Reload the control plane certificate
+  command: 'kubeadm init phase upload-certs --upload-certs'
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+    no_proxy: '*'
+  when: kube_servers[0] in ansible_default_ipv4.address
+  register: kuber_control_plane_certs
+
+- debug:
+    var: kuber_control_plane_certs.stdout_lines[2]
 
 - name: Create bootstrap token from the master
   command: 'kubeadm token create'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
-  when: kube_node_role == 'master'
+    no_proxy: '*'
+  when: kube_servers[0] in ansible_default_ipv4.address
 
 - name: Get the kubeadm join command from the master
   command: 'kubeadm token create --print-join-command'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
+    no_proxy: '*'
   changed_when: false
-  when: kube_node_role == 'master'
+  when: kube_servers[0] in ansible_default_ipv4.address
   register: kuber_join_command_result
 
-- name: Set the kubeadm join command
+- name: Set the kubeadm control plane join command
   set_fact:
-    kube_join_command: "{{ kuber_join_command_result.stdout }}"
+    kube_plan_join_command: "{{ kuber_join_command_result.stdout }} --experimental-control-plane --certificate-key {{ kuber_control_plane_certs.stdout_lines[2] }}"
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true
   loop: '{{ groups[group_names[-1]] }}'
+
+- name: Set the kubeadm work node join command
+  set_fact:
+    kube_node_join_command: "{{ kuber_join_command_result.stdout }}"
+  when: kuber_join_command_result.stdout is defined
+  delegate_to: '{{ item }}'
+  delegate_facts: true
+  loop: '{{ groups[group_names[-1]] }}'
+
+- name: Kubernetes member master join operations
+  include: 'member.yml'
+  when:
+    - kube_servers[0] not in ansible_default_ipv4.address
+    - not kube_init_stat.stat.exists | bool
 
 - name: Check if node has already been joined
   stat:

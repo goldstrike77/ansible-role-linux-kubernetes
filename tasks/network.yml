@@ -1,19 +1,4 @@
 ---
-- name: 'Download the {{ kube_network.cni }} networking manifest for the Kubernetes API datastore'
-  get_url:
-    url: '{{ item }}'
-    dest: '/tmp/network_{{ kube_network.cni }}_{{ index }}.yaml'
-    timeout: '60'
-    force: 'yes'
-    mode: '0777'
-  loop: '{{ kube_cni_plugins[kube_network.cni].manifests }}'
-  loop_control:
-    index_var: index
-  register: download_manifest_status
-  until: download_manifest_status is succeeded
-  retries: 5
-  delay: 3
-
 - name: Set pod CIDR environment variable
   replace:
     path: '/tmp/network_{{ kube_network.cni }}_{{ index }}.yaml'
@@ -31,10 +16,10 @@
   loop_control:
     index_var: index
 
-- name: 'Delete the {{ kube_pod_network_solution }} networking manifest'
-  file:
-    path: '/tmp/network_{{ kube_network.cni }}_{{ index }}.yaml'
-    state: 'absent'
-  loop: '{{ kube_cni_plugins[kube_network.cni].manifests }}'
-  loop_control:
-    index_var: index
+#- name: 'Delete the {{ kube_pod_network_solution }} networking manifest'
+#  file:
+#    path: '/tmp/network_{{ kube_network.cni }}_{{ index }}.yaml'
+#    state: 'absent'
+#  loop: '{{ kube_cni_plugins[kube_network.cni].manifests }}'
+#  loop_control:
+#    index_var: index

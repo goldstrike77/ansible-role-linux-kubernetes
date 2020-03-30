@@ -1,13 +1,51 @@
 ---
+- name: 'Download the {{ kube_network.cni }} networking manifest for the Kubernetes API datastore'
+  get_url:
+    url: '{{ item }}'
+    dest: '/tmp/network_{{ kube_network.cni }}_{{ index }}.yaml'
+    timeout: '60'
+    force: 'yes'
+    mode: '0777'
+  loop: '{{ kube_cni_plugins[kube_network.cni].manifests }}'
+  loop_control:
+    index_var: index
+  register: download_manifest_status
+  until: download_manifest_status is succeeded
+  retries: 5
+  delay: 3
+
+- name: Get kubernetes network containers image list
+  shell: "grep image /tmp/network_{{ kube_network.cni }}_{{ index }}.yaml | awk -F'image: ' '{print $2}'"
+  register: kube_network_cni_image_list
+  loop: '{{ kube_cni_plugins[kube_network.cni].manifests }}'
+  loop_control:
+    index_var: index
+
+- debug:
+    var: kube_network_cni_image_list.results[0].stdout_lines
+
 - name: Get kubernetes control plane containers image list
   shell: '/bin/kubeadm config images list --kubernetes-version=v{{ kube_version }} | cut -f2 -d "/"'
-  register: kube_image_list
+  register: kube_control_plane_image_list
+
+- debug:
+    var: kube_control_plane_image_list
 
 - name: Pull an kubernetes control plane containers image
   docker_image:
     name: '{{ kube_registry_server }}/{{ item }}'
     source: 'pull'
-  loop: '{{ kube_image_list.stdout_lines }}'
+  loop: '{{ kube_control_plane_image_list.stdout_lines }}'
+  register: kube_image_pull_status
+  until: kube_image_pull_status is succeeded
+  retries: 3
+  delay: 5
+
+- name: Pull an kubernetes network cni containers image
+  docker_image:
+    name: '{{ item }}'
+    source: 'pull'
+  loop: '{{ kube_network_cni_image_list.results[0].stdout_lines }}'
   register: kube_image_pull_status
   until: kube_image_pull_status is succeeded
   retries: 3

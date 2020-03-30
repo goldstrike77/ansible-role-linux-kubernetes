@@ -22,3 +22,13 @@ kube_cni_plugins:
   kube-router:
     manifests:
       - 'http://raw.githubusercontent.com/cloudnativelabs/kube-router/v{{ kube_network.version }}/daemonset/kubeadm-kuberouter.yaml'
+
+kube_servers: "\
+  {% set _kube_servers = [] %}\
+  {% for host in groups[group_names[-1]] %}\
+    {% set _kube_node_role = hostvars[host]['kube_node_role'] | default('node', true) %}\
+    {% if ( _kube_node_role == 'master') %}\
+      {% if _kube_servers.append(hostvars[host]['ansible_host']) %}{% endif %}\
+    {% endif %}\
+  {% endfor %}\
+  {{ _kube_servers }}"

@@ -1,4 +1,11 @@
 ---
+- name: Join to Kubernetes control plane
+  shell: >
+    {{ kube_plan_join_command }}
+    creates=/etc/kubernetes/kubelet.conf
+  environment:
+    no_proxy: '*'
+
 - name: Check local consul client are accessible from current host
   uri:
     url: '{{ consul_public_http_prot }}://{{ ansible_default_ipv4.address }}:{{ consul_public_http_port }}/v1/agent/service/register'
@@ -33,37 +40,3 @@
   no_log: true
   changed_when: false
   failed_when: false
-
-- name: Kubeadm confuration file transfer
-  template:
-    src: 'kubeadm-config.yaml.j2'
-    dest: '/tmp/kubeadm-config.yaml'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
-
-- name: Initialize Kubernetes master
-  command: >
-    kubeadm init
-    --config=/tmp/kubeadm-config.yaml
-    --upload-certs
-    --ignore-preflight-errors=all
-  environment:
-    no_proxy: '*'
-
-- name: Ensure .kube directory exists
-  file:
-    path: '{{ ansible_env.PWD }}/.kube'
-    state: 'directory'
-    owner: '{{ ansible_user }}'
-    group: '{{ ansible_user }}'
-    mode: '0755'
-
-- name: Symlink the kubectl admin.conf
-  copy:
-    src: '/etc/kubernetes/admin.conf'
-    dest: '{{ ansible_env.PWD }}/.kube/config'
-    owner: '{{ ansible_user }}'
-    group: '{{ ansible_user }}'
-    mode: '0644'
-    remote_src: 'yes'
