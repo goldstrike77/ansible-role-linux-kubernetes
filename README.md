@@ -106,7 +106,7 @@ See tests/inventory for an example.
 
     [all:vars]
     kube_version='1.15.11'
-    kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:6443'
+    kube_control_plane_endpoint='Master-Production-APIServer.service.dc01.local:6443'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
