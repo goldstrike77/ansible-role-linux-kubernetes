@@ -1,38 +1,159 @@
-Role Name
-=========
+![](https://img.shields.io/badge/Ansible-kubernetes-green.svg?logo=angular&style=for-the-badge)
 
-A brief description of the role goes here.
+>__Please note that the original design goal of this role was more concerned with the initial installation and bootstrapping environment, which currently does not involve performing continuous maintenance, and therefore are only suitable for testing and development purposes,  should not be used in production environments.__
 
-Requirements
-------------
+>__请注意，此角色的最初设计目标更关注初始安装和引导环境，目前不涉及执行连续维护，因此仅适用于测试和开发目的，不应在生产环境中使用。__
+___
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+<p><img src="https://raw.githubusercontent.com/goldstrike77/goldstrike77.github.io/master/img/logo/logo_kubernetes.png" align="right" /></p>
 
-Role Variables
---------------
+__Table of Contents__
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+- [Overview](#overview)
+- [Requirements](#requirements)
+  * [Operating systems](#operating-systems)
+  * [Kubernetes Versions](#kubernetes-versions)
+- [ Role variables](#Role-variables)
+  * [Main Configuration](#Main-parameters)
+  * [Other Configuration](#Other-parameters)
+- [Dependencies](#dependencies)
+- [Example Playbook](#example-playbook)
+  * [Hosts inventory file](#Hosts-inventory-file)
+  * [Vars in role configuration](#vars-in-role-configuration)
+  * [Combination of group vars and playbook](#combination-of-group-vars-and-playbook)
+- [License](#license)
+- [Author Information](#author-information)
+- [Contributors](#Contributors)
 
-Dependencies
-------------
+## Overview
+This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and server configuration with some common operational features.
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+## Requirements
+### Operating systems
+This role will work on the following operating systems:
 
-Example Playbook
-----------------
+  * CentOS 7
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+### Kubernetes versions
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+The following list of supported the kubernetes releases:
 
-License
--------
+  * kubernetes 1.15.xx
 
-BSD
+## Role variables
+### Main parameters #
+There are some variables in defaults/main.yml which can (Or needs to) be overridden:
 
-Author Information
-------------------
+##### General parameters
+* `kube_version`: Specify the Kubernetes version.
+* `kube_node_role`: Type of nodes in cluster, master or node.
+* `kube_cgroup_driver`: Specifies the management of the container's cgroups, cgroupfs or systemd.
+* `kube_control_plane_endpoint`: The address or DNS and port of the load balancer.
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+##### Kubernetes networking
+* `kube_network.cni`: Specify the Kubernetes CNI plugins, calico / flannel / canal.
+* `kube_network.pod_cidr`: Specify range of IP addresses for the pod network.
+* `kube_network.srv_cidr`: Use alternative range of IP address for service VIPs.
+
+##### Dashboard parameters
+* `kube_dashboard_install`:A boolean value, whether installs kubernetes dashboard.
+
+##### Role dependencies
+* `kube_docker_dept`: A boolean value, whether Docker installs use the same task.
+
+##### Docker parameters
+* `kube_docker_version`: Specify the Docker version.
+* `kube_docker_edition`: Specify the Docker edition.
+* `kube_docker_channel`: Define Docker distribution.
+* `kube_docker_syslog`: A boolean value,  Enable or Disable send log to remote Syslog server.
+
+##### Service Mesh
+* `environments`: Define the service environment.
+* `tags`: Define the service custom label.
+* `exporter_is_install`: Whether to install prometheus exporter.
+* `consul_public_register`: false Whether register a exporter service with public consul client.
+* `consul_public_exporter_token`: Public Consul client ACL token.
+* `consul_public_http_prot`: The consul Hypertext Transfer Protocol.
+* `consul_public_clients`: List of public consul clients.
+* `consul_public_http_port`: The consul HTTP API port.
+
+### Other parameters
+There are some variables in vars/main.yml:
+
+## Dependencies
+- Ansible versions >= 2.8 are supported.
+- [Docker](https://github.com/goldstrike77/ansible-role-linux-docker.git)
+
+## Example
+
+### Hosts inventory file
+See tests/inventory for an example.
+    
+    [Node]
+    s-p-demo-nod01 ansible_host='10.101.4.40'
+    s-p-demo-nod02 ansible_host='10.101.4.41'
+    s-p-demo-nod03 ansible_host='10.101.4.42'
+    
+    [Master]
+    s-p-demo-mas01 ansible_host='10.101.4.43'
+    s-p-demo-mas02 ansible_host='10.101.4.44'
+    s-p-demo-mas03 ansible_host='10.101.4.45'
+    
+    [Kubernetes:children]
+    Master
+    Node
+
+    [Master:vars]
+    kube_node_role='master'
+
+    [all:vars]
+    kube_version='1.15.11'
+
+### Combination of group vars and playbook
+You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
+
+    kube_version: '1.15.11'
+    kube_node_role: 'node'
+    kube_cgroup_driver: 'systemd'
+    kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:6443'
+    kube_network:
+      cni: 'canal'
+      pod_cidr: '10.244.0.0/16'
+      srv_cidr: '10.96.0.0/12'
+    kube_dashboard_install: true
+    kube_docker_dept: true
+    kube_docker_version: '19.03.8'
+    kube_docker_edition: 'ce'
+    kube_docker_channel: 'stable'
+    kube_docker_syslog: false
+    kube_port_arg:
+      etcd: '2379-2380'
+      cadvisor: '4149'
+      api_server: '6443'
+      dashboard: '8001'
+      calico: '9099'
+      kube: '10250-10256'
+      node: '30000-32767'
+    environments: 'Development'
+    tags:
+      subscription: 'default'
+      owner: 'nobody'
+      department: 'Infrastructure'
+      organization: 'The Company'
+      region: 'IDC01'
+    exporter_is_install: false
+    consul_public_register: false
+    consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
+    consul_public_http_prot: 'https'
+    consul_public_http_port: '8500'
+    consul_public_clients:
+      - '127.0.0.1'
+
+## License
+![](https://img.shields.io/badge/MIT-purple.svg?style=for-the-badge)
+
+## Author Information
+Please send your suggestions to make this role better.
+
+## Contributors
+Special thanks to the [Connext Information Technology](http://www.connext.com.cn) for their contributions to this role.

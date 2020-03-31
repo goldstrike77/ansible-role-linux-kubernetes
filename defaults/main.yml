@@ -1,28 +1,28 @@
 ---
 # General parameters #
-kubernetes_is_install: false
-kube_version: '1.15.11'
-kube_node_role: 'node'
-kube_cgroup_driver: 'systemd'
+kube_is_install: false # A boolean value, whether install the Kubernetes.
+kube_version: '1.15.11' # Specify the Kubernetes version.
+kube_node_role: 'node' # Type of nodes in cluster, master or node.
+kube_cgroup_driver: 'systemd' # Specifies the management of the container's cgroups, cgroupfs or systemd.
 kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:6443' # The address or DNS and port of the load balancer.
 
 # Kubernetes networking #
 kube_network:
-  cni: 'canal' # calico / flannel / canal
+  cni: 'canal' # Specify the Kubernetes CNI plugins, calico / flannel / canal.
   pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
   srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
 
 # Dashboard parameters #
-kube_dashboard_install: true
+kube_dashboard_install: true # A boolean value, whether Docker installs kubernetes dashboard.
 
 # Role dependencies #
-kube_docker_dept: false
+kube_docker_dept: false # A boolean value, whether Docker installs use the same task.
 
 # Docker parameters #
-kube_docker_version: '19.03.8'
-kube_docker_edition: 'ce'
-kube_docker_channel: 'stable'
-kube_docker_syslog: false
+kube_docker_version: '19.03.8' # Specify the Docker version.
+kube_docker_edition: 'ce' # Specify the Docker edition.
+kube_docker_channel: 'stable' # Define Docker distribution.
+kube_docker_syslog: false # A boolean value,  Enable or Disable send log to remote Syslog server.
 
 # Listen port #
 kube_port_arg:
