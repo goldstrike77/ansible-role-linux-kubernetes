@@ -1,4 +1,24 @@
 ---
+- name: Install requirement python package
+  pip:
+    name: '{{ kube_python_dependent_packages }}'
+    state: 'forcereinstall'
+    extra_args: '--ignore-installed -i {{ kube_pypi_url }}'
+  register: kube_python_status
+  until: kube_python_status is succeeded
+  retries: 5
+  delay: 5
+
+- name: Pull an kubernetes network cni containers image
+  docker_image:
+    name: '{{ item }}'
+    source: 'pull'  
+  loop: '{{ vars["kube_cni_" + kube_network.cni + "_images"] }}'
+  register: kube_image_pull_status
+  until: kube_image_pull_status is succeeded
+  retries: 3
+  delay: 5
+
 - name: Get kubernetes control plane containers image list
   shell: '/bin/kubeadm config images list --kubernetes-version=v{{ kube_version }} | cut -f2 -d "/"'
   register: kube_control_plane_image_list
@@ -8,16 +28,6 @@
     name: '{{ kube_registry_server }}/{{ item }}'
     source: 'pull'
   loop: '{{ kube_control_plane_image_list.stdout_lines }}'
-  register: kube_image_pull_status
-  until: kube_image_pull_status is succeeded
-  retries: 3
-  delay: 5
-
-- name: Pull an kubernetes network cni containers image
-  docker_image:
-    name: '{{ item }}'
-    source: 'pull'
-  loop: '{{ vars["kube_cni_" + kube_network.cni + "_images"] }}'
   register: kube_image_pull_status
   until: kube_image_pull_status is succeeded
   retries: 3

@@ -22,7 +22,7 @@
   uri:
     url: '{{ consul_public_http_prot }}://{{ ansible_default_ipv4.address }}:{{ consul_public_http_port }}/v1/agent/service/register'
     method: 'PUT'
-    body: '{"tags":["kubernetes"],"ID":"{{ group_names[0] | upper | regex_replace("_", "-") }}-{{ environments | upper | regex_replace("_", "-") }}-APIServer","name":"{{ group_names[0] | upper | regex_replace("_", "-") }}-{{ environments | upper | regex_replace("_", "-") }}-APIServer","address":"{{ ansible_default_ipv4.address }}","checks":[{"tcp":"{{ ansible_default_ipv4.address }}:{{ kube_port_arg.api_server }}","interval":"10s","timeout":"10s"}]}'
+    body: '{"tags":["kubernetes"],"ID":"{{ group_names[-1] | upper | regex_replace("_", "-") }}-{{ environments | upper | regex_replace("_", "-") }}-APIServer","name":"{{ group_names[-1] | upper | regex_replace("_", "-") }}-{{ environments | upper | regex_replace("_", "-") }}-APIServer","address":"{{ ansible_default_ipv4.address }}","checks":[{"tcp":"{{ ansible_default_ipv4.address }}:{{ kube_port_arg.api_server }}","interval":"10s","timeout":"10s"}]}'
     body_format: 'json'
     status_code: '200'
     headers:

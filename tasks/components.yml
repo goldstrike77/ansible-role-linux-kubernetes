@@ -7,7 +7,7 @@
     mode: '0644'
   loop: '{{ kube_components_deploy }}'
 
-- name: 'Apply the {{ item }} networking manifest'
+- name: Apply the components manifest
   command: 'kubectl create -f /tmp/components/{{ item }}'
   environment:
     no_proxy: '*'

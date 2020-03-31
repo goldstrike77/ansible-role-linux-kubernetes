@@ -48,16 +48,15 @@
       include: 'init.yml'
     - name: Include Networking operation
       include: 'network.yml'
+    - name: Include components deploy operation
+      include: 'components.yml'
+    - name: Include Dashboard deploy operation
+      include: 'dashboard.yml'
+      when: kube_dashboard_install | bool
   when:
     - kube_node_role == 'master'
     - kube_servers[0] in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
-
-- name: Include components deploy operation
-  include: 'components.yml'
-  when:
-    - kube_node_role == 'master'
-    - kube_servers[0] in ansible_default_ipv4.address
 
 - name: Reload the control plane certificate
   command: 'kubeadm init phase upload-certs --upload-certs'
@@ -97,6 +96,13 @@
   delegate_facts: true
   loop: '{{ groups[group_names[-1]] }}'
 
+- name: Kubernetes member master join operations
+  include: 'member.yml'
+  when:
+    - kube_node_role == 'master'
+    - kube_servers[0] not in ansible_default_ipv4.address
+    - not kube_init_stat.stat.exists | bool
+
 - name: Ensure .kube directory exists
   file:
     path: '{{ ansible_env.PWD }}/.kube'
@@ -125,13 +131,6 @@
   delegate_to: '{{ item }}'
   delegate_facts: true
   loop: '{{ groups[group_names[0]] }}'
-
-- name: Kubernetes member master join operations
-  include: 'member.yml'
-  when:
-    - kube_node_role == 'master'
-    - kube_servers[0] not in ansible_default_ipv4.address
-    - not kube_init_stat.stat.exists | bool
 
 - name: Check if node has already been joined
   stat:

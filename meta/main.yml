@@ -61,4 +61,5 @@ dependencies:
       docker_edition: '{{ kube_docker_edition }}'
       docker_channel: '{{ kube_docker_channel }}'
       docker_native_cgroupdriver: '{{ kube_cgroup_driver }}'
+      syslog: '{{ kube_docker_syslog | bool }}'
     when: kube_docker_dept | bool

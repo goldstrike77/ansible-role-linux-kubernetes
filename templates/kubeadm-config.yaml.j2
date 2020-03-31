@@ -1,17 +1,37 @@
 apiVersion: kubeadm.k8s.io/v1beta2
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: abcdef.0123456789abcdef
+  ttl: 2h0m0s
+  usages:
+  - signing
+  - authentication
 kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ ansible_default_ipv4.address }}
   bindPort: {{ kube_port_arg.api_server }}
+nodeRegistration:
+  criSocket: /var/run/dockershim.sock
+  name: {{ ansible_fqdn }}
+  taints:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
 ---
 apiServer:
-  timeoutForControlPlane: 4m0s
+  timeoutForControlPlane: 10m0s
 apiVersion: kubeadm.k8s.io/v1beta2
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
+controllerManager: {}
+dns:
+  type: CoreDNS
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+imageRepository: {{ kube_registry_server }}
 kind: ClusterConfiguration
 kubernetesVersion: v{{ kube_version }}
-imageRepository: {{ kube_registry_server }}
 controlPlaneEndpoint: "{{ kube_control_plane_endpoint | lower }}"
 networking:
   dnsDomain: cluster.local

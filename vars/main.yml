@@ -10,6 +10,12 @@ kube_kernel_parameters:
 kube_registry_server: 'gcr.azk8s.cn/google_containers'
 #kube_registry_server: 'registry.aliyuncs.com/google_containers'
 
+kube_pypi_url: 'https://mirrors.aliyun.com/pypi/simple/'
+
+kube_python_dependent_packages:
+  - 'pip'
+  - 'docker'
+
 kube_cni_canal_images:
   - 'quay.azk8s.cn/calico/cni:v3.13.1'
   - 'quay.azk8s.cn/calico/pod2daemon-flexvol:v3.13.1'

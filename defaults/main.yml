@@ -22,6 +22,7 @@ kube_docker_dept: false
 kube_docker_version: '19.03.8'
 kube_docker_edition: 'ce'
 kube_docker_channel: 'stable'
+kube_docker_syslog: false
 
 # Listen port #
 kube_port_arg:
