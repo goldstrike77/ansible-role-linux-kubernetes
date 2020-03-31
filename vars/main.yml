@@ -10,18 +10,23 @@ kube_kernel_parameters:
 kube_registry_server: 'gcr.azk8s.cn/google_containers'
 #kube_registry_server: 'registry.aliyuncs.com/google_containers'
 
-kube_cni_plugins:
-  calico:
-    cidr: '192.168.0.0/16'
-    manifests:
-      - 'http://docs.projectcalico.org/v{{ kube_network.version }}/manifests/calico.yaml'
-  flannel:
-    cidr: '10.244.0.0/16'
-    manifests:
-      - 'http://raw.githubusercontent.com/coreos/flannel/v{{ kube_network.version }}/Documentation/kube-flannel.yml'
-  kube-router:
-    manifests:
-      - 'http://raw.githubusercontent.com/cloudnativelabs/kube-router/v{{ kube_network.version }}/daemonset/kubeadm-kuberouter.yaml'
+kube_cni_canal_images:
+  - 'quay.azk8s.cn/calico/cni:v3.13.1'
+  - 'quay.azk8s.cn/calico/pod2daemon-flexvol:v3.13.1'
+  - 'quay.azk8s.cn/calico/node:v3.13.1'
+  - 'quay.azk8s.cn/coreos/flannel:v0.11.0'
+
+kube_cni_flannel_images:
+  - 'quay.azk8s.cn/coreos/flannel:v0.12.0-amd64'
+
+kube_cni_calico_images:
+  - 'quay.azk8s.cn/calico/cni:v3.13.1'
+  - 'quay.azk8s.cn/calico/pod2daemon-flexvol:v3.13.1'
+  - 'quay.azk8s.cn/calico/node:v3.13.1'
+  - 'quay.azk8s.cn/calico/kube-controllers:v3.13.1'
+
+kube_components_deploy:
+  - 'metrics-server'
 
 kube_servers: "\
   {% set _kube_servers = [] %}\

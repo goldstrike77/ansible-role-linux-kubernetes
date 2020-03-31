@@ -46,32 +46,37 @@
   block:
     - name: Initialize Kubernetes
       include: 'init.yml'
-#    - name: Include Networking operation
-#      include: 'network.yml'
-#    - name: Include Dashboard operation
-#      include: 'dashboard.yml'
-#      when: kube_dashboard_install | bool
+    - name: Include Networking operation
+      include: 'network.yml'
   when:
+    - kube_node_role == 'master'
     - kube_servers[0] in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
+
+- name: Include components deploy operation
+  include: 'components.yml'
+  when:
+    - kube_node_role == 'master'
+    - kube_servers[0] in ansible_default_ipv4.address
 
 - name: Reload the control plane certificate
   command: 'kubeadm init phase upload-certs --upload-certs'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
     no_proxy: '*'
-  when: kube_servers[0] in ansible_default_ipv4.address
+  when:
+    - kube_node_role == 'master'
+    - kube_servers[0] in ansible_default_ipv4.address
   register: kuber_control_plane_certs
-
-- debug:
-    var: kuber_control_plane_certs.stdout_lines[2]
 
 - name: Create bootstrap token from the master
   command: 'kubeadm token create'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
     no_proxy: '*'
-  when: kube_servers[0] in ansible_default_ipv4.address
+  when:
+    - kube_node_role == 'master' 
+    - kube_servers[0] in ansible_default_ipv4.address
 
 - name: Get the kubeadm join command from the master
   command: 'kubeadm token create --print-join-command'
@@ -79,7 +84,9 @@
     KUBECONFIG: '/etc/kubernetes/admin.conf'
     no_proxy: '*'
   changed_when: false
-  when: kube_servers[0] in ansible_default_ipv4.address
+  when:
+    - kube_node_role == 'master'
+    - kube_servers[0] in ansible_default_ipv4.address
   register: kuber_join_command_result
 
 - name: Set the kubeadm control plane join command
@@ -90,17 +97,39 @@
   delegate_facts: true
   loop: '{{ groups[group_names[-1]] }}'
 
+- name: Ensure .kube directory exists
+  file:
+    path: '{{ ansible_env.PWD }}/.kube'
+    state: 'directory'
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
+    mode: '0755'
+  when:
+    - kube_node_role == 'master'
+
+- name: Symlink the kubectl admin.conf
+  copy:
+    src: '/etc/kubernetes/admin.conf'
+    dest: '{{ ansible_env.PWD }}/.kube/config'
+    owner: '{{ ansible_user }}'
+    group: '{{ ansible_user }}'
+    mode: '0644'
+    remote_src: 'yes'
+  when:
+    - kube_node_role == 'master'
+
 - name: Set the kubeadm work node join command
   set_fact:
     kube_node_join_command: "{{ kuber_join_command_result.stdout }}"
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true
-  loop: '{{ groups[group_names[-1]] }}'
+  loop: '{{ groups[group_names[0]] }}'
 
 - name: Kubernetes member master join operations
   include: 'member.yml'
   when:
+    - kube_node_role == 'master'
     - kube_servers[0] not in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
 

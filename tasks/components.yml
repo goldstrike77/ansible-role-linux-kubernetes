@@ -1,0 +1,15 @@
+- name: Kubernetes components deploy file transfer
+  copy:
+    src: 'components/{{ item }}'
+    dest: '/tmp/components/'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  loop: '{{ kube_components_deploy }}'
+
+- name: 'Apply the {{ item }} networking manifest'
+  command: 'kubectl create -f /tmp/components/{{ item }}'
+  environment:
+    no_proxy: '*'
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+  loop: '{{ kube_components_deploy }}'

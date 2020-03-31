@@ -50,20 +50,3 @@
     --ignore-preflight-errors=all
   environment:
     no_proxy: '*'
-
-- name: Ensure .kube directory exists
-  file:
-    path: '{{ ansible_env.PWD }}/.kube'
-    state: 'directory'
-    owner: '{{ ansible_user }}'
-    group: '{{ ansible_user }}'
-    mode: '0755'
-
-- name: Symlink the kubectl admin.conf
-  copy:
-    src: '/etc/kubernetes/admin.conf'
-    dest: '{{ ansible_env.PWD }}/.kube/config'
-    owner: '{{ ansible_user }}'
-    group: '{{ ansible_user }}'
-    mode: '0644'
-    remote_src: 'yes'

@@ -8,8 +8,7 @@ kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:644
 
 # Kubernetes networking #
 kube_network:
-  cni: 'calico' # calico / flannel / kube-router
-  version: '3.12' # Specify the CNI version.
+  cni: 'canal' # calico / flannel / canal
   pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
   srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
 

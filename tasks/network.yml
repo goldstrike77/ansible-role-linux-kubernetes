@@ -1,20 +1,17 @@
 ---
-- name: Set pod CIDR environment variable
-  replace:
-    path: '/tmp/network_{{ kube_network.cni }}_{{ index }}.yaml'
-    regexp: '{{ kube_cni_plugins[kube_network.cni].cidr | default("192.168.0.0/16") }}'
-    replace: '{{ kube_network.pod_cidr }}'
-  loop: '{{ kube_cni_plugins[kube_network.cni].manifests }}'
-  loop_control:
-    index_var: index
+- name: Kubernetes networking cni manifest transfer
+  template:
+    src: '{{ kube_network.cni }}.yaml.j2'
+    dest: '/tmp/{{ kube_network.cni }}.yaml'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
 
 - name: 'Apply the {{ kube_network.cni }} networking manifest'
-  command: 'kubectl apply -f "/tmp/network_{{ kube_network.cni }}_{{ index }}.yaml"'
+  command: 'kubectl apply -f "/tmp/{{ kube_network.cni }}.yaml"'
   environment:
+    no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
-  loop: '{{ kube_cni_plugins[kube_network.cni].manifests }}'
-  loop_control:
-    index_var: index
 
 #- name: 'Delete the {{ kube_pod_network_solution }} networking manifest'
 #  file:
