@@ -38,7 +38,7 @@ This role will work on the following operating systems:
 
 The following list of supported the kubernetes releases:
 
-  * kubernetes 1.15.xx
+  * kubernetes 1.15.xx,1.16.xx
 
 ## Role variables
 ### Main parameters #

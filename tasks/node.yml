@@ -5,3 +5,7 @@
     creates=/etc/kubernetes/kubelet.conf
   environment:
     no_proxy: '*'
+  register: kube_join_status
+  until: kube_join_status is succeeded
+  retries: 3
+  delay: 5

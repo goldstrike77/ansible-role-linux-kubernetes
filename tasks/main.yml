@@ -90,7 +90,7 @@
 
 - name: Set the kubeadm control plane join command
   set_fact:
-    kube_plan_join_command: "{{ kuber_join_command_result.stdout }} --experimental-control-plane --certificate-key {{ kuber_control_plane_certs.stdout_lines[2] }}"
+    kube_plan_join_command: "{{ kuber_join_command_result.stdout }} --control-plane --certificate-key {{ kuber_control_plane_certs.stdout_lines[2] }} --ignore-preflight-errors=all"
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true
@@ -126,7 +126,7 @@
 
 - name: Set the kubeadm work node join command
   set_fact:
-    kube_node_join_command: "{{ kuber_join_command_result.stdout }}"
+    kube_node_join_command: "{{ kuber_join_command_result.stdout }} --ignore-preflight-errors=all"
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true
