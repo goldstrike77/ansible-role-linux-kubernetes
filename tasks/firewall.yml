@@ -3,12 +3,30 @@
   service_facts:
   register: services_state
 
-- name: Allow Kubernetes service port
-  firewalld:
-    port: '{{ item.value }}/tcp'
-    zone: 'public'
-    permanent: 'true'
-    immediate: 'true'
-    state: 'enabled'
-  loop: '{{ kube_port_arg | dict2items }}'
-  when: services_state.ansible_facts.services["firewalld.service"].state == 'running'
+- name: Kubernetes firewalld operation
+  block:
+    - name: Allow Kubernetes service port
+      firewalld:
+        port: '{{ item.value }}/tcp'
+        zone: 'public'
+        permanent: 'true'
+        immediate: 'true'
+        state: 'enabled'
+      loop: '{{ kube_port_arg | dict2items }}'
+    - name: Enable IP masquerading
+      firewalld:
+        masquerade: 'yes'
+        state: 'enabled'
+        permanent: 'yes'
+        zone: 'public'
+    - name: Allow default interface traffic 
+      shell: 'firewall-cmd --permanent --direct --add-rule ipv4 filter {{ item }} 1 -j ACCEPT && firewall-cmd --reload'
+      with_items:
+        - 'INPUT'
+        - 'FORWARD'
+        - 'OUTPUT'
+      async: 1
+      poll: 0
+  when:
+    - services_state.ansible_facts.services["firewalld.service"] is defined
+    - services_state.ansible_facts.services["firewalld.service"].state == 'running'

@@ -19,7 +19,7 @@ kube_dashboard_install: true # A boolean value, whether Docker installs kubernet
 kube_docker_dept: false # A boolean value, whether Docker installs use the same task.
 
 # Docker parameters #
-kube_docker_version: '19.03.8' # Specify the Docker version.
+kube_docker_version: '18.09.9' # Specify the Docker version.
 kube_docker_edition: 'ce' # Specify the Docker edition.
 kube_docker_channel: 'stable' # Define Docker distribution.
 kube_docker_syslog: false # A boolean value,  Enable or Disable send log to remote Syslog server.
