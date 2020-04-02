@@ -1,7 +1,4 @@
 ---
-- name: Include OS-specific variables
-  include_vars: '{{ ansible_os_family }}.yml'
-
 - name: Add Kubernetes YUM repositories
   yum_repository:
     name: '{{ kube_repo_name }}'
@@ -22,10 +19,11 @@
   retries: 3
   delay: 5
 
-- name: Enable kubernetes service
-  systemd:
-    name: 'kubelet.service'
-    enabled: 'yes'
-    state: 'restarted'
-    daemon_reload: 'yes'
-  when: kube_soft_update is changed
+- name: kubelet services file transfer
+  template:
+    src: 'kubelet.j2'
+    dest: '/etc/sysconfig/kubelet'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  register: kube_conf_update

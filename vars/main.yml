@@ -4,8 +4,13 @@ kube_module_dependent:
   - 'br_netfilter'
 
 kube_kernel_parameters:
-  - { variable: 'net.bridge.bridge-nf-call-iptables', value: '1' }
-  - { variable: 'net.bridge.bridge-nf-call-ip6tables', value: '1', create: '{{ ansible_all_ipv6_addresses is none }}' }
+  - { variable: 'net.bridge.bridge-nf-call-iptables',  value: '1' }
+  - { variable: 'net.bridge.bridge-nf-call-ip6tables', value: '1', create: '{{ ansible_all_ipv6_addresses is not none }}' }
+  - { variable: 'net.core.somaxconn',                  value: '65535' }
+  - { variable: 'net.ipv4.ip_local_port_range',        value: '1025 65535' }
+  - { variable: 'net.ipv4.neigh.default.gc_thresh3',   value: '8192' }
+  - { variable: 'net.ipv4.neigh.default.gc_thresh2',   value: '4096' }
+  - { variable: 'net.ipv4.neigh.default.gc_thresh1',   value: '2048' }
 
 kube_registry_server: 'gcr.azk8s.cn/google_containers'
 #kube_registry_server: 'registry.aliyuncs.com/google_containers'
@@ -15,6 +20,10 @@ kube_pypi_url: 'https://mirrors.aliyun.com/pypi/simple/'
 kube_python_dependent_packages:
   - 'pip'
   - 'docker'
+
+kube_extra_args:
+  - 'runtime-cgroups=/systemd/system.slice'
+  - 'kubelet-cgroups=/systemd/system.slice'
 
 kube_cni_canal_images:
   - 'quay.azk8s.cn/calico/cni:v3.13.1'

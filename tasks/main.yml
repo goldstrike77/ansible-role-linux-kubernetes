@@ -1,4 +1,7 @@
 ---
+- name: Include OS-specific variables
+  include_vars: '{{ ansible_os_family }}.yml'
+
 - name: Remove swapfile from /etc/fstab
   mount:
     name: 'swap'
@@ -15,7 +18,7 @@
     state: 'present'
   loop: '{{ kube_module_dependent }}'
 
-- name: Set Netfilter bridge
+- name: Configure kernel parameters
   sysctl:
     name: '{{ item.variable }}'
     value: '{{ item.value }}'
@@ -31,10 +34,17 @@
 - name: Include tasks for specific OS
   include: '{{ ansible_os_family }}.yml'
 
+- name: Reload the kubelet service
+  shell: echo ''
+  notify: 'Ensure kubelet service is enabled'
+  when: kube_soft_update is changed or kube_conf_update is changed
+
 - name: Include images pull tasks
   include: 'images.yml'
-  when:
-    - kube_node_role == 'master'
+  when: kube_node_role == 'master'
+
+- name: Force the handler to run immediately
+  meta: flush_handlers
 
 - name: Check if master has already been initialized
   stat:
