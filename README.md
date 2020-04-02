@@ -39,20 +39,20 @@ This role will work on the following operating systems:
 The following list of supported the kubernetes releases:
 
 - Core
-  - kubernetes v1.14
-  - kubernetes v1.15
-  - kubernetes v1.16
-  - kubernetes v1.17
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.14
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.15
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.16
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.17
 
 - Network Plugin
-  - calico v3.13.1
-  - flannel v0.12.0
-  - canal (given calico/flannel versions)
+  - [calico](https://github.com/projectcalico/calico) v3.13.1
+  - [flannel](https://github.com/coreos/flannel) v0.12.0
+  - [canal](https://github.com/projectcalico/canal) (given calico/flannel versions)
 
 - Components
-  - kubernetes-dashboard v2.0.0-rc7
-  - metrics-server v0.3.6
-  - kube-state-metrics v1.9.5
+  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.0-rc7
+  - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
+  - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.5
 
 ## Role variables
 ### Main parameters #
