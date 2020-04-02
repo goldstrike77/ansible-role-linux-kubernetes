@@ -38,10 +38,21 @@ This role will work on the following operating systems:
 
 The following list of supported the kubernetes releases:
 
-  * 1.14
-  * 1.15
-  * 1.16
-  * 1.17
+- Core
+  - kubernetes v1.14
+  - kubernetes v1.15
+  - kubernetes v1.16
+  - kubernetes v1.17
+
+- Network Plugin
+  - calico v3.13.1
+  - flannel v0.12.0
+  - canal (given calico/flannel versions)
+
+- Components
+  - kubernetes-dashboard v2.0.0-rc7
+  - metrics-server v0.3.6
+  - kube-state-metrics v1.9.5
 
 ## Role variables
 ### Main parameters #
