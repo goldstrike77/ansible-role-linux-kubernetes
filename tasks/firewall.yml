@@ -9,8 +9,7 @@
       firewalld:
         port: '{{ item.value }}/tcp'
         zone: 'public'
-        permanent: 'true'
-        immediate: 'true'
+        permanent: 'yes'
         state: 'enabled'
       loop: '{{ kube_port_arg | dict2items }}'
     - name: Enable IP masquerading
@@ -20,13 +19,19 @@
         permanent: 'yes'
         zone: 'public'
     - name: Allow default interface traffic 
-      shell: 'firewall-cmd --permanent --direct --add-rule ipv4 filter {{ item }} 1 -j ACCEPT && firewall-cmd --reload'
+      shell: 'firewall-cmd --permanent --direct --add-rule ipv4 filter {{ item }} 1 -j ACCEPT'
       with_items:
         - 'INPUT'
         - 'FORWARD'
         - 'OUTPUT'
-      async: 1
-      poll: 0
+      register: kube_firewalld_status
+    - name: Reload firewalld service
+      systemd:
+        name: 'firewalld.service'
+        enabled: 'yes'
+        state: 'restarted'
+        daemon_reload: 'yes'
+      when: kube_firewalld_status is changed
   when:
     - services_state.ansible_facts.services["firewalld.service"] is defined
     - services_state.ansible_facts.services["firewalld.service"].state == 'running'

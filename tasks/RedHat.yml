@@ -11,21 +11,9 @@
     gpgcheck: 'no'
     timeout: '60'
 
-- name: Install the Kubernetes dependent packages
-  yum:
-    name: 'python-openshift'
-    state: 'present'
-    validate_certs: 'no'
-    update_cache: 'yes'
-    disable_gpg_check: 'yes'
-  register: kube_soft_update
-  until: kube_soft_update is succeeded
-  retries: 3
-  delay: 5
-
 - name: Install the Kubernetes packages
   yum:
-    name: 'kubernetes-cni,kubeadm-{{ kube_version }}-0,kubelet-{{ kube_version }}-0,kubectl-{{ kube_version }}-0'
+    name: '{{ kube_package }}'
     state: 'present'
     validate_certs: 'no'
     disable_gpg_check: 'yes'

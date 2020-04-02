@@ -38,7 +38,7 @@ This role will work on the following operating systems:
 
 The following list of supported the kubernetes releases:
 
-  * kubernetes 1.15.xx,1.16.xx
+  * Kubernetes 1.15.xx, 1.16.xx, 1.17.xx
 
 ## Role variables
 ### Main parameters #
@@ -56,7 +56,10 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_network.srv_cidr`: Use alternative range of IP address for service VIPs.
 
 ##### Dashboard parameters
-* `kube_dashboard_install`:A boolean value, whether installs kubernetes dashboard.
+* `kube_dashboard_install`: A boolean value, whether installs kubernetes dashboard.
+
+##### Components
+* `kube_components`: Individual Kubernetes components.
 
 ##### Role dependencies
 * `kube_docker_dept`: A boolean value, whether Docker installs use the same task.
@@ -120,6 +123,9 @@ You can also use the group_vars or the host_vars files for setting the variables
       pod_cidr: '10.244.0.0/16'
       srv_cidr: '10.96.0.0/12'
     kube_dashboard_install: true
+    kube_components:
+      - 'metrics-server'
+      - 'kube-state-metrics'
     kube_docker_dept: true
     kube_docker_version: '19.03.8'
     kube_docker_edition: 'ce'

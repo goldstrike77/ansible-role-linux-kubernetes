@@ -21,7 +21,7 @@
     KUBECONFIG: '/etc/kubernetes/admin.conf'
     no_proxy: '*'
 
-- name: Create Admin Service Account
+- name: Create Dashboard Admin Service Account
   k8s:
     state: 'present'
     kubeconfig: '/etc/kubernetes/admin.conf'
@@ -34,7 +34,7 @@
         labels:
           k8s-app: kubernetes-dashboard
 
-- name: Create ClusterRoleBinding
+- name: Create Dashboard ClusterRoleBinding
   k8s:
     state: 'present'
     kubeconfig: '/etc/kubernetes/admin.conf'
@@ -53,7 +53,7 @@
         name: kubernetes-dashboard-admin
         namespace: kubernetes-dashboard
 
-- name: Get access token
+- name: Get Dashboard access token
   shell: "kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard-admin | awk '{print $1}') | grep 'token:' | sed 's/.*://' | sed 's/^[ \t]*//g'"
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
@@ -62,7 +62,7 @@
 
 - name: Access token outputs
   copy:
-    content: '{{ kube_dashboard_token.stdout_lines }}'
+    content: '{{ kube_dashboard_token.stdout_lines[0] }}'
     dest: '/tmp/dashboard.token'
 
 - name: Remove the kubernetes dashboard configuration.

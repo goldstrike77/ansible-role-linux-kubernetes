@@ -31,9 +31,6 @@ kube_cni_calico_images:
   - 'quay.azk8s.cn/calico/node:v3.13.1'
   - 'quay.azk8s.cn/calico/kube-controllers:v3.13.1'
 
-kube_components_deploy:
-  - 'metrics-server'
-
 kube_servers: "\
   {% set _kube_servers = [] %}\
   {% for host in groups[group_names[-1]] %}\

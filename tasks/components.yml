@@ -5,11 +5,11 @@
     owner: 'root'
     group: 'root'
     mode: '0644'
-  loop: '{{ kube_components_deploy }}'
+  loop: '{{ kube_components }}'
 
 - name: Apply the components manifest
   command: 'kubectl create -f /tmp/components/{{ item }}'
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
-  loop: '{{ kube_components_deploy }}'
+  loop: '{{ kube_components }}'
