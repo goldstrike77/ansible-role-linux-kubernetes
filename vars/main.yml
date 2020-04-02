@@ -12,8 +12,8 @@ kube_kernel_parameters:
   - { variable: 'net.ipv4.neigh.default.gc_thresh2',   value: '4096' }
   - { variable: 'net.ipv4.neigh.default.gc_thresh1',   value: '2048' }
 
-kube_registry_server: 'gcr.azk8s.cn/google_containers'
-#kube_registry_server: 'registry.aliyuncs.com/google_containers'
+#kube_registry_server: 'gcr.azk8s.cn/google_containers'
+kube_registry_server: 'registry.aliyuncs.com/google_containers'
 
 kube_pypi_url: 'https://mirrors.aliyun.com/pypi/simple/'
 

@@ -1,4 +1,8 @@
+{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}
+apiVersion: kubeadm.k8s.io/v1beta1
+{% else %}
 apiVersion: kubeadm.k8s.io/v1beta2
+{% endif %}
 bootstrapTokens:
 - groups:
   - system:bootstrappers:kubeadm:default-node-token
@@ -20,7 +24,11 @@ nodeRegistration:
 ---
 apiServer:
   timeoutForControlPlane: 10m0s
+{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}
+apiVersion: kubeadm.k8s.io/v1beta1
+{% else %}
 apiVersion: kubeadm.k8s.io/v1beta2
+{% endif %}
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
 controllerManager: {}

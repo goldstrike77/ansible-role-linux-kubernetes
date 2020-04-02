@@ -38,7 +38,10 @@ This role will work on the following operating systems:
 
 The following list of supported the kubernetes releases:
 
-  * Kubernetes 1.15.xx, 1.16.xx, 1.17.xx
+  * 1.14
+  * 1.15
+  * 1.16
+  * 1.17
 
 ## Role variables
 ### Main parameters #
@@ -127,7 +130,7 @@ You can also use the group_vars or the host_vars files for setting the variables
       - 'metrics-server'
       - 'kube-state-metrics'
     kube_docker_dept: true
-    kube_docker_version: '19.03.8'
+    kube_docker_version: '18.09.9'
     kube_docker_edition: 'ce'
     kube_docker_channel: 'stable'
     kube_docker_syslog: false

@@ -69,7 +69,7 @@
     - not kube_init_stat.stat.exists | bool
 
 - name: Reload the control plane certificate
-  command: 'kubeadm init phase upload-certs --upload-certs'
+  command: "kubeadm init phase upload-certs --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-upload-certs{% else %}upload-certs{% endif %}"
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
     no_proxy: '*'
@@ -100,7 +100,7 @@
 
 - name: Set the kubeadm control plane join command
   set_fact:
-    kube_plan_join_command: "{{ kuber_join_command_result.stdout }} --control-plane --certificate-key {{ kuber_control_plane_certs.stdout_lines[2] }} --ignore-preflight-errors=all"
+    kube_plan_join_command: "{{ kuber_join_command_result.stdout }} --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-control-plane{% else %}control-plane{% endif %} --certificate-key {{ kuber_control_plane_certs.stdout_lines[2] }} --ignore-preflight-errors=all"
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true
