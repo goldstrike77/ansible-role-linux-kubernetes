@@ -28,6 +28,8 @@ __Table of Contents__
 ## Overview
 This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and server configuration with some common operational features, very easy to deploy if you use HashiCorp Consul as DNS-based service discovery.
 
+>__There are two file that record token for prometheus and dashboard in /tmp folder at first master node, Burn after reading!__
+
 ## Requirements
 ### Operating systems
 This role will work on the following operating systems:

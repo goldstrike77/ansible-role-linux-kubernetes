@@ -34,7 +34,7 @@
   changed_when: false
   failed_when: false
 
-- name: Kubeadm confuration file transfer
+- name: Kubeadm configuration file transfer
   template:
     src: 'kubeadm-config.yaml.j2'
     dest: '/tmp/kubeadm-config.yaml'
@@ -50,3 +50,37 @@
     --ignore-preflight-errors=all
   environment:
     no_proxy: '*'
+
+- name: Remove the kubeadm configuration file
+  file:
+    path: '/tmp/kubeadm-config.yaml'
+    state: 'absent'
+  when: kube_template_clean | bool
+
+- name: Watch ServiceAccount file transfer
+  copy:
+    src: 'grafana-prometheus-scraper.yaml'
+    dest: '/tmp/grafana-prometheus-scraper.yaml'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
+- name: Apply the Watch ServiceAccount manifest
+  command: 'kubectl apply -f /tmp/grafana-prometheus-scraper.yaml'
+  environment:
+    no_proxy: '*'
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+
+- name: Get watch ServiceAccount access token
+  shell: "kubectl -n default describe secret $(kubectl -n default get secret | grep grafana-prometheus-scraper | awk '{print $1}') | grep 'token:' | sed 's/.*://' | sed 's/^[ \t]*//g'"
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+    no_proxy: '*'
+  no_log: true
+  register: kube_prometheus_token
+
+- name: Access token outputs
+  copy:
+    content: '{{ kube_prometheus_token.stdout_lines[0] }}'
+    dest: '/tmp/prometheus.token'
+  no_log: true

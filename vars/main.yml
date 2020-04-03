@@ -30,6 +30,8 @@ kube_extra_args:
   - 'runtime-cgroups=/systemd/system.slice'
   - 'kubelet-cgroups=/systemd/system.slice'
 
+kube_template_clean: true
+
 kube_servers: "\
   {% set _kube_servers = [] %}\
   {% for host in groups[group_names[-1]] %}\

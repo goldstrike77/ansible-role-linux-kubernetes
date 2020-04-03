@@ -58,14 +58,17 @@
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
     no_proxy: '*'
+  no_log: true
   register: kube_dashboard_token
 
 - name: Access token outputs
   copy:
     content: '{{ kube_dashboard_token.stdout_lines[0] }}'
     dest: '/tmp/dashboard.token'
+  no_log: true
 
 - name: Remove the kubernetes dashboard configuration.
   file:
     path: '/tmp/dashboard.yaml'
     state: 'absent'
+  when: kube_template_clean | bool

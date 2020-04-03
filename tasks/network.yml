@@ -12,3 +12,10 @@
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
+
+- name: Remove networking cni manifest transfer
+  file:
+    path: '/tmp/{{ kube_network.cni }}.yaml'
+    state: 'absent'
+  when: kube_template_clean | bool
+
