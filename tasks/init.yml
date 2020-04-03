@@ -84,3 +84,9 @@
     content: '{{ kube_prometheus_token.stdout_lines[0] }}'
     dest: '/tmp/prometheus.token'
   no_log: true
+
+- name: Remove the Watch ServiceAccount configuration file
+  file:
+    path: '/tmp/grafana-prometheus-scraper.yaml'
+    state: 'absent'
+  when: kube_template_clean | bool
