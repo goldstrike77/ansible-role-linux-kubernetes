@@ -60,6 +60,9 @@
       include: 'network.yml'
     - name: Include components deploy operation
       include: 'components.yml'
+      loop: '{{ kube_components }}'
+      loop_control:
+        loop_var: kube_components_item
     - name: Include Dashboard deploy operation
       include: 'dashboard.yml'
       when: kube_dashboard_install | bool

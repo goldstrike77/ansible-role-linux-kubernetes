@@ -1,15 +1,19 @@
+- name: Create kubernetes components folder
+  file:
+    path: '/tmp/components/{{ kube_components_item }}'
+    state: 'directory'
+
 - name: Kubernetes components deploy file transfer
-  copy:
-    src: 'components/{{ item }}'
-    dest: '/tmp/components/'
+  template:
+    src: 'components/{{ kube_components_item }}/{{ item | basename }}'
+    dest: '/tmp/components/{{ kube_components_item }}/{{ item | basename }}'
     owner: 'root'
     group: 'root'
     mode: '0644'
-  loop: '{{ kube_components }}'
+  loop: "{{ lookup('fileglob', '../templates/components/{{ kube_components_item }}/*.yaml', wantlist=True) }}"
 
 - name: Apply the components manifest
-  command: 'kubectl create -f /tmp/components/{{ item }}'
+  command: 'kubectl create -f /tmp/components/{{ kube_components_item }}'
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
-  loop: '{{ kube_components }}'

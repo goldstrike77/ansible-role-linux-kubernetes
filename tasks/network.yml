@@ -12,11 +12,3 @@
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
-
-#- name: 'Delete the {{ kube_pod_network_solution }} networking manifest'
-#  file:
-#    path: '/tmp/network_{{ kube_network.cni }}_{{ index }}.yaml'
-#    state: 'absent'
-#  loop: '{{ kube_cni_plugins[kube_network.cni].manifests }}'
-#  loop_control:
-#    index_var: index

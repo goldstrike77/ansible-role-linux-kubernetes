@@ -12,8 +12,13 @@ kube_kernel_parameters:
   - { variable: 'net.ipv4.neigh.default.gc_thresh2',   value: '4096' }
   - { variable: 'net.ipv4.neigh.default.gc_thresh1',   value: '2048' }
 
-#kube_registry_server: 'gcr.azk8s.cn/google_containers'
-kube_registry_server: 'registry.aliyuncs.com/google_containers'
+kube_registry_mirrors: # Mirrors of docker image registry 
+  quay: 'quay-mirror.qiniu.com'
+#  quay: 'quay.azk8s.cn'
+  google: 'registry.aliyuncs.com'
+#  google: 'gcr.azk8s.cn'
+  dockerhub: 'hub-mirror.c.163.com'
+#  dockerhub: 'dockerhub.azk8s.cn'
 
 kube_pypi_url: 'https://mirrors.aliyun.com/pypi/simple/'
 
@@ -24,21 +29,6 @@ kube_python_dependent_packages:
 kube_extra_args:
   - 'runtime-cgroups=/systemd/system.slice'
   - 'kubelet-cgroups=/systemd/system.slice'
-
-kube_cni_canal_images:
-  - 'quay.azk8s.cn/calico/cni:v3.13.1'
-  - 'quay.azk8s.cn/calico/pod2daemon-flexvol:v3.13.1'
-  - 'quay.azk8s.cn/calico/node:v3.13.1'
-  - 'quay.azk8s.cn/coreos/flannel:v0.11.0'
-
-kube_cni_flannel_images:
-  - 'quay.azk8s.cn/coreos/flannel:v0.12.0-amd64'
-
-kube_cni_calico_images:
-  - 'quay.azk8s.cn/calico/cni:v3.13.1'
-  - 'quay.azk8s.cn/calico/pod2daemon-flexvol:v3.13.1'
-  - 'quay.azk8s.cn/calico/node:v3.13.1'
-  - 'quay.azk8s.cn/calico/kube-controllers:v3.13.1'
 
 kube_servers: "\
   {% set _kube_servers = [] %}\

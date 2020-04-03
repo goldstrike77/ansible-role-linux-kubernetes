@@ -1,7 +1,7 @@
 ---
 - name: Kubernetes dashboard configuration file transfer
-  copy:
-    src: 'dashboard.yaml'
+  template:
+    src: 'dashboard.yaml.j2'
     dest: '/tmp/dashboard.yaml'
     owner: 'root'
     group: 'root'

@@ -112,16 +112,21 @@ See tests/inventory for an example.
     s-p-demo-mas02 ansible_host='10.101.4.44'
     s-p-demo-mas03 ansible_host='10.101.4.45'
     
+    [Kubernetes:vars]
+    kube_version='1.15.11'
+    kube_control_plane_endpoint='Master-Production-APIServer.service.dc01.local:6443'
+    kube_docker_dept=true
+    kube_docker_version='18.09.9'
+    
+    [Master:vars]
+    kube_node_role='master'
+    kube_network.cni='canal'
+    kube_network.pod_cidr='10.244.0.0/16'
+    kube_network.srv_cidr='10.96.0.0/12'
+    
     [Kubernetes:children]
     Master
     Node
-
-    [Master:vars]
-    kube_node_role='master'
-
-    [all:vars]
-    kube_version='1.15.11'
-    kube_control_plane_endpoint='Master-Production-APIServer.service.dc01.local:6443'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`

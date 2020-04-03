@@ -18,7 +18,7 @@ spec:
         app.kubernetes.io/version: 1.9.5
     spec:
       containers:
-      - image: quay.azk8s.cn/coreos/kube-state-metrics:v1.9.5
+      - image: {{ kube_registry_mirrors['quay'] }}/coreos/kube-state-metrics:v1.9.5
         livenessProbe:
           httpGet:
             path: /healthz
