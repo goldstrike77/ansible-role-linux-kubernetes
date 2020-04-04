@@ -3,7 +3,7 @@
     path: '/tmp/components/{{ kube_components_item }}'
     state: 'directory'
 
-- name: Kubernetes components deploy file transfer
+- name: Kubernetes components manifest file transfer
   template:
     src: 'components/{{ kube_components_item }}/{{ item | basename }}'
     dest: '/tmp/components/{{ kube_components_item }}/{{ item | basename }}'
@@ -17,6 +17,8 @@
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
+  changed_when: false
+  failed_when: false
 
 - name: Remove kubernetes components folder
   file:

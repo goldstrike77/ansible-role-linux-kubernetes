@@ -53,6 +53,7 @@ The following list of supported the kubernetes releases:
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.0-rc7
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.5
+  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.30.0
 
 ## Role variables
 ### Main parameters #

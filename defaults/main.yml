@@ -20,8 +20,9 @@ kube_dashboard_install: true # A boolean value, whether Docker installs kubernet
 
 # Components #
 kube_components: # Individual Kubernetes components.
-  - 'metrics-server'
+  - 'ingress-nginx'
   - 'kube-state-metrics'
+  - 'metrics-server'
 
 # Docker parameters #
 kube_docker_version: '18.09.9' # Specify the Docker version.
