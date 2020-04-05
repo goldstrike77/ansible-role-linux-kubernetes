@@ -50,6 +50,7 @@ The following list of supported the kubernetes releases:
   - [flannel](https://github.com/coreos/flannel) v0.12.0
   - [canal](https://github.com/projectcalico/canal) (given calico/flannel versions)
 - Components
+  - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.0
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.0-rc7
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.5
@@ -72,6 +73,15 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### Dashboard parameters
 * `kube_dashboard_install`: A boolean value, whether installs kubernetes dashboard.
+
+##### Fluentd parameters
+* `kube_fluentd_elastic_install`: A boolean value, whether Docker installs kubernetes fluentd-elasticsearch addons.
+* `kube_fluentd_elastic_hosts`: The hostname list of your Elasticsearch node.
+* `kube_fluentd_elastic_port`: The port number of your Elasticsearch node.
+* `kube_fluentd_elastic_user`: The login username to connect to the Elasticsearch node.
+* `kube_fluentd_elastic_pass`: The login password to connect to the Elasticsearch node.
+* `kube_fluentd_elastic_scheme`: Specify https if your Elasticsearch endpoint supports SSL (default: http)
+* `kube_fluentd_elastic_prefix`: The prefix index name to write events when specifying logstash_format.
 
 ##### Components
 * `kube_components`: Individual Kubernetes components.
@@ -143,6 +153,14 @@ You can also use the group_vars or the host_vars files for setting the variables
       pod_cidr: '10.244.0.0/16'
       srv_cidr: '10.96.0.0/12'
     kube_dashboard_install: true
+    kube_fluentd_elastic_install: true
+    kube_fluentd_elastic_hosts:
+      - 'SYSLOG-Production-elastic.service.dc01.local'
+    kube_fluentd_elastic_port: '9200'
+    kube_fluentd_elastic_user: 'elastic'
+    kube_fluentd_elastic_pass: 'changeme'
+    kube_fluentd_elastic_scheme: 'http'
+    kube_fluentd_elastic_prefix: 'fluentd'
     kube_components:
       - 'metrics-server'
       - 'kube-state-metrics'
@@ -160,12 +178,6 @@ You can also use the group_vars or the host_vars files for setting the variables
       kube: '10250-10256'
       node: '30000-32767'
     environments: 'Development'
-    tags:
-      subscription: 'default'
-      owner: 'nobody'
-      department: 'Infrastructure'
-      organization: 'The Company'
-      region: 'IDC01'
     consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
     consul_public_http_prot: 'https'
     consul_public_http_port: '8500'

@@ -63,6 +63,9 @@
       loop: '{{ kube_components }}'
       loop_control:
         loop_var: kube_components_item
+    - name: Include fluentd-elasticsearch addons
+      include: 'fluentd.yaml'
+      when: kube_fluentd_elastic_install | bool
     - name: Include Dashboard deploy operation
       include: 'dashboard.yml'
       when: kube_dashboard_install | bool

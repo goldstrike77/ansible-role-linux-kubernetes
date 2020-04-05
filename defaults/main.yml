@@ -18,6 +18,16 @@ kube_docker_dept: false # A boolean value, whether Docker installs use the same 
 # Dashboard parameters #
 kube_dashboard_install: true # A boolean value, whether Docker installs kubernetes dashboard.
 
+# Fluentd parameters #
+kube_fluentd_elastic_install: false # A boolean value, whether Docker installs kubernetes fluentd-elasticsearch addons.
+kube_fluentd_elastic_hosts: # The hostname list of your Elasticsearch node.
+  - 'SYSLOG-Production-elastic.service.dc01.local'
+kube_fluentd_elastic_port: '9200' # The port number of your Elasticsearch node.
+kube_fluentd_elastic_user: 'elastic' # The login username to connect to the Elasticsearch node.
+kube_fluentd_elastic_pass: 'changeme' # The login password to connect to the Elasticsearch node.
+kube_fluentd_elastic_scheme: 'http' # Specify https if your Elasticsearch endpoint supports SSL (default: http)
+kube_fluentd_elastic_prefix: 'fluentd' # The prefix index name to write events when specifying logstash_format.
+
 # Components #
 kube_components: # Individual Kubernetes components.
   - 'ingress-nginx'
@@ -28,6 +38,7 @@ kube_components: # Individual Kubernetes components.
 kube_docker_version: '18.09.9' # Specify the Docker version.
 kube_docker_edition: 'ce' # Specify the Docker edition.
 kube_docker_channel: 'stable' # Define Docker distribution.
+kube_docker_path: '/data' # Specify the Docker data folder.
 kube_docker_syslog: false # A boolean value,  Enable or Disable send log to remote Syslog server.
 
 # Listen port #
@@ -42,12 +53,6 @@ kube_port_arg:
 
 # Service Mesh #
 environments: 'Development' # Define the service environment.
-#tags: # Define the service custom label.
-#  subscription: 'default'
-#  owner: 'nobody'
-#  department: 'Infrastructure'
-#  organization: 'The Company'
-#  region: 'IDC01'
 consul_public_exporter_token: '00000000-0000-0000-0000-000000000000' # Public Consul client ACL token.
 consul_public_http_prot: 'https' # The consul Hypertext Transfer Protocol.
 consul_public_http_port: '8500' # The consul HTTP API port.
