@@ -7,10 +7,9 @@ kube_cgroup_driver: 'systemd' # Specifies the management of the container's cgro
 #kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:6443' # The address or DNS and port of the load balancer.
 
 # Kubernetes networking #
-kube_network:
-  cni: 'canal' # Specify the Kubernetes CNI plugins, calico / flannel / canal.
-  pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
-  srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
+kube_cni: 'canal' # Specify the Kubernetes CNI plugins, calico / flannel / canal.
+kube_pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
+kube_srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
 
 # Role dependencies #
 kube_docker_dept: false # A boolean value, whether Docker installs use the same task.

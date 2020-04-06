@@ -86,7 +86,7 @@ data:
 
     # Valid log_level's are: fatal, error, warn, info, debug, trace
     <system>
-      log_level warn
+      log_level info
     </system>
 kind: ConfigMap
 metadata:

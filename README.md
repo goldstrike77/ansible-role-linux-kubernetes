@@ -46,9 +46,9 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.16
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.17
 - Network Plugin
-  - [calico](https://github.com/projectcalico/calico) v3.13.1
+  - [calico](https://github.com/projectcalico/calico) v3.13.2
   - [flannel](https://github.com/coreos/flannel) v0.12.0
-  - [canal](https://github.com/projectcalico/canal) (given calico/flannel versions)
+  - [canal](https://github.com/projectcalico/canal) (given calico versions)
 - Components
   - [roffe/kube-gelf](https://hub.docker.com/r/roffe/kube-gelf) latest
   - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.0
@@ -68,9 +68,9 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_control_plane_endpoint`: The address or DNS and port of the load balancer.
 
 ##### Kubernetes networking
-* `kube_network.cni`: Specify the Kubernetes CNI plugins, calico / flannel / canal.
-* `kube_network.pod_cidr`: Specify range of IP addresses for the pod network.
-* `kube_network.srv_cidr`: Use alternative range of IP address for service VIPs.
+* `kube_cni`: Specify the Kubernetes CNI plugins, calico / flannel / canal.
+* `kube_pod_cidr`: Specify range of IP addresses for the pod network.
+* `kube_srv_cidr`: Use alternative range of IP address for service VIPs.
 
 ##### Dashboard parameters
 * `kube_dashboard_install`: A boolean value, whether installs kubernetes dashboard.
@@ -135,14 +135,14 @@ See tests/inventory for an example.
     [Kubernetes:vars]
     kube_version='1.15.11'
     kube_control_plane_endpoint='Master-Production-APIServer.service.dc01.local:6443'
+    kube_cni='calico'
+    kube_pod_cidr='10.244.0.0/16'
+    kube_srv_cidr='10.96.0.0/12'
     kube_docker_dept=true
     kube_docker_version='18.09.9'
     
     [Master:vars]
     kube_node_role='master'
-    kube_network.cni='canal'
-    kube_network.pod_cidr='10.244.0.0/16'
-    kube_network.srv_cidr='10.96.0.0/12'
     
     [Kubernetes:children]
     Master
@@ -155,10 +155,9 @@ You can also use the group_vars or the host_vars files for setting the variables
     kube_node_role: 'node'
     kube_cgroup_driver: 'systemd'
     kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:6443'
-    kube_network:
-      cni: 'canal'
-      pod_cidr: '10.244.0.0/16'
-      srv_cidr: '10.96.0.0/12'
+    kube_cni: 'calico'
+    kube_pod_cidr: '10.244.0.0/16'
+    kube_srv_cidr: '10.96.0.0/12'
     kube_dashboard_install: true
     kube_fluentd_elastic_install: true
     kube_fluentd_elastic_hosts:

@@ -60,7 +60,7 @@ data:
   # Flannel network configuration. Mounted into the flannel container.
   net-conf.json: |
     {
-      "Network": "{{ kube_network.pod_cidr }}",
+      "Network": "{{ kube_pod_cidr }}",
       "Backend": {
         "Type": "vxlan"
       }
@@ -475,7 +475,7 @@ spec:
         # This container installs the CNI binaries
         # and CNI network config file on each node.
         - name: install-cni
-          image: {{ kube_registry_mirrors['quay'] }}/calico/cni:v3.13.1
+          image: {{ kube_registry_mirrors['quay'] }}/calico/cni:v3.13.2
           command: ["/install-cni.sh"]
           env:
             # Name of the CNI config file to create.
@@ -511,7 +511,7 @@ spec:
         # Adds a Flex Volume Driver that creates a per-pod Unix Domain Socket to allow Dikastes
         # to communicate with Felix over the Policy Sync API.
         - name: flexvol-driver
-          image: {{ kube_registry_mirrors['quay'] }}/calico/pod2daemon-flexvol:v3.13.1
+          image: {{ kube_registry_mirrors['quay'] }}/calico/pod2daemon-flexvol:v3.13.2
           volumeMounts:
           - name: flexvol-driver-host
             mountPath: /host/driver
@@ -522,7 +522,7 @@ spec:
         # container programs network policy and routes on each
         # host.
         - name: calico-node
-          image: {{ kube_registry_mirrors['quay'] }}/calico/node:v3.13.1
+          image: {{ kube_registry_mirrors['quay'] }}/calico/node:v3.13.2
           env:
             # Use Kubernetes API as the backing datastore.
             - name: DATASTORE_TYPE
