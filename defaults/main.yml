@@ -18,8 +18,8 @@ kube_docker_dept: false # A boolean value, whether Docker installs use the same 
 # Dashboard parameters #
 kube_dashboard_install: true # A boolean value, whether Docker installs kubernetes dashboard.
 
-# Fluentd parameters #
-kube_fluentd_elastic_install: false # A boolean value, whether Docker installs kubernetes fluentd-elasticsearch addons.
+# Fluentd Elasticsearch parameters #
+kube_fluentd_elastic_install: false # A boolean value, whether installs kubernetes fluentd-elasticsearch addons.
 kube_fluentd_elastic_hosts: # The hostname list of your Elasticsearch node.
   - 'SYSLOG-Production-elastic.service.dc01.local'
 kube_fluentd_elastic_port: '9200' # The port number of your Elasticsearch node.
@@ -27,6 +27,12 @@ kube_fluentd_elastic_user: 'elastic' # The login username to connect to the Elas
 kube_fluentd_elastic_pass: 'changeme' # The login password to connect to the Elasticsearch node.
 kube_fluentd_elastic_scheme: 'http' # Specify https if your Elasticsearch endpoint supports SSL (default: http)
 kube_fluentd_elastic_prefix: 'fluentd' # The prefix index name to write events when specifying logstash_format.
+
+# Fluentd Gelf parameters #
+kube_fluentd_gelf_install: false # A boolean value, whether installs kubernetes fluentd-gelf addons.
+kube_fluentd_gelf_host: 'SYSLOG-Production-graylog.service.dc01.local' # The hostname of your Graylog or Logstash node.
+kube_fluentd_gelf_port: '12201' # The input port number of your Graylog or Logstash node.
+kube_fluentd_gelf_protocol: 'udp' # The input port protocol of your Graylog or Logstash node.
 
 # Components #
 kube_components: # Individual Kubernetes components.
@@ -39,7 +45,7 @@ kube_docker_version: '18.09.9' # Specify the Docker version.
 kube_docker_edition: 'ce' # Specify the Docker edition.
 kube_docker_channel: 'stable' # Define Docker distribution.
 kube_docker_path: '/data' # Specify the Docker data folder.
-kube_docker_syslog: false # A boolean value,  Enable or Disable send log to remote Syslog server.
+kube_docker_syslog: false # A boolean value, Enable or Disable send log to remote Syslog server.
 
 # Listen port #
 kube_port_arg:

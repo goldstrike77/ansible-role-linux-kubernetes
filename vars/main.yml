@@ -20,6 +20,7 @@ kube_registry_mirrors: # Mirrors of docker image registry
 #  google: 'gcr.azk8s.cn'
   dockerhub: 'hub-mirror.c.163.com'
 #  dockerhub: 'dockerhub.azk8s.cn'
+#  dockerhub: 'docker.mirrors.ustc.edu.cn'
 
 kube_pypi_url: 'https://mirrors.aliyun.com/pypi/simple/'
 
