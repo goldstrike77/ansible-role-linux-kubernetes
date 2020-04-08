@@ -13,8 +13,8 @@ kube_kernel_parameters:
   - { variable: 'net.ipv4.neigh.default.gc_thresh1',   value: '2048' }
 
 kube_registry_mirrors: # Mirrors of docker image registry 
-  quay: 'quay.mirrors.ustc.edu.cn'
-#  quay: 'quay-mirror.qiniu.com'
+#  quay: 'quay.mirrors.ustc.edu.cn'
+  quay: 'quay-mirror.qiniu.com'
 #  quay: 'quay.azk8s.cn'
   google: 'registry.aliyuncs.com'
 #  google: 'gcr.azk8s.cn'
@@ -28,9 +28,14 @@ kube_python_dependent_packages:
   - 'pip'
   - 'docker'
 
-kube_extra_args:
+kube_kubelet_extra_args:
   - 'runtime-cgroups=/systemd/system.slice'
   - 'kubelet-cgroups=/systemd/system.slice'
+  - 'feature-gates=RotateKubeletServerCertificate=true'
+
+kube_controller_manager_extra_args:
+  - 'experimental-cluster-signing-duration=87600h0m0s'
+  - 'feature-gates=RotateKubeletServerCertificate=true'
 
 kube_template_clean: true
 

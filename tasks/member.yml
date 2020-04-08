@@ -50,3 +50,12 @@
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
+
+- name: Kube controller manager extra args configuration
+  lineinfile:
+    state: 'present'
+    dest: '/etc/kubernetes/manifests/kube-controller-manager.yaml'
+    insertafter: '    - kube-controller-manager'
+    regexp: '    - --{{ item }}'
+    line: '    - --{{ item }}'
+  loop: '{{ kube_controller_manager_extra_args }}'

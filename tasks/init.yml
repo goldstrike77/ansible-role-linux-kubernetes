@@ -96,3 +96,37 @@
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
+
+- name: Kubelet certificates autoapprove manifest file transfer
+  copy:
+    src: 'kubelet_cert_update.yaml'
+    dest: '/tmp/kubelet_cert_update.yaml'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+
+- name: Apply the Kubelet certificates autoapprove
+  command: 'kubectl apply -f /tmp/kubelet_cert_update.yaml'
+  environment:
+    no_proxy: '*'
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+
+- name: Remove the Kubelet certificates autoapprove manifest file
+  file:
+    path: '/tmp/kubelet_cert_update.yaml'
+    state: 'absent'
+  when: kube_template_clean | bool
+
+- name: Kube controller manager extra args configuration
+  lineinfile:
+    state: 'present'
+    dest: '/etc/kubernetes/manifests/kube-controller-manager.yaml'
+    insertafter: '    - kube-controller-manager'
+    regexp: '    - --{{ item }}'
+    line: '    - --{{ item }}'
+  loop: '{{ kube_controller_manager_extra_args }}'
+
+- name: Sleep for 10 seconds for wait kube controller manager reload
+  wait_for:
+    timeout: 10
+  delegate_to: 'localhost'
