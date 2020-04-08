@@ -1,3 +1,9 @@
 ---
 - include: 'RedHat.yml'
   when: ansible_os_family == 'RedHat'
+
+- name: Kubernetes control plane node labele applied
+  command: 'kubectl label nodes {{ ansible_fqdn | lower }} --overwrite environment="{{ environments | default("Development") }}" group="{{ group_names[0] | default ("") | upper }}"'
+  environment:
+    no_proxy: '*'
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
