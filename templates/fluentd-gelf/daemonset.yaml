@@ -16,6 +16,9 @@ spec:
       labels:
         app: kube-gelf
     spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
       serviceAccountName: kube-gelf
       dnsPolicy: ClusterFirst
       containers:

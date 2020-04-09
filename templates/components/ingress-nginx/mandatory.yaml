@@ -210,6 +210,9 @@ spec:
         prometheus.io/port: "10254"
         prometheus.io/scrape: "true"
     spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
       # wait up to five minutes for the drain of connections
       terminationGracePeriodSeconds: 300
       serviceAccountName: nginx-ingress-serviceaccount
