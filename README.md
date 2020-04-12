@@ -50,7 +50,7 @@ The following list of supported the kubernetes releases:
   - [flannel](https://github.com/coreos/flannel) v0.12.0
   - [canal](https://github.com/projectcalico/canal) (given calico versions)
 - Components
-  - [roffe/kube-gelf](https://hub.docker.com/r/roffe/kube-gelf) latest
+  - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
   - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.0
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.0-rc7
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
