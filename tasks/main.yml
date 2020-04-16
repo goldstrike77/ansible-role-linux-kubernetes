@@ -162,3 +162,13 @@
   when:
     - kube_node_role == 'node'
     - not kube_join_stat.stat.exists | bool
+
+- name: Registered with HashiCorp Consul
+  include: 'register.yml'
+  when:
+    - kube_node_role == 'master'
+    - kube_servers[0] in ansible_default_ipv4.address
+    - kube_components is defined
+    - "'kube-state-metrics' in kube_components"
+    - exporter_is_install | bool
+    - consul_public_register | bool

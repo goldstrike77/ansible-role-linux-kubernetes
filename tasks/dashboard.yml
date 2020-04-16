@@ -65,6 +65,9 @@
   copy:
     content: '{{ kube_dashboard_token.stdout_lines[0] }}'
     dest: '/tmp/dashboard.token'
+    mode: '0600'
+    owner: 'root'
+    group: 'root'
   no_log: true
 
 - name: Remove the kubernetes dashboard configuration.
@@ -72,3 +75,41 @@
     path: '/tmp/dashboard.yaml'
     state: 'absent'
   when: kube_template_clean | bool
+
+- name: Get kubernetes dashboard node port
+  shell: "kubectl describe service kubernetes-dashboard -n kubernetes-dashboard | grep NodePort | grep TCP | awk '{print $3}' | cut -d / -f 1"
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+    no_proxy: '*'
+  no_log: true
+  register: kubernetes_dashboard_nodeport
+  until: kubernetes_dashboard_nodeport is succeeded
+  retries: 3
+  delay: 3
+  changed_when: false
+  failed_when: false
+
+- name: Register exporter service with an http health check
+  uri:
+    url: '{{ consul_public_http_prot }}://{{ item.client }}:{{ consul_public_http_port }}/v1/agent/service/register'
+    method: 'PUT'
+    body: '{"tags":["prometheus","exporter","prober"],"ID":"{{ group_names[0] | upper | regex_replace("_", "-") }}-{{ environments | upper | regex_replace("_", "-") }}-kubernetes-dashboard","name":"blackbox_exporter_prober","meta":{"target":"https://{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}{% else %}{{ ansible_default_ipv4.address }}{% endif %}:{{ kubernetes_dashboard_nodeport.stdout }}","group":"{{ group_names[0] | upper }}","environment":"{{ environments | upper }}"{% if tags is defined %},{{ tags | to_json | regex_replace("{") | regex_replace("}") }}{% endif %},"module":"http_2xx","metrics_path":"/probe","address":":9115",}}'
+    body_format: 'json'
+    status_code: '200'
+    headers:
+      X-Consul-Token: '{{ consul_public_exporter_token }}'
+      X-Requested-By: '{{ ansible_default_ipv4.address }}'
+      cache-control: 'no-cache'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ item.client }}'
+  loop: "{{ check_consul_reg.results | json_query('[*].{client:item,status:status}') }}"
+  when:
+    - item.status == 405
+  register: register_status
+  until: register_status.status == 200
+  retries: 3
+  delay: 3
+  no_log: true
+  changed_when: false
+  failed_when: false

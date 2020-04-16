@@ -1,0 +1,38 @@
+---
+- name: Get kube state metrics node port
+  shell: "kubectl describe service kube-state-metrics -n kube-system | grep NodePort | grep http-metrics | awk '{print $3}' | cut -d / -f 1"
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+    no_proxy: '*'
+  no_log: true
+  register: kube_state_metrics_nodeport
+  until: kube_state_metrics_nodeport is succeeded
+  retries: 3
+  delay: 3
+  changed_when: false
+  failed_when: false
+
+- name: Register exporter service with an http health check
+  uri:
+    url: '{{ consul_public_http_prot }}://{{ item.client }}:{{ consul_public_http_port }}/v1/agent/service/register'
+    method: 'PUT'
+    body: '{"tags":["prometheus","exporter"],"ID":"{{ group_names[0] | upper | regex_replace("_", "-") }}-{{ environments | upper | regex_replace("_", "-") }}-kube-state-metrics","name":"kube-state-metrics_exporter","address":"{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}{% else %}{{ ansible_default_ipv4.address }}{% endif %}","port":{{ kube_state_metrics_nodeport.stdout }},"meta":{"metrics_path":"/metrics","instance":"{{ inventory_hostname | upper }}","group":"{{ group_names[0] | upper }}","environment":"{{ environments | upper }}"{% if tags is defined %},{{ tags | to_json | regex_replace("{") | regex_replace("}") }}{% endif %}},"checks":[{"http":"http://{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}{% else %}{{ ansible_default_ipv4.address }}{% endif %}:{{ kube_state_metrics_nodeport.stdout }}/metrics","interval":"60s","tls_skip_verify":true,"method":"HEAD","timeout":"10s"}]}'
+    body_format: 'json'
+    status_code: '200'
+    headers:
+      X-Consul-Token: '{{ consul_public_exporter_token }}'
+      X-Requested-By: '{{ ansible_default_ipv4.address }}'
+      cache-control: 'no-cache'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ item.client }}'
+  loop: "{{ check_consul_reg.results | json_query('[*].{client:item,status:status}') }}"
+  when:
+    - item.status == 405
+  register: register_status
+  until: register_status.status == 200
+  retries: 3
+  delay: 3
+  no_log: true
+  changed_when: false
+  failed_when: false

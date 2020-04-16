@@ -4,7 +4,8 @@ kube_is_install: false # A boolean value, whether install the Kubernetes.
 kube_version: '1.15.11' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
 kube_cgroup_driver: 'systemd' # Specifies the management of the container's cgroups, cgroupfs or systemd.
-#kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:6443' # The address or DNS and port of the load balancer.
+#kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
+#kube_control_plane_port: '6443' # The port of the API Server load balancer advertise listening on.
 
 # Kubernetes networking #
 kube_cni: 'canal' # Specify the Kubernetes CNI plugins, calico / flannel / canal.
@@ -58,6 +59,16 @@ kube_port_arg:
 
 # Service Mesh #
 environments: 'Development' # Define the service environment.
+#tags: # Define the service custom label.
+#  subscription: 'default'
+#  owner: 'nobody'
+#  department: 'Infrastructure'
+#  organization: 'The Company'
+#  region: 'IDC01'
+exporter_is_install: false # Whether to install prometheus exporter.
+consul_public_register: false # Whether register a exporter service with public consul client.
 consul_public_exporter_token: '00000000-0000-0000-0000-000000000000' # Public Consul client ACL token.
 consul_public_http_prot: 'https' # The consul Hypertext Transfer Protocol.
 consul_public_http_port: '8500' # The consul HTTP API port.
+consul_public_clients: # List of public consul clients.
+  - '127.0.0.1'

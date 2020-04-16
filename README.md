@@ -66,6 +66,8 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_node_role`: Type of nodes in cluster, master or node.
 * `kube_cgroup_driver`: Specifies the management of the container's cgroups, cgroupfs or systemd.
 * `kube_control_plane_endpoint`: The address or DNS and port of the load balancer.
+* `kube_control_plane_endpoint`: The address or DNS name of the API Server load balancer advertise listening on.
+* `kube_control_plane_port`: The port of the API Server load balancer advertise listening on.
 
 ##### Kubernetes networking
 * `kube_cni`: Specify the Kubernetes CNI plugins, calico / flannel / canal.
@@ -105,6 +107,9 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### Service Mesh
 * `environments`: Define the service environment.
+* `tags`: Define the service custom label.
+* `exporter_is_install`: Whether to install prometheus exporter.
+* `consul_public_register`: false Whether register a exporter service with public consul client.
 * `consul_public_exporter_token`: Public Consul client ACL token.
 * `consul_public_http_prot`: The consul Hypertext Transfer Protocol.
 * `consul_public_clients`: List of public consul clients.
@@ -134,7 +139,8 @@ See tests/inventory for an example.
     
     [Kubernetes:vars]
     kube_version='1.15.11'
-    kube_control_plane_endpoint='Master-Production-APIServer.service.dc01.local:6443'
+    kube_control_plane_endpoint='Master-Production-APIServer.service.dc01.local'
+    kube_control_plane_port='6443'
     kube_cni='calico'
     kube_pod_cidr='10.244.0.0/16'
     kube_srv_cidr='10.96.0.0/12'
@@ -154,7 +160,8 @@ You can also use the group_vars or the host_vars files for setting the variables
     kube_version: '1.15.11'
     kube_node_role: 'node'
     kube_cgroup_driver: 'systemd'
-    kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local:6443'
+    kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local'
+    kube_control_plane_port: '6443'
     kube_cni: 'calico'
     kube_pod_cidr: '10.244.0.0/16'
     kube_srv_cidr: '10.96.0.0/12'
@@ -190,6 +197,14 @@ You can also use the group_vars or the host_vars files for setting the variables
       kube: '10250-10256'
       node: '30000-32767'
     environments: 'Development'
+    tags:
+      subscription: 'default'
+      owner: 'nobody'
+      department: 'Infrastructure'
+      organization: 'The Company'
+      region: 'IDC01'
+    exporter_is_install: false
+    consul_public_register: false
     consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
     consul_public_http_prot: 'https'
     consul_public_http_port: '8500'

@@ -84,6 +84,9 @@
   copy:
     content: '{{ kube_prometheus_token.stdout_lines[0] }}'
     dest: '/tmp/prometheus.token'
+    owner: 'root'
+    group: 'root'
+    mode: '0600'
   no_log: true
 
 - name: Remove the Watch ServiceAccount configuration file
