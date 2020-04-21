@@ -88,7 +88,7 @@ spec:
         - name: varlog
           mountPath: /var/log
         - name: varlibdockercontainers
-          mountPath: << kube_docker_path >>/containers
+          mountPath: << kube_docker_path >>/docker/containers
           readOnly: true
         - name: config-volume
           mountPath: /etc/fluent/config.d
@@ -113,7 +113,7 @@ spec:
           path: /var/log
       - name: varlibdockercontainers
         hostPath:
-          path: << kube_docker_path >>/containers
+          path: << kube_docker_path >>/docker/containers
       - name: config-volume
         configMap:
           name: fluentd-es-config-v0.2.0
