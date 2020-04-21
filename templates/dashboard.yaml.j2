@@ -186,9 +186,6 @@ spec:
       labels:
         k8s-app: kubernetes-dashboard
     spec:
-      tolerations:
-      - key: node-role.kubernetes.io/master
-        effect: NoSchedule
       containers:
         - name: kubernetes-dashboard
           image: {{ kube_registry_mirrors['dockerhub'] }}/kubernetesui/dashboard:v2.0.0-rc7

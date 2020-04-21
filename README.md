@@ -120,6 +120,7 @@ There are some variables in vars/main.yml:
 
 ## Dependencies
 - Ansible versions >= 2.8 are supported.
+- Python >= 2.7.5
 - [Docker](https://github.com/goldstrike77/ansible-role-linux-docker.git)
 
 ## Example
