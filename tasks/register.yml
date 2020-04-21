@@ -12,6 +12,19 @@
   changed_when: false
   failed_when: false
 
+- name: Check register client are accessible from current host
+  uri:
+    url: '{{ consul_public_http_prot }}://{{ item }}:{{ consul_public_http_port }}/v1/agent/service/register'
+    method: 'GET'
+    timeout: '5'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ item }}'
+  loop: '{{ consul_public_clients }}'
+  changed_when: false
+  failed_when: false
+  register: check_consul_reg
+
 - name: Register exporter service with an http health check
   uri:
     url: '{{ consul_public_http_prot }}://{{ item.client }}:{{ consul_public_http_port }}/v1/agent/service/register'
