@@ -46,16 +46,16 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.16
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.17
 - Network Plugin
-  - [calico](https://github.com/projectcalico/calico) v3.13.2
+  - [calico](https://github.com/projectcalico/calico) v3.13.3
   - [flannel](https://github.com/coreos/flannel) v0.12.0
   - [canal](https://github.com/projectcalico/canal) (given calico versions)
 - Components
   - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
-  - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.0
-  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.0-rc7
+  - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.1
+  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.0
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.5
-  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.30.0
+  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.32.0
 
 ## Role variables
 ### Main parameters #
