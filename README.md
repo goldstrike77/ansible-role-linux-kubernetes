@@ -142,7 +142,7 @@ See tests/inventory for an example.
     kube_version='1.15.11'
     kube_control_plane_endpoint='Master-Production-APIServer.service.dc01.local'
     kube_control_plane_port='6443'
-    kube_cni='calico'
+    kube_cni='canal'
     kube_pod_cidr='10.244.0.0/16'
     kube_srv_cidr='10.96.0.0/12'
     kube_docker_dept=true
@@ -163,19 +163,11 @@ You can also use the group_vars or the host_vars files for setting the variables
     kube_cgroup_driver: 'systemd'
     kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local'
     kube_control_plane_port: '6443'
-    kube_cni: 'calico'
+    kube_cni: 'canal'
     kube_pod_cidr: '10.244.0.0/16'
     kube_srv_cidr: '10.96.0.0/12'
     kube_dashboard_install: true
-    kube_fluentd_elastic_install: true
-    kube_fluentd_elastic_hosts:
-      - 'SYSLOG-Production-elastic.service.dc01.local'
-    kube_fluentd_elastic_port: '9200'
-    kube_fluentd_elastic_user: 'elastic'
-    kube_fluentd_elastic_pass: 'changeme'
-    kube_fluentd_elastic_scheme: 'http'
-    kube_fluentd_elastic_prefix: 'fluentd'
-    kube_fluentd_gelf_install: false
+    kube_fluentd_gelf_install: true
     kube_fluentd_gelf_host: 'SYSLOG-Production-graylog.service.dc01.local'
     kube_fluentd_gelf_port: '12201'
     kube_fluentd_gelf_protocol: 'udp'
@@ -185,10 +177,6 @@ You can also use the group_vars or the host_vars files for setting the variables
       - 'metrics-server'
     kube_docker_dept: true
     kube_docker_version: '18.09.9'
-    kube_docker_edition: 'ce'
-    kube_docker_channel: 'stable'
-    kube_docker_path: '/data'
-    kube_docker_syslog: false
     kube_port_arg:
       etcd: '2379-2380'
       cadvisor: '4149'
@@ -204,8 +192,8 @@ You can also use the group_vars or the host_vars files for setting the variables
       department: 'Infrastructure'
       organization: 'The Company'
       region: 'IDC01'
-    exporter_is_install: false
-    consul_public_register: false
+    exporter_is_install: true
+    consul_public_register: true
     consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
     consul_public_http_prot: 'https'
     consul_public_http_port: '8500'
