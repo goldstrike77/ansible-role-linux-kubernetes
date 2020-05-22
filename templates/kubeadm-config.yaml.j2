@@ -14,7 +14,7 @@ bootstrapTokens:
 kind: InitConfiguration
 localAPIEndpoint:
   advertiseAddress: {{ ansible_default_ipv4.address }}
-  bindPort: {{ kube_port_arg.api_server }}
+  bindPort: {{ kube_port_arg.api }}
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
   name: {{ ansible_fqdn }}
@@ -40,7 +40,7 @@ etcd:
 imageRepository: {{ kube_registry_mirrors['google'] }}/google_containers
 kind: ClusterConfiguration
 kubernetesVersion: v{{ kube_version }}
-controlPlaneEndpoint: "{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}{% else %}{{ ansible_default_ipv4.address }}:{{ kube_port_arg.api_server }}{% endif %}:{{ kube_control_plane_port | default('6443') }}"
+controlPlaneEndpoint: "{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}{% else %}{{ ansible_default_ipv4.address }}:{{ kube_port_arg.api }}{% endif %}:{{ kube_control_plane_port | default('6443') }}"
 networking:
   dnsDomain: cluster.local
   podSubnet: "{{ kube_pod_cidr }}"
