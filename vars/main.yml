@@ -4,13 +4,15 @@ kube_module_dependent:
   - 'br_netfilter'
 
 kube_kernel_parameters:
-  - { variable: 'net.bridge.bridge-nf-call-iptables',  value: '1' }
-  - { variable: 'net.bridge.bridge-nf-call-ip6tables', value: '1', create: '{{ ansible_all_ipv6_addresses is not none }}' }
-  - { variable: 'net.core.somaxconn',                  value: '65535' }
-  - { variable: 'net.ipv4.ip_local_port_range',        value: '1025 65535' }
-  - { variable: 'net.ipv4.neigh.default.gc_thresh3',   value: '8192' }
-  - { variable: 'net.ipv4.neigh.default.gc_thresh2',   value: '4096' }
-  - { variable: 'net.ipv4.neigh.default.gc_thresh1',   value: '2048' }
+  - { variable: 'net.bridge.bridge-nf-call-iptables',   value: '1' }
+  - { variable: 'net.bridge.bridge-nf-call-ip6tables',  value: '1', create: '{{ ansible_all_ipv6_addresses is not none }}' }
+  - { variable: 'net.core.somaxconn',                   value: '65535' }
+  - { variable: 'net.ipv4.ip_local_port_range',         value: '1025 65535' }
+  - { variable: 'net.ipv4.neigh.default.gc_thresh3',    value: '8192' }
+  - { variable: 'net.ipv4.neigh.default.gc_thresh2',    value: '6144' }
+  - { variable: 'net.ipv4.neigh.default.gc_thresh1',    value: '4096' }
+  - { variable: 'net.ipv4.neigh.default.gc_stale_time', value: '120' }
+  - { variable: 'kernel.perf_event_paranoid',           value: '-1' }
 
 kube_registry_mirrors: # Mirrors of docker image registry 
 #  quay: 'quay.mirrors.ustc.edu.cn'
