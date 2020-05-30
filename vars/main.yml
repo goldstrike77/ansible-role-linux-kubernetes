@@ -1,11 +1,16 @@
 ---
 kube_module_dependent:
-  - 'overlay'
   - 'br_netfilter'
+  - 'ip_vs'
+  - 'ip_vs_rr'
+  - 'ip_vs_sh'
+  - 'ip_vs_wrr'
+  - 'nf_conntrack_ipv4'
+  - 'overlay'
 
 kube_kernel_parameters:
   - { variable: 'net.bridge.bridge-nf-call-iptables',   value: '1' }
-  - { variable: 'net.bridge.bridge-nf-call-ip6tables',  value: '1', create: '{{ ansible_all_ipv6_addresses is not none }}' }
+  - { variable: 'net.bridge.bridge-nf-call-ip6tables',  value: '1', create: '{{ ansible_default_ipv6 | length > 0 }}' }
   - { variable: 'net.core.somaxconn',                   value: '65535' }
   - { variable: 'net.ipv4.ip_local_port_range',         value: '1025 65535' }
   - { variable: 'net.ipv4.neigh.default.gc_thresh3',    value: '8192' }

@@ -46,7 +46,7 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.16
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.17
 - Network Plugin
-  - [calico](https://github.com/projectcalico/calico) v3.13.3
+  - [calico](https://github.com/projectcalico/calico) v3.13.4
   - [flannel](https://github.com/coreos/flannel) v0.12.0
   - [canal](https://github.com/projectcalico/canal) (given calico versions)
 - Components
@@ -65,6 +65,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_version`: Specify the Kubernetes version.
 * `kube_node_role`: Type of nodes in cluster, master or node.
 * `kube_cgroup_driver`: Specifies the management of the container's cgroups, cgroupfs or systemd.
+* `kube_proxy_ipvs`: A boolean value, whether run kube-proxy in IPVS mode.
 * `kube_control_plane_endpoint`: The address or DNS and port of the load balancer.
 * `kube_control_plane_endpoint`: The address or DNS name of the API Server load balancer advertise listening on.
 * `kube_control_plane_port`: The port of the API Server load balancer advertise listening on.
@@ -77,8 +78,10 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### Dashboard parameters
 * `kube_dashboard_install`: A boolean value, whether installs kubernetes dashboard.
 
+##### Logging layer
+* `kube_log_collector`: Define log collector, fluentd-elastic or fluentd-gelf.
+
 ##### Fluentd Elasticsearch parameters
-* `kube_fluentd_elastic_install`: A boolean value, whether installs kubernetes fluentd-elasticsearch addons.
 * `kube_fluentd_elastic_hosts`: The hostname list of your Elasticsearch node.
 * `kube_fluentd_elastic_port`: The port number of your Elasticsearch node.
 * `kube_fluentd_elastic_user`: The login username to connect to the Elasticsearch node.
@@ -87,7 +90,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_fluentd_elastic_prefix`: The prefix index name to write events when specifying logstash_format.
 
 ##### Fluentd Gelf parameters
-* `kube_fluentd_gelf_install`: A boolean value, whether installs kubernetes fluentd-gelf addons.
 * `kube_fluentd_gelf_host`: The hostname of your Graylog or Logstash node.
 * `kube_fluentd_gelf_port`: The input port number of your Graylog or Logstash node.
 * `kube_fluentd_gelf_protocol`: The input port protocol of your Graylog or Logstash node.
@@ -161,13 +163,14 @@ You can also use the group_vars or the host_vars files for setting the variables
     kube_version: '1.15.11'
     kube_node_role: 'node'
     kube_cgroup_driver: 'systemd'
+    kube_proxy_ipvs: true
     kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local'
     kube_control_plane_port: '6443'
     kube_cni: 'canal'
     kube_pod_cidr: '10.244.0.0/16'
     kube_srv_cidr: '10.96.0.0/12'
     kube_dashboard_install: true
-    kube_fluentd_gelf_install: true
+    kube_log_collector: 'fluentd-gelf'
     kube_fluentd_gelf_host: 'SYSLOG-Production-graylog.service.dc01.local'
     kube_fluentd_gelf_port: '12201'
     kube_fluentd_gelf_protocol: 'udp'
@@ -177,12 +180,17 @@ You can also use the group_vars or the host_vars files for setting the variables
       - 'metrics-server'
     kube_docker_dept: true
     kube_docker_version: '18.09.9'
-    kube_port_arg:
+    kube_port_tcp_arg:
       etcd: '2379-2380'
       api: '6443'
-      calico: '9099'
       kube: '10250-10256'
       node: '30000-32767'
+    kube_cni_tcp_arg:
+      calico_bgp: '179'
+      calico_typha: '5473'
+    kube_cni_udp_arg:
+      flannel_vxlan: '8472'
+      flannel_debug: '8285'
     environments: 'Development'
     tags:
       subscription: 'default'

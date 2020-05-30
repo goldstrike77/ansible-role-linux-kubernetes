@@ -27,6 +27,7 @@
     sysctl_set: 'yes'
     sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
   loop: '{{ kube_kernel_parameters }}'
+  when: item.create | default(true) | bool
 
 - name: Include firewall tasks
   include: 'firewall.yml'
@@ -39,12 +40,12 @@
   notify: 'Ensure kubelet service is enabled'
   when: kube_soft_update is changed or kube_conf_update is changed
 
+- name: Force the handler to run immediately
+  meta: flush_handlers
+
 - name: Include images pull tasks
   include: 'images.yml'
   when: kube_node_role == 'master'
-
-- name: Force the handler to run immediately
-  meta: flush_handlers
 
 - name: Check if master has already been initialized
   stat:
@@ -63,12 +64,9 @@
       loop: '{{ kube_components }}'
       loop_control:
         loop_var: kube_components_item
-    - name: Include fluentd-elasticsearch addons
-      include: 'fluentd-elastic.yaml'
-      when: kube_fluentd_elastic_install | bool
-    - name: Include fluentd-gelf addons
-      include: 'fluentd-gelf.yaml'
-      when: kube_fluentd_gelf_install | bool
+    - name: Include unified logging layer addons
+      include: '{{ kube_log_collector }}.yaml'
+      when: kube_log_collector is defined
     - name: Include Dashboard deploy operation
       include: 'dashboard.yml'
       when: kube_dashboard_install | bool
