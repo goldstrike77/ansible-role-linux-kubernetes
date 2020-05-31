@@ -39,6 +39,16 @@
       loop:
         - 'flannel.1'
         - 'tunl0'
+    - name: Allow CIDR networking traffic
+      firewalld:
+        zone: 'trusted'
+        source: '{{ item }}'
+        permanent: 'yes'
+        state: 'enabled'
+        immediate: 'true'
+      loop:
+        - '{{ kube_pod_cidr | default("10.244.0.0/16") }}'
+        - '{{ kube_srv_cidr | default("10.96.0.0/12") }}'
     - name: Enable IP masquerading
       firewalld:
         masquerade: 'yes'
