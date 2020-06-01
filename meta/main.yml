@@ -62,5 +62,6 @@ dependencies:
       docker_channel: '{{ kube_docker_channel }}'
       docker_native_cgroupdriver: '{{ kube_cgroup_driver }}'
       docker_path: '{{ kube_docker_path }}'
+      docker_bip: '{{ kube_docker_bip | default("172.17.0.1/16") }}'
       syslog: '{{ kube_docker_syslog | bool }}'
     when: kube_docker_dept | bool

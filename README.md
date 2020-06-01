@@ -50,6 +50,7 @@ The following list of supported the kubernetes releases:
   - [flannel](https://github.com/coreos/flannel) v0.12.0
   - [canal](https://github.com/projectcalico/canal) (given calico versions)
 - Components
+  - [falco](https://github.com/falcosecurity/falco) v0.23.0
   - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
   - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.1
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.1
@@ -105,6 +106,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_docker_edition`: Specify the Docker edition.
 * `kube_docker_channel`: Define Docker distribution.
 * `kube_docker_path`: Specify the Docker data folder.
+* `kube_docker_bip`: Specify the Docker network bridge IP.
 * `kube_docker_syslog`: A boolean value, Enable or Disable send log to remote Syslog server.
 
 ##### Service Mesh
@@ -175,6 +177,7 @@ You can also use the group_vars or the host_vars files for setting the variables
     kube_fluentd_gelf_port: '12201'
     kube_fluentd_gelf_protocol: 'udp'
     kube_components:
+      - 'falco'
       - 'ingress-nginx'
       - 'kube-state-metrics'
       - 'metrics-server'
