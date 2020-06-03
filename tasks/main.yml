@@ -35,6 +35,18 @@
 - name: Include tasks for specific OS
   include: '{{ ansible_os_family }}.yml'
 
+- name: Install requirement python package
+  pip:
+    name: '{{ item }}'
+    state: 'forcereinstall'
+    extra_args: '--ignore-installed -i https://{{ kube_pypi_url }}/simple --trusted-host {{ kube_pypi_url }}'
+  loop: '{{ kube_python_dependent_packages }}'
+  when: kube_node_role == 'master'
+  register: kube_python_status
+  until: kube_python_status is succeeded
+  retries: 5
+  delay: 2
+
 - name: Reload the kubelet service
   shell: echo ''
   notify: 'Ensure kubelet service is enabled'

@@ -29,11 +29,14 @@ kube_registry_mirrors: # Mirrors of docker image registry
 #  dockerhub: 'dockerhub.azk8s.cn'
 #  dockerhub: 'docker.mirrors.ustc.edu.cn'
 
-kube_pypi_url: 'https://mirrors.aliyun.com/pypi/simple/'
+kube_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
 
 kube_python_dependent_packages:
   - 'pip'
+  - 'setuptools'
   - 'docker'
+  - 'openshift'
+  - 'PyYAML'
 
 kube_kubelet_extra_args:
   - 'runtime-cgroups=/systemd/system.slice'

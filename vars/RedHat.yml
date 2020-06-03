@@ -3,7 +3,6 @@ kube_repo_name: 'kubernetes'
 kube_repo_url: 'http://mirrors.tuna.tsinghua.edu.cn/kubernetes/yum/repos/kubernetes-el{{ansible_distribution_version.split(".")[0]}}-{{ ansible_architecture }}/'
 kube_package:
   - 'ipvsadm'
-  - 'python-openshift'
   - 'kernel-devel-{{ ansible_kernel }}'
   - 'kubernetes-cni'
   - 'kubeadm-{{ kube_version }}-0'

@@ -26,7 +26,7 @@ __Table of Contents__
 - [Contributors](#Contributors)
 
 ## Overview
-This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and server configuration with some common operational features, very easy to deploy if you use HashiCorp Consul as DNS-based service discovery.
+Kubernetes is an open-source container-orchestration system for automating application deployment, scaling, and management. It was originally designed by Google, and is now maintained by the Cloud Native Computing Foundation. This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and cluster configuration with some common operational features, very easy to deploy if you use HashiCorp Consul as DNS-based service discovery.
 
 >__There are two file that record token for prometheus and dashboard in /tmp folder at first master node, Burn after reading!__
 
