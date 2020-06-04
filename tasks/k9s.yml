@@ -1,0 +1,33 @@
+---
+- name: Check current K9s version
+  command: '{{ kube_k9s.path }}/k9s version'
+  register: kube_k9s_current_version
+  changed_when: false
+  failed_when: false
+
+- name: Delete existing K9s version if different
+  file:
+    path: '{{ kube_k9s.path }}/k9s'
+    state: 'absent'
+  when:
+    - kube_k9s_current_version.stdout is defined
+    - kube_k9s.version not in kube_k9s_current_version.stdout
+
+- name: Install K9s
+  unarchive:
+    src: 'https://github.com/derailed/k9s/releases/download/v{{ kube_k9s.version }}/k9s_{{ ansible_system }}_{{ ansible_architecture }}.tar.gz'
+    dest: '{{ kube_k9s.path }}'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+    exclude:
+      - 'README.md'
+      - 'LICENSE'
+    remote_src: 'yes'
+    validate_certs: 'no'
+  when: kube_k9s_current_version.rc == 2 or kube_k9s.version not in kube_k9s_current_version.stdout
+  register: kube_k9s_status
+  until: kube_k9s_status is succeeded
+  retries: 5
+  delay: 2
+  ignore_errors: true

@@ -57,6 +57,7 @@ The following list of supported the kubernetes releases:
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.6
   - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.32.0
+  - [k9s](https://github.com/derailed/k9s) v0.20.3
 
 ## Role variables
 ### Main parameters #
@@ -108,6 +109,11 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_docker_path`: Specify the Docker data folder.
 * `kube_docker_bip`: Specify the Docker network bridge IP.
 * `kube_docker_syslog`: A boolean value, Enable or Disable send log to remote Syslog server.
+
+##### K9s parameters
+* `kube_k9s.install`: A boolean value, whether install the K9s.
+* `kube_k9s.version`: Specify the K9s version.
+* `kube_k9s.path`: Specify the K9s Program directory.
 
 ##### Service Mesh
 * `environments`: Define the service environment.
@@ -194,6 +200,10 @@ You can also use the group_vars or the host_vars files for setting the variables
     kube_cni_udp_arg:
       flannel_vxlan: '8472'
       flannel_debug: '8285'
+    kube_k9s:
+      install: true
+      version: '0.20.3'
+      path: '/usr/local/bin'
     environments: 'Development'
     tags:
       subscription: 'default'

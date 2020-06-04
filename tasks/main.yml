@@ -35,13 +35,20 @@
 - name: Include tasks for specific OS
   include: '{{ ansible_os_family }}.yml'
 
+- name: Get the list from current pip packages
+  pip_package_info:
+  when: kube_node_role == 'master'
+  register: kube_pip_packages
+
 - name: Install requirement python package
   pip:
     name: '{{ item }}'
     state: 'forcereinstall'
     extra_args: '--ignore-installed -i https://{{ kube_pypi_url }}/simple --trusted-host {{ kube_pypi_url }}'
   loop: '{{ kube_python_dependent_packages }}'
-  when: kube_node_role == 'master'
+  when:
+    - kube_node_role == 'master'
+    - "'openshift' not in kube_pip_packages.packages.pip or 'docker' not in kube_pip_packages.packages.pip"
   register: kube_python_status
   until: kube_python_status is succeeded
   retries: 5
@@ -182,3 +189,9 @@
     - "'kube-state-metrics' in kube_components"
     - exporter_is_install | bool
     - consul_public_register | bool
+
+- name: Install K9s terminal UI
+  include: 'k9s.yml'
+  when:
+    - kube_k9s.install | bool
+    - kube_node_role == 'master'

@@ -64,6 +64,12 @@ kube_cni_udp_arg:
   flannel_vxlan: '8472' # Use in-kernel VXLAN to encapsulate the packets.
   flannel_debug: '8285' # Debugging if your network and kernel prevent you from using VXLAN or host-gw.
 
+# K9s parameters #
+kube_k9s:
+  install: true # A boolean value, whether install the K9s.
+  version: '0.20.3' # Specify the K9s version.
+  path: '/usr/local/bin' # Specify the K9s Program directory.
+
 # Service Mesh #
 environments: 'Development' # Define the service environment.
 #tags: # Define the service custom label.
