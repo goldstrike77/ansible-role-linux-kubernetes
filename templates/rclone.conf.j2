@@ -1,0 +1,7 @@
+[kubernetes]
+type = {{ kube_backupset_arg.cloud_drive }}
+{% if kube_backupset_arg.cloud_drive == 'azureblob' %}
+account = {{ kube_backupset_arg.cloud_config.account }}
+key = {{ kube_backupset_arg.cloud_config.key }}
+endpoint = {{ kube_backupset_arg.cloud_config.endpoint }}
+{% endif %}

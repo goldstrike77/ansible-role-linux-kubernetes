@@ -35,10 +35,10 @@
 - name: Include tasks for specific OS
   include: '{{ ansible_os_family }}.yml'
 
-- name: Get the list from current pip packages
-  pip_package_info:
-  when: kube_node_role == 'master'
-  register: kube_pip_packages
+#- name: Get the list from current pip packages
+#  pip_package_info:
+#  when: kube_node_role == 'master'
+#  register: kube_pip_packages
 
 - name: Install requirement python package
   pip:
@@ -48,7 +48,7 @@
   loop: '{{ kube_python_dependent_packages }}'
   when:
     - kube_node_role == 'master'
-    - "'openshift' not in kube_pip_packages.packages.pip or 'docker' not in kube_pip_packages.packages.pip"
+#    - "'openshift' not in kube_pip_packages.packages.pip or 'docker' not in kube_pip_packages.packages.pip"
   register: kube_python_status
   until: kube_python_status is succeeded
   retries: 5
@@ -159,6 +159,10 @@
     remote_src: 'yes'
   when:
     - kube_node_role == 'master'
+
+- name: Include backup operation
+  include: 'backup.yml'
+  when: kube_node_role == 'master'
 
 - name: Set the kubeadm work node join command
   set_fact:

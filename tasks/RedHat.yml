@@ -1,4 +1,33 @@
 ---
+- name: Add EPEL YUM repositories.
+  yum_repository:
+    name: '{{ kube_epel_repo_name }}'
+    description: '{{ kube_epel_repo_name }} YUM repo'
+    file: '{{ kube_epel_repo_name }}'
+    baseurl: '{{ kube_epel_repo_url }}'
+    gpgcheck: 'no'
+    timeout: '60'
+  when:
+    - kube_backupset_arg.cloud_rsync | bool
+    - kube_backupset_arg.cloud_drive is defined
+    - kube_node_role == 'master'
+
+- name: Install the Rclone command line program packages.
+  yum:
+    name: 'rclone'
+    state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
+    update_cache: 'yes'
+  register: yum_status
+  until: yum_status is succeeded
+  retries: 3
+  delay: 5
+  when:
+    - kube_backupset_arg.cloud_rsync | bool
+    - kube_backupset_arg.cloud_drive is defined
+    - kube_node_role == 'master'
+
 - name: Add Kubernetes YUM repositories
   yum_repository:
     name: '{{ kube_repo_name }}'

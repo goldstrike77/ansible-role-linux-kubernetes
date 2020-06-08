@@ -19,6 +19,18 @@ kube_docker_dept: false # A boolean value, whether Docker installs use the same 
 # Dashboard parameters #
 kube_dashboard_install: true # A boolean value, whether Docker installs kubernetes dashboard.
 
+# Backup parameters #
+kube_backupset_arg:
+  keep: '5' # Backup retention cycle in days.
+  cloud_rsync: false # Whether rsync for cloud storage.
+  cloud_drive: 'azureblob' # Specify the cloud storage providers.
+  cloud_bwlimit: '10M' # Controls the bandwidth limit.
+  cloud_event: 'sync' # Define transfer events.
+  cloud_config: # Specify the cloud storage configuration.
+    account: 'blobuser' # Storage Account Name.
+    key: 'base64encodedkey==' # Storage Account Key.
+    endpoint: 'blob.core.chinacloudapi.cn' # Endpoint for the service.
+
 # Logging layer #
 kube_log_collector: 'fluentd-elastic' # Define log collector, fluentd-elastic / fluentd-gelf.
 

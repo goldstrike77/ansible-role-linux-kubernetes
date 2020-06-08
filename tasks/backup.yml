@@ -1,0 +1,63 @@
+---
+- name: Kubernetes etcd backup cronjob operations
+  block:
+    - name: Get kubernetes etcd containers image version.
+      shell: '/bin/kubeadm config images list --kubernetes-version=v{{ kube_version }} | grep etcd | cut -f2 -d "/" | cut -f2 -d ":"'
+      register: kube_etcd_image_version
+    - name: Kubernetes etcd backup configuration file transfer.
+      template:
+        src: 'etcd_backup.yaml.j2'
+        dest: '/tmp/etcd_backup.yaml'
+        owner: 'root'
+        group: 'root'
+        mode: '0644'
+    - name: Enable the Kubernetes etcd backup cronjob
+      command: 'kubectl apply -f "/tmp/etcd_backup.yaml"'
+      environment:
+        KUBECONFIG: '/etc/kubernetes/admin.conf'
+        no_proxy: '*'
+    - name: Remove the kubernetes etcd backup configuration.
+      file:
+        path: '/tmp/etcd_backup.yaml'
+        state: 'absent'
+      when: kube_template_clean | bool
+  when: kube_servers[0] in ansible_default_ipv4.address
+
+- name: Creating Rclone configureation folder.
+  file:
+    dest: '/etc/rclone'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0755'
+  when:
+    - kube_backupset_arg.cloud_rsync | bool
+    - kube_backupset_arg.cloud_drive is defined
+
+- name: Rclone configuration file transfer.
+  template:
+    src: 'rclone.conf.j2'
+    dest: '/etc/rclone/kubernetes.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0640'
+  when:
+    - kube_backupset_arg.cloud_rsync | bool
+    - kube_backupset_arg.cloud_drive is defined
+
+- name: Kubernetes Backup Scripts file transfer.
+  template:
+    src: 'kube_backup.sh.j2'
+    dest: '/usr/local/bin/kube_backup.sh'
+    owner: 'root'
+    group: 'root'
+    mode: '0660'
+  no_log: true
+
+- name : Kubernetes backup job.
+  cron:
+    user: 'root'
+    name: 'Etcd Snapshot Backup'
+    minute: "{{ ( ansible_hostname | hash | list | map('int',0,16) | sum ) % 60 }}"
+    hour: "{{ (( ansible_hostname | hash | list | map('int',0,16) | sum ) % 2) + 1 }}"
+    job: '/bin/sh /usr/local/bin/kube_backup.sh'

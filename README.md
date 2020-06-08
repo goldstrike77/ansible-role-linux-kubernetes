@@ -80,6 +80,14 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### Dashboard parameters
 * `kube_dashboard_install`: A boolean value, whether installs kubernetes dashboard.
 
+##### Backup parameters
+* `kube_backupset_arg.keep`: Backup retention cycle in days.
+* `kube_backupset_arg.cloud_rsync`: Whether rsync for cloud storage.
+* `kube_backupset_arg.cloud_drive`: Specify the cloud storage providers.
+* `kube_backupset_arg.cloud_bwlimit`: Controls the bandwidth limit.
+* `kube_backupset_arg.cloud_event`: Define transfer events.
+* `kube_backupset_arg.cloud_config`: Specify the cloud storage configuration.
+
 ##### Logging layer
 * `kube_log_collector`: Define log collector, fluentd-elastic or fluentd-gelf.
 
@@ -178,6 +186,16 @@ You can also use the group_vars or the host_vars files for setting the variables
     kube_pod_cidr: '10.244.0.0/16'
     kube_srv_cidr: '10.96.0.0/12'
     kube_dashboard_install: true
+    kube_backupset_arg:
+      keep: '5'
+      cloud_rsync: true
+      cloud_drive: 'azureblob'
+      cloud_bwlimit: '10M'
+      cloud_event: 'sync'
+      cloud_config:
+        account: 'blobuser'
+        key: 'base64encodedkey=='
+        endpoint: 'blob.core.chinacloudapi.cn'
     kube_log_collector: 'fluentd-gelf'
     kube_fluentd_gelf_host: 'SYSLOG-Production-graylog.service.dc01.local'
     kube_fluentd_gelf_port: '12201'
