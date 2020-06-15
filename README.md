@@ -10,6 +10,7 @@ ___
 __Table of Contents__
 
 - [Overview](#overview)
+  * [Architecture](#Architecture)
 - [Requirements](#requirements)
   * [Operating systems](#operating-systems)
   * [Kubernetes Versions](#kubernetes-versions)
@@ -27,8 +28,10 @@ __Table of Contents__
 
 ## Overview
 Kubernetes is an open-source container-orchestration system for automating application deployment, scaling, and management. It was originally designed by Google, and is now maintained by the Cloud Native Computing Foundation. This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and cluster configuration with some common operational features, very easy to deploy if you use HashiCorp Consul as DNS-based service discovery.
-
 >__There are two file that record token for prometheus and dashboard in /tmp folder at first master node, Burn after reading!__
+
+### Architecture
+<p><img src="https://raw.githubusercontent.com/goldstrike77/goldstrike77.github.io/master/img/k8s_arch.png" /></p>
 
 ## Requirements
 ### Operating systems
@@ -127,7 +130,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `environments`: Define the service environment.
 * `tags`: Define the service custom label.
 * `exporter_is_install`: Whether to install prometheus exporter.
-* `consul_public_register`: false Whether register a exporter service with public consul client.
+* `consul_public_register`: Whether register a exporter service with public consul client.
 * `consul_public_exporter_token`: Public Consul client ACL token.
 * `consul_public_http_prot`: The consul Hypertext Transfer Protocol.
 * `consul_public_clients`: List of public consul clients.
@@ -176,66 +179,68 @@ See tests/inventory for an example.
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
 
-    kube_version: '1.15.11'
-    kube_node_role: 'node'
-    kube_cgroup_driver: 'systemd'
-    kube_proxy_ipvs: true
-    kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local'
-    kube_control_plane_port: '6443'
-    kube_cni: 'canal'
-    kube_pod_cidr: '10.244.0.0/16'
-    kube_srv_cidr: '10.96.0.0/12'
-    kube_dashboard_install: true
-    kube_backupset_arg:
-      keep: '5'
-      cloud_rsync: true
-      cloud_drive: 'azureblob'
-      cloud_bwlimit: '10M'
-      cloud_event: 'sync'
-      cloud_config:
-        account: 'blobuser'
-        key: 'base64encodedkey=='
-        endpoint: 'blob.core.chinacloudapi.cn'
-    kube_log_collector: 'fluentd-gelf'
-    kube_fluentd_gelf_host: 'SYSLOG-Production-graylog.service.dc01.local'
-    kube_fluentd_gelf_port: '12201'
-    kube_fluentd_gelf_protocol: 'udp'
-    kube_components:
-      - 'falco'
-      - 'ingress-nginx'
-      - 'kube-state-metrics'
-      - 'metrics-server'
-    kube_docker_dept: true
-    kube_docker_version: '18.09.9'
-    kube_port_tcp_arg:
-      etcd: '2379-2380'
-      api: '6443'
-      kube: '10250-10256'
-      node: '30000-32767'
-    kube_cni_tcp_arg:
-      calico_bgp: '179'
-      calico_typha: '5473'
-    kube_cni_udp_arg:
-      flannel_vxlan: '8472'
-      flannel_debug: '8285'
-    kube_k9s:
-      install: true
-      version: '0.20.3'
-      path: '/usr/local/bin'
-    environments: 'Development'
-    tags:
-      subscription: 'default'
-      owner: 'nobody'
-      department: 'Infrastructure'
-      organization: 'The Company'
-      region: 'IDC01'
-    exporter_is_install: true
-    consul_public_register: true
-    consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
-    consul_public_http_prot: 'https'
-    consul_public_http_port: '8500'
-    consul_public_clients:
-      - '127.0.0.1'
+```yaml
+kube_version: '1.15.11'
+kube_node_role: 'node'
+kube_cgroup_driver: 'systemd'
+kube_proxy_ipvs: true
+kube_control_plane_endpoint: 'Master-Production-APIServer.service.dc01.local'
+kube_control_plane_port: '6443'
+kube_cni: 'canal'
+kube_pod_cidr: '10.244.0.0/16'
+kube_srv_cidr: '10.96.0.0/12'
+kube_dashboard_install: true
+kube_backupset_arg:
+  keep: '5'
+  cloud_rsync: true
+  cloud_drive: 'azureblob'
+  cloud_bwlimit: '10M'
+  cloud_event: 'sync'
+  cloud_config:
+    account: 'blobuser'
+    key: 'base64encodedkey=='
+    endpoint: 'blob.core.chinacloudapi.cn'
+kube_log_collector: 'fluentd-gelf'
+kube_fluentd_gelf_host: 'SYSLOG-Production-graylog.service.dc01.local'
+kube_fluentd_gelf_port: '12201'
+kube_fluentd_gelf_protocol: 'udp'
+kube_components:
+  - 'falco'
+  - 'ingress-nginx'
+  - 'kube-state-metrics'
+  - 'metrics-server'
+kube_docker_dept: true
+kube_docker_version: '18.09.9'
+kube_port_tcp_arg:
+  etcd: '2379-2380'
+  api: '6443'
+  kube: '10250-10256'
+  node: '30000-32767'
+kube_cni_tcp_arg:
+  calico_bgp: '179'
+  calico_typha: '5473'
+kube_cni_udp_arg:
+  flannel_vxlan: '8472'
+  flannel_debug: '8285'
+kube_k9s:
+  install: true
+  version: '0.20.3'
+  path: '/usr/local/bin'
+environments: 'Development'
+tags:
+  subscription: 'default'
+  owner: 'nobody'
+  department: 'Infrastructure'
+  organization: 'The Company'
+  region: 'IDC01'
+exporter_is_install: true
+consul_public_register: true
+consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'
+consul_public_http_prot: 'https'
+consul_public_http_port: '8500'
+consul_public_clients:
+  - '127.0.0.1'
+```
 
 ## License
 ![](https://img.shields.io/badge/MIT-purple.svg?style=for-the-badge)
