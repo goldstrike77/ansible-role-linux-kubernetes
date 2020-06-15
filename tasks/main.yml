@@ -1,7 +1,4 @@
 ---
-- name: Include OS-specific variables
-  include_vars: '{{ ansible_os_family }}.yml'
-
 - name: Remove swapfile from /etc/fstab
   mount:
     name: 'swap'
@@ -42,10 +39,9 @@
 
 - name: Install requirement python package
   pip:
-    name: '{{ item }}'
+    name: '{{ kube_python_dependent_packages }}'
     state: 'forcereinstall'
-    extra_args: '--ignore-installed -i https://{{ kube_pypi_url }}/simple --trusted-host {{ kube_pypi_url }}'
-  loop: '{{ kube_python_dependent_packages }}'
+    extra_args: '--default-timeout=120 --ignore-installed -i https://{{ kube_pypi_url }}/simple --trusted-host {{ kube_pypi_url }}'
   when:
     - kube_node_role == 'master'
 #    - "'openshift' not in kube_pip_packages.packages.pip or 'docker' not in kube_pip_packages.packages.pip"

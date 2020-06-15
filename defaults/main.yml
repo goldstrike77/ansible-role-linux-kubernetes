@@ -32,7 +32,7 @@ kube_backupset_arg:
     endpoint: 'blob.core.chinacloudapi.cn' # Endpoint for the service.
 
 # Logging layer #
-kube_log_collector: 'fluentd-elastic' # Define log collector, fluentd-elastic / fluentd-gelf.
+kube_log_collector: 'fluentd-gelf' # Define log collector, fluentd-elastic / fluentd-gelf.
 
 # Fluentd Elasticsearch parameters #
 kube_fluentd_elastic_hosts: # The hostname list of your Elasticsearch node.

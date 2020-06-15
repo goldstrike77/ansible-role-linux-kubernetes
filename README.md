@@ -55,7 +55,7 @@ The following list of supported the kubernetes releases:
 - Components
   - [falco](https://github.com/falcosecurity/falco) v0.23.0
   - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
-  - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.1
+  - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.2
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.1
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.6
