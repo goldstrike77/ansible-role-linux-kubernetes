@@ -58,9 +58,9 @@ The following list of supported the kubernetes releases:
   - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.2
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.1
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
-  - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.6
-  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.32.0
-  - [k9s](https://github.com/derailed/k9s) v0.20.3
+  - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.7
+  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.33.0
+  - [k9s](https://github.com/derailed/k9s) v0.20.5
 
 ## Role variables
 ### Main parameters #
@@ -160,7 +160,7 @@ See tests/inventory for an example.
     s-p-demo-mas03 ansible_host='10.101.4.45'
     
     [Kubernetes:vars]
-    kube_version='1.15.11'
+    kube_version='1.15.12'
     kube_control_plane_endpoint='Master-Production-APIServer.service.dc01.local'
     kube_control_plane_port='6443'
     kube_cni='canal'
@@ -180,7 +180,7 @@ See tests/inventory for an example.
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
 
 ```yaml
-kube_version: '1.15.11'
+kube_version: '1.15.12'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
@@ -224,7 +224,7 @@ kube_cni_udp_arg:
   flannel_debug: '8285'
 kube_k9s:
   install: true
-  version: '0.20.3'
+  version: '0.20.5'
   path: '/usr/local/bin'
 environments: 'Development'
 tags:
