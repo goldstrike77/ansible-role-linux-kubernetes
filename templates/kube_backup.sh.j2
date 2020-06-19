@@ -7,7 +7,7 @@ $FIND {{ kube_docker_path }}/backup/etcd -type f -mtime +{{ kube_backupset_arg.k
 
 {% if kube_backupset_arg.cloud_rsync | bool and kube_backupset_arg.cloud_drive is defined %}
 # Rsync for cloud storage
-$RCLONE --verbose --config="/etc/clone/kubernetes.conf" mkdir kubernetes:{{ ansible_hostname | lower }}
+$RCLONE --verbose --config="/etc/rclone/kubernetes.conf" mkdir kubernetes:{{ ansible_hostname | lower }}
 $RCLONE --bwlimit="{{ kube_backupset_arg.cloud_bwlimit | default('10M') }}" --verbose --config="/etc/rclone/kubernetes.conf" {{ kube_backupset_arg.cloud_event | default('sync') }} {{ kube_docker_path }}/backup/etcd kubernetes:{{ ansible_hostname | lower }}/etcd
 {% endif %}
 exit 0
