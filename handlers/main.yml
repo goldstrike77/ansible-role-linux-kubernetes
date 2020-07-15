@@ -3,7 +3,7 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Kubernetes control plane node labele applied
-  command: 'kubectl label nodes {{ ansible_fqdn | lower }} --overwrite nodeType="master" environment="{{ environments | default("Development") | upper }}" group="{{ group_names[0] | default ("") | upper }}"'
+  command: 'kubectl label nodes {{ ansible_fqdn | lower }} --overwrite nodeType="master" datacenter="{{ datacenter | default("dc01") | lower }}" domain="{{ domain | default("local") | lower }}" environment="{{ environments | default("Development") | upper }}" group="{{ group_names[0] | default ("") | upper }}"'
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'

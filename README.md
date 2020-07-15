@@ -56,11 +56,11 @@ The following list of supported the kubernetes releases:
   - [falco](https://github.com/falcosecurity/falco) v0.23.0
   - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
   - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.2
-  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.1
+  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.3
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.7
   - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.33.0
-  - [k9s](https://github.com/derailed/k9s) v0.20.5
+  - [k9s](https://github.com/derailed/k9s) v0.21.2
 
 ## Role variables
 ### Main parameters #
@@ -128,6 +128,8 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### Service Mesh
 * `environments`: Define the service environment.
+* `datacenter`: Define the DataCenter.
+* `domain`: Define the Domain.
 * `tags`: Define the service custom label.
 * `exporter_is_install`: Whether to install prometheus exporter.
 * `consul_public_register`: Whether register a exporter service with public consul client.
@@ -177,7 +179,7 @@ See tests/inventory for an example.
     Node
 
 ### Combination of group vars and playbook
-You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`
+You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
 kube_version: '1.15.12'
@@ -224,15 +226,17 @@ kube_cni_udp_arg:
   flannel_debug: '8285'
 kube_k9s:
   install: true
-  version: '0.20.5'
+  version: '0.21.2'
   path: '/usr/local/bin'
 environments: 'Development'
+datacenter: 'dc01'
+domain: 'local'
 tags:
   subscription: 'default'
   owner: 'nobody'
   department: 'Infrastructure'
   organization: 'The Company'
-  region: 'IDC01'
+  region: 'China'
 exporter_is_install: true
 consul_public_register: true
 consul_public_exporter_token: '00000000-0000-0000-0000-000000000000'

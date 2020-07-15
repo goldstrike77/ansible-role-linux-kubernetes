@@ -24,8 +24,8 @@
     update_cache: 'yes'
   register: yum_status
   until: yum_status is succeeded
-  retries: 3
-  delay: 5
+  retries: 5
+  delay: 2
   when:
     - kube_backupset_arg.cloud_rsync | bool
     - kube_backupset_arg.cloud_drive is defined
@@ -48,8 +48,8 @@
     disable_gpg_check: 'yes'
   register: kube_soft_update
   until: kube_soft_update is succeeded
-  retries: 3
-  delay: 5
+  retries: 5
+  delay: 2
 
 - name: kubelet services file transfer
   template:

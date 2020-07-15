@@ -79,17 +79,19 @@ kube_cni_udp_arg:
 # K9s parameters #
 kube_k9s:
   install: true # A boolean value, whether install the K9s.
-  version: '0.20.5' # Specify the K9s version.
+  version: '0.21.2' # Specify the K9s version.
   path: '/usr/local/bin' # Specify the K9s Program directory.
 
 # Service Mesh #
 environments: 'Development' # Define the service environment.
+datacenter: 'dc01' # Define the DataCenter.
+domain: 'local' # Define the Domain.
 #tags: # Define the service custom label.
 #  subscription: 'default'
 #  owner: 'nobody'
 #  department: 'Infrastructure'
 #  organization: 'The Company'
-#  region: 'IDC01'
+#  region: 'China'
 exporter_is_install: false # Whether to install prometheus exporter.
 consul_public_register: false # Whether register a exporter service with public consul client.
 consul_public_exporter_token: '00000000-0000-0000-0000-000000000000' # Public Consul client ACL token.
