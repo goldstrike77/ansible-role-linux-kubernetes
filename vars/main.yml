@@ -20,8 +20,9 @@ kube_kernel_parameters:
   - { variable: 'kernel.perf_event_paranoid',           value: '-1' }
 
 kube_registry_mirrors: # Mirrors of docker image registry 
+  quay: 'quay.io'
 #  quay: 'quay.mirrors.ustc.edu.cn'
-  quay: 'quay-mirror.qiniu.com'
+#  quay: 'quay-mirror.qiniu.com'
 #  quay: 'quay.azk8s.cn'
   google: 'registry.aliyuncs.com'
 #  google: 'gcr.azk8s.cn'
