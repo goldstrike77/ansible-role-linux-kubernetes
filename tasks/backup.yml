@@ -1,5 +1,5 @@
 ---
-- name: Kubernetes etcd backup cronjob operations
+- name: Kubernetes etcd backup cronjob operations.
   block:
     - name: Get kubernetes etcd containers image version.
       shell: '/bin/kubeadm config images list --kubernetes-version=v{{ kube_version }} | grep etcd | cut -f2 -d "/" | cut -f2 -d ":"'
@@ -11,7 +11,7 @@
         owner: 'root'
         group: 'root'
         mode: '0644'
-    - name: Enable the Kubernetes etcd backup cronjob
+    - name: Enable the Kubernetes etcd backup cronjob.
       command: 'kubectl apply -f "/tmp/etcd_backup.yaml"'
       environment:
         KUBECONFIG: '/etc/kubernetes/admin.conf'

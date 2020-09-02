@@ -1,21 +1,21 @@
 ---
-- name: Remove swapfile from /etc/fstab
+- name: Remove swapfile from /etc/fstab.
   mount:
     name: 'swap'
     fstype: 'swap'
     state: 'absent'
 
-- name: Disable swap
+- name: Disable swap.
   command: 'swapoff -a'
   when: ansible_swaptotal_mb > 0
 
-- name: Installs necessary runtime module
+- name: Installs necessary runtime module.
   modprobe:
     name: '{{ item }}'
     state: 'present'
   loop: '{{ kube_module_dependent }}'
 
-- name: Configure kernel parameters
+- name: Configure kernel parameters.
   sysctl:
     name: '{{ item.variable }}'
     value: '{{ item.value }}'
@@ -26,19 +26,19 @@
   loop: '{{ kube_kernel_parameters }}'
   when: item.create | default(true) | bool
 
-- name: Include firewall tasks
+- name: Include firewall tasks.
   include: 'firewall.yml'
 
-- name: Include tasks for specific OS
+- name: Include tasks for specific OS.
   include: '{{ ansible_os_family }}.yml'
 
-#- name: Get the list from current pip packages
+#- name: Get the list from current pip packages.
 #  pip_package_info:
 #  when: kube_node_role == 'master'
 #  register: kube_pip_packages
 
 # Need upgrade setuptools first, So can't be installed in parallel.
-- name: Install requirement python package
+- name: Install requirement python package.
   pip:
     name: '{{ item }}'
     state: 'forcereinstall'
@@ -52,39 +52,39 @@
   retries: 5
   delay: 2
 
-- name: Reload the kubelet service
+- name: Reload the kubelet service.
   shell: echo ''
   notify: 'Ensure kubelet service is enabled'
   when: kube_soft_update is changed or kube_conf_update is changed
 
-- name: Force the handler to run immediately
+- name: Force the handler to run immediately.
   meta: flush_handlers
 
-- name: Include images pull tasks
+- name: Include images pull tasks.
   include: 'images.yml'
   when: kube_node_role == 'master'
 
-- name: Check if master has already been initialized
+- name: Check if master has already been initialized.
   stat:
     path: '/etc/kubernetes/admin.conf'
   register: kube_init_stat
   when: kube_node_role == 'master'
 
-- name: Kubernetes master initialization operations
+- name: Kubernetes master initialization operations.
   block:
-    - name: Initialize Kubernetes
+    - name: Initialize Kubernetes.
       include: 'init.yml'
-    - name: Include Networking operation
+    - name: Include Networking operation.
       include: 'network.yml'
-    - name: Include components deploy operation
+    - name: Include components deploy operation.
       include: 'components.yml'
       loop: '{{ kube_components }}'
       loop_control:
         loop_var: kube_components_item
-    - name: Include unified logging layer addons
+    - name: Include unified logging layer addons.
       include: '{{ kube_log_collector }}.yaml'
       when: kube_log_collector is defined
-    - name: Include Dashboard deploy operation
+    - name: Include Dashboard deploy operation.
       include: 'dashboard.yml'
       when: kube_dashboard_install | bool
   when:
@@ -92,7 +92,7 @@
     - kube_servers[0] in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
 
-- name: Reload the control plane certificate
+- name: Reload the control plane certificate.
   command: "kubeadm init phase upload-certs --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-upload-certs{% else %}upload-certs{% endif %}"
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
@@ -102,7 +102,7 @@
     - kube_servers[0] in ansible_default_ipv4.address
   register: kuber_control_plane_certs
 
-- name: Create bootstrap token from the master
+- name: Create bootstrap token from the master.
   command: 'kubeadm token create'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
@@ -111,7 +111,7 @@
     - kube_node_role == 'master' 
     - kube_servers[0] in ansible_default_ipv4.address
 
-- name: Get the kubeadm join command from the master
+- name: Get the kubeadm join command from the master.
   command: 'kubeadm token create --print-join-command'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
@@ -122,7 +122,7 @@
     - kube_servers[0] in ansible_default_ipv4.address
   register: kuber_join_command_result
 
-- name: Set the kubeadm control plane join command
+- name: Set the kubeadm control plane join command.
   set_fact:
     kube_plan_join_command: "{{ kuber_join_command_result.stdout }} --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-control-plane{% else %}control-plane{% endif %} --certificate-key {{ kuber_control_plane_certs.stdout_lines[2] }} --ignore-preflight-errors=all"
   when: kuber_join_command_result.stdout is defined
@@ -130,14 +130,14 @@
   delegate_facts: true
   loop: '{{ groups[group_names[-1]] }}'
 
-- name: Kubernetes member master join operations
+- name: Kubernetes member master join operations.
   include: 'member.yml'
   when:
     - kube_node_role == 'master'
     - kube_servers[0] not in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
 
-- name: Ensure .kube directory exists
+- name: Ensure .kube directory exists.
   file:
     path: '{{ ansible_env.PWD }}/.kube'
     state: 'directory'
@@ -147,7 +147,7 @@
   when:
     - kube_node_role == 'master'
 
-- name: Symlink the kubectl admin.conf
+- name: Symlink the kubectl admin.conf.
   copy:
     src: '/etc/kubernetes/admin.conf'
     dest: '{{ ansible_env.PWD }}/.kube/config'
@@ -158,11 +158,11 @@
   when:
     - kube_node_role == 'master'
 
-- name: Include backup operation
+- name: Include backup operation.
   include: 'backup.yml'
   when: kube_node_role == 'master'
 
-- name: Set the kubeadm work node join command
+- name: Set the kubeadm work node join command.
   set_fact:
     kube_node_join_command: "{{ kuber_join_command_result.stdout }} --ignore-preflight-errors=all"
   when: kuber_join_command_result.stdout is defined
@@ -170,19 +170,19 @@
   delegate_facts: true
   loop: '{{ groups[group_names[0]] }}'
 
-- name: Check if node has already been joined
+- name: Check if node has already been joined.
   stat:
     path: '/etc/kubernetes/kubelet.conf'
   register: kube_join_stat
   when: kube_node_role == 'node'
 
-- name: Include Node operation
+- name: Include Node operation.
   include: 'node.yml'
   when:
     - kube_node_role == 'node'
     - not kube_join_stat.stat.exists | bool
 
-- name: Registered with HashiCorp Consul
+- name: Registered with HashiCorp Consul.
   include: 'register.yml'
   when:
     - kube_node_role == 'master'
@@ -192,7 +192,7 @@
     - exporter_is_install | bool
     - consul_public_register | bool
 
-- name: Install K9s terminal UI
+- name: Install K9s terminal UI.
   include: 'k9s.yml'
   when:
     - kube_k9s.install | bool

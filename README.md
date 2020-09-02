@@ -60,7 +60,7 @@ The following list of supported the kubernetes releases:
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.7
   - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.33.0
-  - [k9s](https://github.com/derailed/k9s) v0.21.2
+  - [k9s](https://github.com/derailed/k9s) v0.21.7
 
 ## Role variables
 ### Main parameters #
@@ -226,7 +226,7 @@ kube_cni_udp_arg:
   flannel_debug: '8285'
 kube_k9s:
   install: true
-  version: '0.21.2'
+  version: '0.21.7'
   path: '/usr/local/bin'
 environments: 'Development'
 datacenter: 'dc01'

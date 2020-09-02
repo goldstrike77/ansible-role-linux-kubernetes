@@ -1,5 +1,5 @@
 ---
-- name: Include OS-specific variables
+- name: Include OS-specific variables.
   include_vars: '{{ ansible_os_family }}.yml'
 
 - name: Add EPEL YUM repositories.
@@ -31,7 +31,7 @@
     - kube_backupset_arg.cloud_drive is defined
     - kube_node_role == 'master'
 
-- name: Add Kubernetes YUM repositories
+- name: Add Kubernetes YUM repositories.
   yum_repository:
     name: '{{ kube_repo_name }}'
     description: '{{ kube_repo_name }} YUM repository'
@@ -40,7 +40,7 @@
     gpgcheck: 'no'
     timeout: '60'
 
-- name: Install the Kubernetes packages
+- name: Install the Kubernetes packages.
   yum:
     name: '{{ kube_package }}'
     state: 'present'
@@ -51,7 +51,7 @@
   retries: 5
   delay: 2
 
-- name: kubelet services file transfer
+- name: kubelet services file transfer.
   template:
     src: 'kubelet.j2'
     dest: '/etc/sysconfig/kubelet'

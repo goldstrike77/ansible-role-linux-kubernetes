@@ -1,5 +1,5 @@
 ---
-- name: Join to Kubernetes control plane
+- name: Join to Kubernetes control plane.
   shell: >
     {{ kube_plan_join_command }}
     creates=/etc/kubernetes/kubelet.conf
@@ -11,7 +11,7 @@
   retries: 3
   delay: 5
 
-- name: Check local consul client are accessible from current host
+- name: Check local consul client are accessible from current host.
   uri:
     url: '{{ consul_public_http_prot }}://{{ ansible_default_ipv4.address }}:{{ consul_public_http_port }}/v1/agent/service/register'
     method: 'GET'
@@ -23,7 +23,7 @@
   failed_when: false
   register: check_consul_local
 
-- name: Register service with an http health check
+- name: Register service with an http health check.
   uri:
     url: '{{ consul_public_http_prot }}://{{ ansible_default_ipv4.address }}:{{ consul_public_http_port }}/v1/agent/service/register'
     method: 'PUT'
@@ -46,7 +46,7 @@
   changed_when: false
   failed_when: false
 
-- name: Kube controller manager extra args configuration
+- name: Kube controller manager extra args configuration.
   lineinfile:
     state: 'present'
     dest: '/etc/kubernetes/manifests/kube-controller-manager.yaml'

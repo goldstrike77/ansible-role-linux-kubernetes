@@ -1,9 +1,10 @@
-- name: Create kubernetes fluentbit-gelf folder
+---
+- name: Create kubernetes fluentbit-gelf folder.
   file:
     path: '/tmp/fluentbit-gelf'
     state: 'directory'
 
-- name: Kubernetes fluentbit-gelf manifest file transfer
+- name: Kubernetes fluentbit-gelf manifest file transfer.
   template:
     src: 'fluentbit-gelf/{{ item | basename }}'
     dest: '/tmp/fluentbit-gelf/{{ item | basename }}'
@@ -12,7 +13,7 @@
     mode: '0644'
   loop: "{{ lookup('fileglob', '../templates/fluentbit-gelf/*.yaml', wantlist=True) }}"
 
-- name: Apply the fluentbit-gelf manifest
+- name: Apply the fluentbit-gelf manifest.
   command: 'kubectl create -f /tmp/fluentbit-gelf'
   environment:
     no_proxy: '*'
@@ -20,7 +21,7 @@
   changed_when: false
   failed_when: false
 
-- name: Remove kubernetes fluentbit-gelf folder
+- name: Remove kubernetes fluentbit-gelf folder.
   file:
     path: '/tmp/fluentbit-gelf'
     state: 'absent'

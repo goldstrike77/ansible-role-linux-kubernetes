@@ -1,9 +1,10 @@
-- name: Create kubernetes fluentd-elasticsearch folder
+---
+- name: Create kubernetes fluentd-elasticsearch folder.
   file:
     path: '/tmp/fluentd-elasticsearch'
     state: 'directory'
 
-- name: Kubernetes fluentd-elasticsearch manifest file transfer
+- name: Kubernetes fluentd-elasticsearch manifest file transfer.
   template:
     src: 'fluentd-elasticsearch/{{ item | basename }}'
     dest: '/tmp/fluentd-elasticsearch/{{ item | basename }}'
@@ -14,7 +15,7 @@
     mode: '0644'
   loop: "{{ lookup('fileglob', '../templates/fluentd-elasticsearch/*.yaml', wantlist=True) }}"
 
-- name: Apply the fluentd-elasticsearch manifest
+- name: Apply the fluentd-elasticsearch manifest.
   command: 'kubectl create -f /tmp/fluentd-elasticsearch'
   environment:
     no_proxy: '*'
@@ -22,7 +23,7 @@
   changed_when: false
   failed_when: false
 
-- name: Remove kubernetes fluentd-elasticsearch folder
+- name: Remove kubernetes fluentd-elasticsearch folder.
   file:
     path: '/tmp/fluentd-elasticsearch'
     state: 'absent'

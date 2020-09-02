@@ -1,5 +1,5 @@
 ---
-- name: Kubernetes networking cni manifest transfer
+- name: Kubernetes networking cni manifest transfer.
   template:
     src: '{{ kube_cni }}.yaml.j2'
     dest: '/tmp/{{ kube_cni }}.yaml'
@@ -7,13 +7,13 @@
     group: 'root'
     mode: '0644'
 
-- name: 'Apply the {{ kube_cni }} networking manifest'
+- name: Apply networking manifest.
   command: 'kubectl apply -f "/tmp/{{ kube_cni }}.yaml"'
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
 
-- name: Remove networking cni manifest transfer
+- name: Remove networking cni manifest transfer.
   file:
     path: '/tmp/{{ kube_cni }}.yaml'
     state: 'absent'

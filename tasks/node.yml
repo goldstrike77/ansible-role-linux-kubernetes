@@ -1,5 +1,5 @@
 ---
-- name: Join node to Kubernetes master
+- name: Join node to Kubernetes master.
   shell: >
     {{ kube_node_join_command }}
     creates=/etc/kubernetes/kubelet.conf
@@ -7,10 +7,14 @@
     no_proxy: '*'
   register: kube_join_status
   until: kube_join_status is succeeded
-  retries: 3
-  delay: 5
+  retries: 5
+  delay: 2
 
-- name: Kubernetes node labele applied
+- name: Waits for Node online.
+  pause:
+    seconds: 2
+
+- name: Kubernetes node labele applied.
   command: 'kubectl label nodes {{ ansible_fqdn | lower }} --overwrite datacenter="{{ datacenter | default("dc01") | lower }}" domain="{{ domain | default("local") | lower }}" environment="{{ environments | default("Development") | upper }}" group="{{ group_names[0] | default ("") | upper }}" nodeType="slave"'
   environment:
     no_proxy: '*'

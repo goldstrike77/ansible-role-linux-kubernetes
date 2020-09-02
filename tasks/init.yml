@@ -1,5 +1,5 @@
 ---
-- name: Check local consul client are accessible from current host
+- name: Check local consul client are accessible from current host.
   uri:
     url: '{{ consul_public_http_prot }}://{{ ansible_default_ipv4.address }}:{{ consul_public_http_port }}/v1/agent/service/register'
     method: 'GET'
@@ -11,7 +11,7 @@
   failed_when: false
   register: check_consul_local
 
-- name: Register service with an http health check
+- name: Register service with an http health check.
   uri:
     url: '{{ consul_public_http_prot }}://{{ ansible_default_ipv4.address }}:{{ consul_public_http_port }}/v1/agent/service/register'
     method: 'PUT'
@@ -34,7 +34,7 @@
   changed_when: false
   failed_when: false
 
-- name: Kubeadm configuration file transfer
+- name: Kubeadm configuration file transfer.
   template:
     src: 'kubeadm-config.yaml.j2'
     dest: '/tmp/kubeadm-config.yaml'
@@ -42,7 +42,7 @@
     group: 'root'
     mode: '0644'
 
-- name: Initialize Kubernetes master
+- name: Initialize Kubernetes master.
   command: >
     kubeadm init
     --config=/tmp/kubeadm-config.yaml
@@ -52,13 +52,13 @@
     no_proxy: '*'
   notify: 'Kubernetes control plane node labele applied'
 
-- name: Remove the kubeadm configuration file
+- name: Remove the kubeadm configuration file.
   file:
     path: '/tmp/kubeadm-config.yaml'
     state: 'absent'
   when: kube_template_clean | bool
 
-- name: Watch ServiceAccount file transfer
+- name: Watch ServiceAccount file transfer.
   copy:
     src: 'grafana-prometheus-scraper.yaml'
     dest: '/tmp/grafana-prometheus-scraper.yaml'
@@ -66,13 +66,13 @@
     group: 'root'
     mode: '0644'
 
-- name: Apply the Watch ServiceAccount manifest
+- name: Apply the Watch ServiceAccount manifest.
   command: 'kubectl apply -f /tmp/grafana-prometheus-scraper.yaml'
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
 
-- name: Get watch ServiceAccount access token
+- name: Get watch ServiceAccount access token.
   shell: "kubectl -n default describe secret $(kubectl -n default get secret | grep grafana-prometheus-scraper | awk '{print $1}') | grep 'token:' | sed 's/.*://' | sed 's/^[ \t]*//g'"
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
@@ -80,7 +80,7 @@
   no_log: true
   register: kube_prometheus_token
 
-- name: Access token outputs
+- name: Prometheus access token outputs.
   copy:
     content: '{{ kube_prometheus_token.stdout_lines[0] }}'
     dest: '/tmp/prometheus.token'
@@ -89,13 +89,13 @@
     mode: '0600'
   no_log: true
 
-- name: Remove the Watch ServiceAccount configuration file
+- name: Remove the Watch ServiceAccount configuration file.
   file:
     path: '/tmp/grafana-prometheus-scraper.yaml'
     state: 'absent'
   when: kube_template_clean | bool
 
-- name: Kubelet certificates autoapprove manifest file transfer
+- name: Kubelet certificates autoapprove manifest file transfer.
   copy:
     src: 'kubelet_cert_update.yaml'
     dest: '/tmp/kubelet_cert_update.yaml'
@@ -103,19 +103,19 @@
     group: 'root'
     mode: '0644'
 
-- name: Apply the Kubelet certificates autoapprove
+- name: Apply the Kubelet certificates autoapprove.
   command: 'kubectl apply -f /tmp/kubelet_cert_update.yaml'
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/admin.conf'
 
-- name: Remove the Kubelet certificates autoapprove manifest file
+- name: Remove the Kubelet certificates autoapprove manifest file.
   file:
     path: '/tmp/kubelet_cert_update.yaml'
     state: 'absent'
   when: kube_template_clean | bool
 
-- name: Kube controller manager extra args configuration
+- name: Kube controller manager extra args configuration.
   lineinfile:
     state: 'present'
     dest: '/etc/kubernetes/manifests/kube-controller-manager.yaml'
@@ -124,7 +124,7 @@
     line: '    - --{{ item }}'
   loop: '{{ kube_controller_manager_extra_args }}'
 
-- name: Sleep for 10 seconds for wait kube controller manager reload
+- name: Sleep for 10 seconds for wait kube controller manager reload.
   wait_for:
     timeout: 10
   delegate_to: 'localhost'

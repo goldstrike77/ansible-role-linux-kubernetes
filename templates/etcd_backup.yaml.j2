@@ -11,9 +11,10 @@ spec:
       template:
         spec:
           nodeSelector:
-            "nodeType": master
+            kubernetes.io/role: master
           tolerations:
             - key: node-role.kubernetes.io/master
+              operator: Exists
               effect: NoSchedule
           containers:
           - name: backup

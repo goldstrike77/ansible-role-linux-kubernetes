@@ -1,9 +1,9 @@
 ---
-- name: Get kubernetes control plane containers image list
+- name: Get kubernetes control plane containers image list.
   shell: '/bin/kubeadm config images list --kubernetes-version=v{{ kube_version }} | cut -f2 -d "/"'
   register: kube_control_plane_image_list
 
-- name: Pull an kubernetes control plane containers image
+- name: Pull an kubernetes control plane containers image.
   docker_image:
     name: "{{ kube_registry_mirrors['google'] }}/google_containers/{{ item }}"
     source: 'pull'
