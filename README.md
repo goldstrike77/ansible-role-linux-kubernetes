@@ -86,7 +86,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### Backup parameters
 * `kube_backupset_arg.keep`: Backup retention cycle in days.
 * `kube_backupset_arg.cloud_rsync`: Whether rsync for cloud storage.
-* `kube_backupset_arg.cloud_drive`: Specify the cloud storage providers.
+* `kube_backupset_arg.cloud_drive`: Specify the cloud storage providers, azureblob / s3 for minio.
 * `kube_backupset_arg.cloud_bwlimit`: Controls the bandwidth limit.
 * `kube_backupset_arg.cloud_event`: Define transfer events.
 * `kube_backupset_arg.cloud_config`: Specify the cloud storage configuration.
