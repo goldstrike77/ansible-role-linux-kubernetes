@@ -216,11 +216,11 @@ spec:
           - podAffinityTerm:
               labelSelector:
                 matchExpressions:
-                - key: app.kubernetes.io/name
+                - key: "app.kubernetes.io/name"
                   operator: In
                   values:
                   - ingress-nginx
-              topologyKey: kubernetes.io/hostname
+              topologyKey: "kubernetes.io/hostname"
             weight: 100
       tolerations:
       - key: node-role.kubernetes.io/master

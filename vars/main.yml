@@ -35,7 +35,6 @@ kube_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
 kube_python_dependent_packages:
   - 'pip'
   - 'setuptools'
-  - 'docker'
   - 'openshift'
   - 'PyYAML'
 

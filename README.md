@@ -10,7 +10,6 @@ ___
 __Table of Contents__
 
 - [Overview](#overview)
-  * [Architecture](#Architecture)
 - [Requirements](#requirements)
   * [Operating systems](#operating-systems)
   * [Kubernetes Versions](#kubernetes-versions)
@@ -29,9 +28,6 @@ __Table of Contents__
 ## Overview
 Kubernetes is an open-source container-orchestration system for automating application deployment, scaling, and management. It was originally designed by Google, and is now maintained by the Cloud Native Computing Foundation. This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and cluster configuration with some common operational features, very easy to deploy if you use HashiCorp Consul as DNS-based service discovery.
 >__There are two file that record token for prometheus and dashboard in /tmp folder at first master node, Burn after reading!__
-
-### Architecture
-<p><img src="https://raw.githubusercontent.com/goldstrike77/goldstrike77.github.io/master/img/k8s_arch.png" /></p>
 
 ## Requirements
 ### Operating systems
