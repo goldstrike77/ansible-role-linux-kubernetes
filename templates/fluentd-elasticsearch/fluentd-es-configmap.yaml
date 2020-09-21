@@ -152,6 +152,12 @@ data:
       separator ""
     </filter>
 
+    # Generate a unique hash of every event to prevent duplicates
+    <filter **>
+      @type elasticsearch_genid
+      hash_id_key _hash
+    </filter>
+
     # Enriches records with Kubernetes metadata
     <filter kubernetes.**>
       @id filter_kubernetes_metadata
@@ -460,6 +466,8 @@ data:
       @log_level info
       type_name _doc
       include_tag_key true
+      id_key _hash
+      remove_keys _hash
       hosts << kube_fluentd_elastic_hosts | list | join(':'+ kube_fluentd_elastic_port + ',') >>:<< kube_fluentd_elastic_port >>
 {% if kube_fluentd_elastic_user is defined and kube_fluentd_elastic_pass is defined %}
       user << kube_fluentd_elastic_user | default('elastic') >>
