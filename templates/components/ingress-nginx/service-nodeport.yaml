@@ -19,6 +19,11 @@ spec:
       targetPort: 443
       protocol: TCP
       nodePort: 31163
+    - name: http-metrics
+      port: 10254
+      targetPort: 10254
+      protocol: TCP
+      nodePort: 31164
   selector:
     app.kubernetes.io/name: ingress-nginx
     app.kubernetes.io/part-of: ingress-nginx

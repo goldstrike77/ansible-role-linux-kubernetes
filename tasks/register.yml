@@ -1,17 +1,4 @@
 ---
-- name: Get kube state metrics node port.
-  shell: "kubectl describe service kube-state-metrics -n kube-system | grep NodePort | grep http-metrics | awk '{print $3}' | cut -d / -f 1"
-  environment:
-    KUBECONFIG: '/etc/kubernetes/admin.conf'
-    no_proxy: '*'
-  no_log: true
-  register: kube_state_metrics_nodeport
-  until: kube_state_metrics_nodeport is succeeded
-  retries: 3
-  delay: 3
-  changed_when: false
-  failed_when: false
-
 - name: Check register client are accessible from current host.
   uri:
     url: '{{ consul_public_http_prot }}://{{ item }}:{{ consul_public_http_port }}/v1/agent/service/register'
@@ -25,7 +12,21 @@
   failed_when: false
   register: check_consul_reg
 
-- name: Register exporter service with an http health check.
+- name: Get kube state metrics node port.
+  shell: "kubectl describe service kube-state-metrics -n kube-system | grep NodePort | grep http-metrics | awk '{print $3}' | cut -d / -f 1"
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+    no_proxy: '*'
+  no_log: true
+  when: "'kube-state-metrics' in kube_components"
+  register: kube_state_metrics_nodeport
+  until: kube_state_metrics_nodeport is succeeded
+  retries: 5
+  delay: 2
+  changed_when: false
+  failed_when: false
+
+- name: Register kube-state-metrics exporter service with an http health check.
   uri:
     url: '{{ consul_public_http_prot }}://{{ item.client }}:{{ consul_public_http_port }}/v1/agent/service/register'
     method: 'PUT'
@@ -42,10 +43,50 @@
   loop: "{{ check_consul_reg.results | json_query('[*].{client:item,status:status}') }}"
   when:
     - item.status == 405
+    - "'kube-state-metrics' in kube_components"
   register: register_status
   until: register_status.status == 200
-  retries: 3
-  delay: 3
+  retries: 5
+  delay: 2
+  no_log: true
+  changed_when: false
+  failed_when: false
+
+- name: Get ingress-nginx metrics node port.
+  shell: "kubectl describe service ingress-nginx -n ingress-nginx | grep NodePort | grep http-metrics | awk '{print $3}' | cut -d / -f 1"
+  environment:
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+    no_proxy: '*'
+  when: "'ingress-nginx' in kube_components"
+  register: ingress_nginx_metrics_nodeport
+  until: ingress_nginx_metrics_nodeport is succeeded
+  retries: 5
+  delay: 2
+  changed_when: false
+  failed_when: false
+
+- name: Register ingress-nginx exporter service with an http health check.
+  uri:
+    url: '{{ consul_public_http_prot }}://{{ item.client }}:{{ consul_public_http_port }}/v1/agent/service/register'
+    method: 'PUT'
+    body: '{"tags":["prometheus","exporter"],"ID":"{{ group_names[0] | upper | regex_replace("_", "-") }}-{{ environments | upper | regex_replace("_", "-") }}-ingress-nginx","name":"ingress-nginx_exporter","address":"{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}{% else %}{{ ansible_default_ipv4.address }}{% endif %}","port":{{ ingress_nginx_metrics_nodeport.stdout }},"meta":{"metrics_path":"/metrics","group":"{{ group_names[0] | upper }}","datacenter":"{{ datacenter | lower }}","domain":"{{ domain | lower }}","environment":"{{ environments | upper }}"{% if tags is defined %},{{ tags | to_json | regex_replace("{") | regex_replace("}") }}{% endif %}},"checks":[{"http":"http://{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}{% else %}{{ ansible_default_ipv4.address }}{% endif %}:{{ ingress_nginx_metrics_nodeport.stdout }}/metrics","interval":"60s","tls_skip_verify":true,"method":"HEAD","timeout":"10s"}]}'
+    body_format: 'json'
+    status_code: '200'
+    headers:
+      X-Consul-Token: '{{ consul_public_exporter_token }}'
+      X-Requested-By: '{{ ansible_default_ipv4.address }}'
+      cache-control: 'no-cache'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ item.client }}'
+  loop: "{{ check_consul_reg.results | json_query('[*].{client:item,status:status}') }}"
+  when:
+    - item.status == 405
+    - "'ingress-nginx' in kube_components"
+  register: register_status
+  until: register_status.status == 200
+  retries: 5
+  delay: 2
   no_log: true
   changed_when: false
   failed_when: false

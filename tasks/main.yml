@@ -188,7 +188,6 @@
     - kube_node_role == 'master'
     - kube_servers[0] in ansible_default_ipv4.address
     - kube_components is defined
-    - "'kube-state-metrics' in kube_components"
     - exporter_is_install | bool
     - consul_public_register | bool
 
