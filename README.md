@@ -147,32 +147,23 @@ There are some variables in vars/main.yml:
 ### Hosts inventory file
 See tests/inventory for an example.
     
-    [Node]
+    [Kubernetes]
+    s-p-demo-mas01 ansible_host='10.101.4.43' kube_node_role='master'
+    s-p-demo-mas02 ansible_host='10.101.4.44' kube_node_role='master'
+    s-p-demo-mas03 ansible_host='10.101.4.45' kube_node_role='master'
     s-p-demo-nod01 ansible_host='10.101.4.40'
     s-p-demo-nod02 ansible_host='10.101.4.41'
     s-p-demo-nod03 ansible_host='10.101.4.42'
-    
-    [Master]
-    s-p-demo-mas01 ansible_host='10.101.4.43'
-    s-p-demo-mas02 ansible_host='10.101.4.44'
-    s-p-demo-mas03 ansible_host='10.101.4.45'
-    
+
     [Kubernetes:vars]
     kube_version='1.16.15'
-    kube_control_plane_endpoint='master-production-apiserver.service.dc01.local'
+    kube_control_plane_endpoint='demo-kubernetes-production-apiserver.service.dc01.local'
     kube_control_plane_port='6443'
     kube_cni='flannel'
     kube_pod_cidr='10.244.0.0/16'
     kube_srv_cidr='10.96.0.0/12'
     kube_docker_dept=true
     kube_docker_version='18.09.9'
-    
-    [Master:vars]
-    kube_node_role='master'
-    
-    [Kubernetes:children]
-    Master
-    Node
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
@@ -182,7 +173,7 @@ kube_version: '1.16.15'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
-kube_control_plane_endpoint: 'master-production-apiserver.service.dc01.local'
+kube_control_plane_endpoint: 'demo-kubernetes-production-apiserver.service.dc01.local'
 kube_control_plane_port: '6443'
 kube_cni: 'flannel'
 kube_pod_cidr: '10.244.0.0/16'
@@ -199,7 +190,7 @@ kube_backupset_arg:
     key: 'base64encodedkey=='
     endpoint: 'blob.core.chinacloudapi.cn'
 kube_log_collector: 'fluentd-gelf'
-kube_fluentd_gelf_host: 'SYSLOG-Production-graylog.service.dc01.local'
+kube_fluentd_gelf_host: 'demo-monitor-production-logstash.service.dc01.local'
 kube_fluentd_gelf_port: '12201'
 kube_fluentd_gelf_protocol: 'udp'
 kube_components:

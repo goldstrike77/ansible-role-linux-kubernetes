@@ -4,8 +4,8 @@ kube_is_install: false # A boolean value, whether install the Kubernetes.
 kube_version: '1.16.15' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
 kube_cgroup_driver: 'systemd' # Specifies the management of the container's cgroups, cgroupfs or systemd.
-kube_proxy_ipvs: false # A boolean value, whether run kube-proxy in IPVS mode. 
-#kube_control_plane_endpoint: 'master-production-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
+kube_proxy_ipvs: true # A boolean value, whether run kube-proxy in IPVS mode. 
+#kube_control_plane_endpoint: 'demo-kubernetes-production-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
 #kube_control_plane_port: '6443' # The port of the API Server load balancer advertise listening on.
 
 # Kubernetes networking #
@@ -14,7 +14,7 @@ kube_pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod netwo
 kube_srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
 
 # Role dependencies #
-kube_docker_dept: false # A boolean value, whether Docker installs use the same task.
+kube_docker_dept: true # A boolean value, whether Docker installs use the same task.
 
 # Dashboard parameters #
 kube_dashboard_install: true # A boolean value, whether Docker installs kubernetes dashboard.
@@ -34,14 +34,14 @@ kube_backupset_arg:
 # s3 #
 #    access_key: 'JPTNJFUFB6UKLUXMRKZT'
 #    secret_key: 'h9KekbhETGC1UNMcbSrWZCOrBgopdgNJWIeAo28i'
-#    endpoint: 'https://storage-production-other-minio.service.dc01.local:9001'
+#    endpoint: 'https://demo-storage-production-other-minio.service.dc01.local:9001'
 
 # Logging layer #
 kube_log_collector: 'fluentd-gelf' # Define log collector, fluentd-elastic / fluentd-gelf.
 
 # Fluentd Elasticsearch parameters #
 kube_fluentd_elastic_hosts: # The hostname list of your Elasticsearch node.
-  - 'SYSLOG-Production-elastic.service.dc01.local'
+  - 'demo-monitor-production-elasticsearch.service.dc01.local'
 kube_fluentd_elastic_port: '9200' # The port number of your Elasticsearch node.
 kube_fluentd_elastic_user: 'elastic' # The login username to connect to the Elasticsearch node.
 kube_fluentd_elastic_pass: 'changeme' # The login password to connect to the Elasticsearch node.
@@ -49,7 +49,7 @@ kube_fluentd_elastic_scheme: 'http' # Specify https if your Elasticsearch endpoi
 kube_fluentd_elastic_prefix: 'fluentd' # The prefix index name to write events when specifying logstash_format.
 
 # Fluentd Gelf parameters #
-kube_fluentd_gelf_host: 'SYSLOG-Production-graylog.service.dc01.local' # The hostname of your Graylog or Logstash node.
+kube_fluentd_gelf_host: 'demo-monitor-production-logstash.service.dc01.local' # The hostname of your Graylog or Logstash node.
 kube_fluentd_gelf_port: '12201' # The input port number of your Graylog or Logstash node.
 kube_fluentd_gelf_protocol: 'udp' # The input port protocol of your Graylog or Logstash node.
 
