@@ -158,7 +158,7 @@ See tests/inventory for an example.
 
     [Kubernetes:vars]
     kube_version='1.16.15'
-    kube_control_plane_endpoint='demo-kubernetes-production-apiserver.service.dc01.local'
+    kube_control_plane_endpoint='demo-prd-infra-k8s.service.dc01.local'
     kube_control_plane_port='6443'
     kube_cni='flannel'
     kube_pod_cidr='10.244.0.0/16'
@@ -174,7 +174,7 @@ kube_version: '1.16.15'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
-kube_control_plane_endpoint: 'demo-prd-infra-master-apiserver.service.dc01.local'
+kube_control_plane_endpoint: 'demo-prd-infra-k8s.service.dc01.local'
 kube_control_plane_port: '6443'
 kube_cni: 'flannel'
 kube_pod_cidr: '10.244.0.0/16'

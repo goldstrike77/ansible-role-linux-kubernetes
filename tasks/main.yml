@@ -168,7 +168,7 @@
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true
-  loop: '{{ groups[group_names[0]] }}'
+  loop: '{{ groups[group_names[-1]] }}'
 
 - name: Check if node has already been joined.
   stat:

@@ -5,7 +5,7 @@ kube_version: '1.16.15' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
 kube_cgroup_driver: 'systemd' # Specifies the management of the container's cgroups, cgroupfs or systemd.
 kube_proxy_ipvs: true # A boolean value, whether run kube-proxy in IPVS mode. 
-#kube_control_plane_endpoint: 'demo-prd-infra-master-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
+#kube_control_plane_endpoint: 'demo-prd-infra-k8s.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
 #kube_control_plane_port: '6443' # The port of the API Server load balancer advertise listening on.
 
 # Kubernetes networking #
