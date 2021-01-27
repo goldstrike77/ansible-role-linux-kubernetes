@@ -126,6 +126,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `environments`: Define the service environment.
 * `datacenter`: Define the DataCenter.
 * `domain`: Define the Domain.
+* `customer`: Define the customer name.
 * `tags`: Define the service custom label.
 * `exporter_is_install`: Whether to install prometheus exporter.
 * `consul_public_register`: Whether register a exporter service with public consul client.
@@ -173,7 +174,7 @@ kube_version: '1.16.15'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
-kube_control_plane_endpoint: 'demo-kubernetes-production-apiserver.service.dc01.local'
+kube_control_plane_endpoint: 'demo-prd-infra-master-apiserver.service.dc01.local'
 kube_control_plane_port: '6443'
 kube_cni: 'flannel'
 kube_pod_cidr: '10.244.0.0/16'
@@ -190,7 +191,7 @@ kube_backupset_arg:
     key: 'base64encodedkey=='
     endpoint: 'blob.core.chinacloudapi.cn'
 kube_log_collector: 'fluentd-gelf'
-kube_fluentd_gelf_host: 'demo-monitor-production-logstash.service.dc01.local'
+kube_fluentd_gelf_host: 'demo-prd-infra-monitor-logstash.service.dc01.local'
 kube_fluentd_gelf_port: '12201'
 kube_fluentd_gelf_protocol: 'udp'
 kube_components:
@@ -215,9 +216,10 @@ kube_k9s:
   install: true
   version: '0.21.7'
   path: '/usr/local/bin'
-environments: 'Development'
+environments: 'prd'
 datacenter: 'dc01'
 domain: 'local'
+customer: 'demo'
 tags:
   subscription: 'default'
   owner: 'nobody'
