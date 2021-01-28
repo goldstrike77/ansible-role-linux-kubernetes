@@ -83,9 +83,8 @@ kube_cni_udp_arg:
 
 # K9s parameters #
 kube_k9s:
-  install: true # A boolean value, whether install the K9s.
+  install: true # A boolean value, whether Docker installs K9s.
   version: '0.24.2' # Specify the K9s version.
-  path: '/usr/local/bin' # Specify the K9s Program directory.
 
 # Service Mesh #
 environments: 'prd' # Define the service environment.

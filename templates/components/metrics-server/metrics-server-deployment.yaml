@@ -13,9 +13,6 @@ metadata:
   labels:
     k8s-app: metrics-server
 spec:
-  strategy:
-    rollingUpdate:
-      maxUnavailable: 0
   selector:
     matchLabels:
       k8s-app: metrics-server
@@ -41,29 +38,11 @@ spec:
           - --cert-dir=/tmp
           - --secure-port=4443
           - --kubelet-insecure-tls
-          - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
-        resources:
-          requests:
-            cpu: 100m
-            memory: 300Mi
+          - --kubelet-preferred-address-types=InternalIP
         ports:
-        - name: https
+        - name: main-port
           containerPort: 4443
           protocol: TCP
-        readinessProbe:
-          httpGet:
-            path: /readyz?exclude=livez
-            port: https
-            scheme: HTTPS
-          periodSeconds: 10
-          failureThreshold: 3
-        livenessProbe:
-          httpGet:
-            path: /livez?exclude=readyz
-            port: https
-            scheme: HTTPS
-          periodSeconds: 10
-          failureThreshold: 3
         securityContext:
           readOnlyRootFilesystem: true
           runAsNonRoot: true

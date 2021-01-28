@@ -119,9 +119,8 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_docker_syslog`: A boolean value, Enable or Disable send log to remote Syslog server.
 
 ##### K9s parameters
-* `kube_k9s.install`: A boolean value, whether install the K9s.
+* `kube_k9s.install`: A boolean value, whether Docker installs K9s.
 * `kube_k9s.version`: Specify the K9s version.
-* `kube_k9s.path`: Specify the K9s Program directory.
 
 ##### Service Mesh
 * `environments`: Define the service environment.
@@ -209,8 +208,7 @@ kube_cni_udp_arg:
   flannel_debug: '8285'
 kube_k9s:
   install: true
-  version: '0.21.7'
-  path: '/usr/local/bin'
+  version: '0.24.2'
 environments: 'prd'
 datacenter: 'dc01'
 domain: 'local'
