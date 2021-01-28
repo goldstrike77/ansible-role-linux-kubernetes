@@ -44,6 +44,7 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.15
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.16
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.17
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.18
 - Network Plugin
   - [calico](https://github.com/projectcalico/calico) v3.13.4
   - [flannel](https://github.com/coreos/flannel) v0.12.0
@@ -51,12 +52,12 @@ The following list of supported the kubernetes releases:
 - Components
   - [falco](https://github.com/falcosecurity/falco) v0.24.0
   - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
-  - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.0.2
-  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.0.4
-  - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
+  - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.1.0
+  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.1.0
+  - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.4.1
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.7
-  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.33.0
-  - [k9s](https://github.com/derailed/k9s) v0.21.10
+  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.43.0
+  - [k9s](https://github.com/derailed/k9s) v0.24.2
 
 ## Role variables
 ### Main parameters #
@@ -157,8 +158,8 @@ See tests/inventory for an example.
     s-p-demo-nod03 ansible_host='10.101.4.42'
 
     [Kubernetes:vars]
-    kube_version='1.16.15'
-    kube_control_plane_endpoint='demo-prd-infra-k8s.service.dc01.local'
+    kube_version='1.18.15'
+    kube_control_plane_endpoint='demo-prd-infra-operator-k8s.service.dc01.local'
     kube_control_plane_port='6443'
     kube_cni='flannel'
     kube_pod_cidr='10.244.0.0/16'
@@ -170,11 +171,11 @@ See tests/inventory for an example.
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-kube_version: '1.16.15'
+kube_version: '1.18.15'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
-kube_control_plane_endpoint: 'demo-prd-infra-k8s.service.dc01.local'
+kube_control_plane_endpoint: 'demo-prd-infra-operator-k8s.service.dc01.local'
 kube_control_plane_port: '6443'
 kube_cni: 'flannel'
 kube_pod_cidr: '10.244.0.0/16'

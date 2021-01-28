@@ -232,7 +232,7 @@ spec:
         kubernetes.io/os: linux
       containers:
         - name: nginx-ingress-controller
-          image: {{ kube_registry_mirrors['quay'] }}/kubernetes-ingress-controller/nginx-ingress-controller:0.33.0
+          image: {{ kube_registry_mirrors['quay'] }}/kubernetes-ingress-controller/nginx-ingress-controller:0.43.0
           args:
             - /nginx-ingress-controller
             - --configmap=$(POD_NAMESPACE)/nginx-configuration

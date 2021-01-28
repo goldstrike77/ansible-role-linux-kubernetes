@@ -13,6 +13,9 @@ metadata:
   labels:
     k8s-app: metrics-server
 spec:
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
   selector:
     matchLabels:
       k8s-app: metrics-server
@@ -32,17 +35,35 @@ spec:
         emptyDir: {}
       containers:
       - name: metrics-server
-        image: {{ kube_registry_mirrors['google'] }}/google_containers/metrics-server-amd64:v0.3.6
+        image: {{ kube_registry_mirrors['google'] }}/google_containers/metrics-server-amd64:v0.4.1
         imagePullPolicy: IfNotPresent
         args:
           - --cert-dir=/tmp
           - --secure-port=4443
           - --kubelet-insecure-tls
-          - --kubelet-preferred-address-types=InternalIP
+          - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+        resources:
+          requests:
+            cpu: 100m
+            memory: 300Mi
         ports:
-        - name: main-port
+        - name: https
           containerPort: 4443
           protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz?exclude=livez
+            port: https
+            scheme: HTTPS
+          periodSeconds: 10
+          failureThreshold: 3
+        livenessProbe:
+          httpGet:
+            path: /livez?exclude=readyz
+            port: https
+            scheme: HTTPS
+          periodSeconds: 10
+          failureThreshold: 3
         securityContext:
           readOnlyRootFilesystem: true
           runAsNonRoot: true

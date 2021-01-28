@@ -188,8 +188,8 @@ spec:
     spec:
       containers:
         - name: kubernetes-dashboard
-          image: {{ kube_registry_mirrors['dockerhub'] }}/kubernetesui/dashboard:v2.0.4
-          imagePullPolicy: Always
+          image: {{ kube_registry_mirrors['dockerhub'] }}/kubernetesui/dashboard:v2.1.0
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8443
               protocol: TCP
@@ -272,7 +272,7 @@ spec:
     spec:
       containers:
         - name: dashboard-metrics-scraper
-          image: {{ kube_registry_mirrors['dockerhub'] }}/kubernetesui/metrics-scraper:v1.0.4
+          image: {{ kube_registry_mirrors['dockerhub'] }}/kubernetesui/metrics-scraper:v1.0.6
           ports:
             - containerPort: 8000
               protocol: TCP

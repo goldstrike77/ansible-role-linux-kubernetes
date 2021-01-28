@@ -27,7 +27,7 @@
   uri:
     url: '{{ consul_public_http_prot }}://{{ ansible_default_ipv4.address }}:{{ consul_public_http_port }}/v1/agent/service/register'
     method: 'PUT'
-    body: '{"tags":["kubernetes"],"ID":"{{ customer | lower | regex_replace("_", "-") }}-{{ environments | lower | regex_replace("_", "-") }}-{{ group_names[-1] | lower | regex_replace("_", "-") }}-k8s","name":"{{ customer | lower | regex_replace("_", "-") }}-{{ environments | lower | regex_replace("_", "-") }}-{{ group_names[-1] | lower | regex_replace("_", "-") }}-k8s","address":"{{ ansible_default_ipv4.address }}","port":{{ kube_port_tcp_arg.api }},"checks":[{"tcp":"{{ ansible_default_ipv4.address }}:{{ kube_port_tcp_arg.api }}","interval":"10s","timeout":"10s"}]}'
+    body: '{"tags":["kubernetes"],"ID":"{{ customer | lower | regex_replace("_", "-") }}-{{ environments | lower | regex_replace("_", "-") }}-{{ group_names[-1] | lower | regex_replace("_", "-") }}-{{ group_names[0] | lower | regex_replace("_", "-") }}-k8s","name":"{{ customer | lower | regex_replace("_", "-") }}-{{ environments | lower | regex_replace("_", "-") }}-{{ group_names[-1] | lower | regex_replace("_", "-") }}-{{ group_names[0] | lower | regex_replace("_", "-") }}-k8s","address":"{{ ansible_default_ipv4.address }}","port":{{ kube_port_tcp_arg.api }},"checks":[{"tcp":"{{ ansible_default_ipv4.address }}:{{ kube_port_tcp_arg.api }}","interval":"10s","timeout":"10s"}]}'
     body_format: 'json'
     status_code: '200'
     headers:

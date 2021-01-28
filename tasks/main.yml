@@ -128,7 +128,7 @@
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true
-  loop: '{{ groups[group_names[-1]] }}'
+  loop: '{{ groups[group_names[0]] }}'
 
 - name: Kubernetes member master join operations.
   include: 'member.yml'
