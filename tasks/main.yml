@@ -76,11 +76,6 @@
       include: 'init.yml'
     - name: Include Networking operation.
       include: 'network.yml'
-    - name: Include components deploy operation.
-      include: 'components.yml'
-      loop: '{{ kube_components }}'
-      loop_control:
-        loop_var: kube_components_item
     - name: Include unified logging layer addons.
       include: '{{ kube_log_collector }}.yaml'
       when: kube_log_collector is defined
@@ -91,6 +86,15 @@
     - kube_node_role == 'master'
     - kube_servers[0] in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
+
+- name: Include components deploy operation.
+  include: 'components.yml'
+  loop: '{{ kube_components }}'
+  loop_control:
+    loop_var: kube_components_item
+  when:
+    - kube_node_role == 'master'
+    - kube_servers[0] in ansible_default_ipv4.address
 
 - name: Reload the control plane certificate.
   command: "kubeadm init phase upload-certs --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-upload-certs{% else %}upload-certs{% endif %}"

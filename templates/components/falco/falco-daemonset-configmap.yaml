@@ -21,7 +21,7 @@ spec:
       serviceAccount: falco-account
       containers:
         - name: falco
-          image: {{ kube_registry_mirrors['dockerhub'] }}/falcosecurity/falco:0.24.0
+          image: {{ kube_registry_mirrors['dockerhub'] }}/falcosecurity/falco:0.27.0
           securityContext:
             privileged: true
 # Uncomment the 3 lines below to enable eBPF support for Falco.

@@ -55,7 +55,7 @@ kube_fluentd_gelf_protocol: 'udp' # The input port protocol of your Graylog or L
 
 # Components #
 kube_components: # Individual Kubernetes components.
-#  - 'falco'
+  - 'falco'
   - 'ingress-nginx'
   - 'kube-state-metrics'
   - 'metrics-server'

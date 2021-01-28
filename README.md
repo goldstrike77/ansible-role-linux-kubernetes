@@ -1,8 +1,8 @@
 ![](https://img.shields.io/badge/Ansible-kubernetes-green.svg?logo=angular&style=for-the-badge)
 
->__Please note that the original design goal of this role was more concerned with the initial installation and bootstrapping environment, which currently does not involve performing continuous maintenance, and therefore are only suitable for testing and development purposes,  should not be used in production environments.__
+>__Please note that the original design goal of this role was more concerned with the initial installation and bootstrapping environment, which currently does not involve performing continuous maintenance, and therefore are only suitable for testing and development purposes,  should not be used in production environments. The author does not guarantee the accuracy, completeness, reliability, and availability of the role content. Under no circumstances will the author be held responsible or liable in any way for any claims, damages, losses, expenses, costs or liabilities whatsoever, including, without limitation, any direct or indirect damages for loss of profits, business interruption or loss of information.__
 
->__请注意，此角色的最初设计目标更关注初始安装和引导环境，目前不涉及执行连续维护，因此仅适用于测试和开发目的，不应在生产环境中使用。__
+>__请注意，此角色的最初设计目标更关注初始安装和引导环境，目前不涉及执行连续维护，因此仅适用于测试和开发目的，不应在生产环境中使用。作者不对角色内容之准确性、完整性、可靠性、可用性做保证。在任何情况下，作者均不对任何索赔，损害，损失，费用，成本或负债承担任何责任，包括但不限于因利润损失，业务中断或信息丢失而造成的任何直接或间接损害。__
 ___
 
 <p><img src="https://raw.githubusercontent.com/goldstrike77/goldstrike77.github.io/master/img/logo/logo_kubernetes.png" align="right" /></p>
@@ -47,16 +47,16 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.18
 - Network Plugin
   - [calico](https://github.com/projectcalico/calico) v3.13.4
-  - [flannel](https://github.com/coreos/flannel) v0.12.0
+  - [flannel](https://github.com/coreos/flannel) v0.13.0
   - [canal](https://github.com/projectcalico/canal) (given calico versions)
 - Components
-  - [falco](https://github.com/falcosecurity/falco) v0.24.0
+  - [falco](https://github.com/falcosecurity/falco) v0.27.0
   - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
   - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.1.0
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.1.0
-  - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.4.1
+  - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
   - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.7
-  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.43.0
+  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.33.0
   - [k9s](https://github.com/derailed/k9s) v0.24.2
 
 ## Role variables
@@ -78,7 +78,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_srv_cidr`: Use alternative range of IP address for service VIPs.
 
 ##### Dashboard parameters
-* `kube_dashboard_install`: A boolean value, whether installs kubernetes dashboard.
+* `kube_dashboard_install`: A boolean to determine whether or not to install the kubernetes dashboard.
 
 ##### Backup parameters
 * `kube_backupset_arg.keep`: Backup retention cycle in days.
@@ -149,23 +149,17 @@ There are some variables in vars/main.yml:
 ### Hosts inventory file
 See tests/inventory for an example.
     
-    [Kubernetes]
-    s-p-demo-mas01 ansible_host='10.101.4.43' kube_node_role='master'
-    s-p-demo-mas02 ansible_host='10.101.4.44' kube_node_role='master'
-    s-p-demo-mas03 ansible_host='10.101.4.45' kube_node_role='master'
-    s-p-demo-nod01 ansible_host='10.101.4.40'
-    s-p-demo-nod02 ansible_host='10.101.4.41'
-    s-p-demo-nod03 ansible_host='10.101.4.42'
-
-    [Kubernetes:vars]
+    [Operator]
+    dem-p-inf-mas01 ansible_host='10.101.4.43' kube_node_role='master'
+    dem-p-inf-mas02 ansible_host='10.101.4.44' kube_node_role='master'
+    dem-p-inf-mas03 ansible_host='10.101.4.45' kube_node_role='master'
+    dem-p-inf-nod01 ansible_host='10.101.4.40'
+    dem-p-inf-nod02 ansible_host='10.101.4.41'
+    dem-p-inf-nod03 ansible_host='10.101.4.42'
+    
+    [Operator:vars]
     kube_version='1.18.15'
     kube_control_plane_endpoint='demo-prd-infra-operator-k8s.service.dc01.local'
-    kube_control_plane_port='6443'
-    kube_cni='flannel'
-    kube_pod_cidr='10.244.0.0/16'
-    kube_srv_cidr='10.96.0.0/12'
-    kube_docker_dept=true
-    kube_docker_version='18.09.9'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.

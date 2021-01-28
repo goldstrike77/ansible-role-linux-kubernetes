@@ -35,7 +35,7 @@ spec:
         emptyDir: {}
       containers:
       - name: metrics-server
-        image: {{ kube_registry_mirrors['google'] }}/google_containers/metrics-server-amd64:v0.4.1
+        image: {{ kube_registry_mirrors['google'] }}/google_containers/metrics-server-amd64:v0.3.6
         imagePullPolicy: IfNotPresent
         args:
           - --cert-dir=/tmp

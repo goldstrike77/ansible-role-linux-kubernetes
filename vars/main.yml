@@ -33,7 +33,7 @@ kube_registry_mirrors: # Mirrors of docker image registry
 kube_pypi_url: 'pypi.tuna.tsinghua.edu.cn'
 
 kube_python_dependent_packages:
-  - 'pip'
+  - 'pip==20.3.4'
   - 'setuptools'
   - 'openshift'
   - 'PyYAML'
