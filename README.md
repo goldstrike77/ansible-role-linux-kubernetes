@@ -24,6 +24,7 @@ __Table of Contents__
 - [License](#license)
 - [Author Information](#author-information)
 - [Contributors](#Contributors)
+- [Donations](#Donations)
 
 ## Overview
 Kubernetes is an open-source container-orchestration system for automating application deployment, scaling, and management. It was originally designed by Google, and is now maintained by the Cloud Native Computing Foundation. This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and cluster configuration with some common operational features, very easy to deploy if you use HashiCorp Consul as DNS-based service discovery.
@@ -157,14 +158,14 @@ See tests/inventory for an example.
     dem-p-inf-nod03 ansible_host='10.101.4.42'
     
     [Operator:vars]
-    kube_version='1.18.15'
+    kube_version='1.18.17'
     kube_control_plane_endpoint='demo-prd-infra-operator-k8s.service.dc01.local'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-kube_version: '1.18.15'
+kube_version: '1.18.17'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
@@ -236,3 +237,8 @@ Please send your suggestions to make this role better.
 
 ## Contributors
 Special thanks to the [Connext Information Technology](http://www.connext.com.cn) for their contributions to this role.
+
+## Donations
+Please donate to the following monero address.
+
+    46CHVMbb6wQV2PJYEbahb353SYGqXhcdFQVEWdCnHb6JaR5125h3kNQ6bcqLye5G7UF7qz6xL9qHLDSAY3baagfmLZABz75
