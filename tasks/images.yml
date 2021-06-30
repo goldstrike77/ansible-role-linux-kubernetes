@@ -3,16 +3,6 @@
   shell: '/bin/kubeadm config images list --kubernetes-version=v{{ kube_version }} | cut -f2 -d "/"'
   register: kube_control_plane_image_list
 
-#- name: Pull an kubernetes control plane containers image.
-#  docker_image:
-#    name: "{{ kube_registry_mirrors['google'] }}/google_containers/{{ item }}"
-#    source: 'pull'
-#  loop: '{{ kube_control_plane_image_list.stdout_lines }}'
-#  register: kube_image_pull_status
-#  until: kube_image_pull_status is succeeded
-#  retries: 5
-#  delay: 2
-
 - name: Pull an kubernetes control plane containers image.
   shell: "docker pull {{ kube_registry_mirrors['google'] }}/google_containers/{{ item }}"
   loop: '{{ kube_control_plane_image_list.stdout_lines }}'

@@ -7,6 +7,7 @@ kube_repo_url: 'http://mirrors.tuna.tsinghua.edu.cn/kubernetes/yum/repos/kuberne
 kube_package:
   - 'ipvsadm'
   - 'python-pip'
+  - 'python-openshift'
   - 'kernel-devel-{{ ansible_kernel }}'
   - 'kubernetes-cni'
   - 'kubeadm-{{ kube_version }}-0'

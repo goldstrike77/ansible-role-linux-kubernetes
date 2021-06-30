@@ -1,7 +1,7 @@
 ---
 # General parameters #
 kube_is_install: false # A boolean value, whether install the Kubernetes.
-kube_version: '1.18.17' # Specify the Kubernetes version.
+kube_version: '1.19.12' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
 kube_cgroup_driver: 'systemd' # Specifies the management of the container's cgroups, cgroupfs or systemd.
 kube_proxy_ipvs: true # A boolean value, whether run kube-proxy in IPVS mode. 
@@ -84,7 +84,7 @@ kube_cni_udp_arg:
 # K9s parameters #
 kube_k9s:
   install: true # A boolean value, whether Docker installs K9s.
-  version: '0.24.2' # Specify the K9s version.
+  version: '0.24.11' # Specify the K9s version.
 
 # Service Mesh #
 environments: 'prd' # Define the service environment.

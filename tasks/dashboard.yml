@@ -1,57 +1,23 @@
 ---
-- name: Kubernetes dashboard configuration file transfer.
+- name: Create Kubernetes dashboard folder.
+  file:
+    path: '/tmp/dashboard'
+    state: 'directory'
+
+- name: Kubernetes dashboard manifest file transfer.
   template:
-    src: 'dashboard.yaml.j2'
-    dest: '/tmp/dashboard.yaml'
+    src: 'dashboard/{{ item | basename }}'
+    dest: '/tmp/dashboard/{{ item | basename }}'
     owner: 'root'
     group: 'root'
     mode: '0644'
-
-- name: Remove the Dashboard previous version by namespace delete.
-  command: 'kubectl delete ns kubernetes-dashboard'
-  environment:
-    KUBECONFIG: '/etc/kubernetes/admin.conf'
-    no_proxy: '*'
-  changed_when: false
-  failed_when: false
+  loop: "{{ lookup('fileglob', '../templates/dashboard/*.yaml', wantlist=True) }}"
 
 - name: Enable the Kubernetes Web Dashboard.
-  command: 'kubectl apply -f "/tmp/dashboard.yaml"'
+  command: 'kubectl create -f "/tmp/dashboard"'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
     no_proxy: '*'
-
-- name: Create Dashboard Admin Service Account.
-  k8s:
-    state: 'present'
-    kubeconfig: '/etc/kubernetes/admin.conf'
-    definition:
-      apiVersion: v1
-      kind: ServiceAccount
-      metadata:
-        name: kubernetes-dashboard-admin
-        namespace: kubernetes-dashboard
-        labels:
-          k8s-app: kubernetes-dashboard
-
-- name: Create Dashboard ClusterRoleBinding.
-  k8s:
-    state: 'present'
-    kubeconfig: '/etc/kubernetes/admin.conf'
-    definition:
-      apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRoleBinding
-      metadata:
-        name: kubernetes-dashboard-admin
-        namespace: kubernetes-dashboard
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: cluster-admin
-      subjects:
-      - kind: ServiceAccount
-        name: kubernetes-dashboard-admin
-        namespace: kubernetes-dashboard
 
 - name: Get Dashboard access token.
   shell: "kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep kubernetes-dashboard-admin | awk '{print $1}') | grep 'token:' | sed 's/.*://' | sed 's/^[ \t]*//g'"
@@ -72,7 +38,7 @@
 
 - name: Remove the kubernetes dashboard configuration.
   file:
-    path: '/tmp/dashboard.yaml'
+    path: '/tmp/dashboard'
     state: 'absent'
   when: kube_template_clean | bool
 
@@ -117,8 +83,7 @@
   environment:
     no_proxy: '{{ item.client }}'
   loop: "{{ check_consul_reg.results | json_query('[*].{client:item,status:status}') }}"
-  when:
-    - item.status == 405
+  when: item.status == 405
   register: register_status
   until: register_status.status == 200
   retries: 3

@@ -21,7 +21,7 @@ spec:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
       containers:
-      - image: {{ kube_registry_mirrors['quay'] }}/coreos/kube-state-metrics:v1.9.7
+      - image: {{ kube_registry_mirrors['quay'] }}/coreos/kube-state-metrics:v1.9.8
         livenessProbe:
           httpGet:
             path: /healthz

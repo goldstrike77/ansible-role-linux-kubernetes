@@ -23,7 +23,6 @@ __Table of Contents__
   * [Combination of group vars and playbook](#combination-of-group-vars-and-playbook)
 - [License](#license)
 - [Author Information](#author-information)
-- [Contributors](#Contributors)
 - [Donations](#Donations)
 
 ## Overview
@@ -46,19 +45,20 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.16
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.17
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.18
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.19
 - Network Plugin
   - [calico](https://github.com/projectcalico/calico) v3.13.4
-  - [flannel](https://github.com/coreos/flannel) v0.13.0
+  - [flannel](https://github.com/coreos/flannel) v0.14.0
   - [canal](https://github.com/projectcalico/canal) (given calico versions)
 - Components
-  - [falco](https://github.com/falcosecurity/falco) v0.27.0
+  - [falco](https://github.com/falcosecurity/falco) v0.29.0
   - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
   - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.1.0
-  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.1.0
+  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.2.0
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
-  - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.7
-  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.33.0
-  - [k9s](https://github.com/derailed/k9s) v0.24.2
+  - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.8
+  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.47.0
+  - [k9s](https://github.com/derailed/k9s) v0.24.11
 
 ## Role variables
 ### Main parameters #
@@ -234,9 +234,6 @@ consul_public_clients:
 
 ## Author Information
 Please send your suggestions to make this role better.
-
-## Contributors
-Special thanks to the [Connext Information Technology](http://www.connext.com.cn) for their contributions to this role.
 
 ## Donations
 Please donate to the following monero address.
