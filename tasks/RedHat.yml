@@ -9,6 +9,7 @@
     file: '{{ kube_epel_repo_name }}'
     baseurl: '{{ kube_epel_repo_url }}'
     gpgcheck: 'no'
+    sslverify: 'no'
     timeout: '60'
   when:
     - kube_backupset_arg.cloud_rsync | bool
@@ -38,6 +39,7 @@
     file: '{{ kube_repo_name }}'
     baseurl: '{{ kube_repo_url }}'
     gpgcheck: 'no'
+    sslverify: 'no'
     timeout: '60'
 
 - name: Install the Kubernetes packages.
