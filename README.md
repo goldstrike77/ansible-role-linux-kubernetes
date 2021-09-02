@@ -159,7 +159,7 @@ See tests/inventory for an example.
     
     [Operator:vars]
     kube_version='1.18.17'
-    kube_control_plane_endpoint='demo-prd-infra-operator-k8s.service.dc01.local'
+    kube_control_plane_endpoint='demo-prd-infra-k8s00-apiserver.service.dc01.local'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
@@ -169,7 +169,7 @@ kube_version: '1.18.17'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
-kube_control_plane_endpoint: 'demo-prd-infra-operator-k8s.service.dc01.local'
+kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local'
 kube_control_plane_port: '6443'
 kube_cni: 'flannel'
 kube_pod_cidr: '10.244.0.0/16'
