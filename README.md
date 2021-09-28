@@ -68,7 +68,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_version`: Specify the Kubernetes version.
 * `kube_node_role`: Type of nodes in cluster, master or node.
 * `kube_cgroup_driver`: Specifies the management of the container's cgroups, cgroupfs or systemd.
-* `kube_proxy_ipvs`: A boolean value, whether run kube-proxy in IPVS mode.
+* `kube_proxy_ipvs`: A boolean to determine whether or not to run kube-proxy in IPVS mode.
 * `kube_control_plane_endpoint`: The address or DNS and port of the load balancer.
 * `kube_control_plane_endpoint`: The address or DNS name of the API Server load balancer advertise listening on.
 * `kube_control_plane_port`: The port of the API Server load balancer advertise listening on.
@@ -79,7 +79,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_srv_cidr`: Use alternative range of IP address for service VIPs.
 
 ##### Dashboard parameters
-* `kube_dashboard_install`: A boolean to determine whether or not to install the kubernetes dashboard.
+* `kube_dashboard_install`: A boolean to determine whether or not to deploy kubernetes dashboard.
 
 ##### Backup parameters
 * `kube_backupset_arg.keep`: Backup retention cycle in days.
@@ -109,7 +109,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_components`: Individual Kubernetes components.
 
 ##### Role dependencies
-* `kube_docker_dept`: A boolean value, whether Docker installs use the same task.
+* `kube_docker_dept`: A boolean to determine whether or not to install Docker at the same task.
 
 ##### Docker parameters
 * `kube_docker_version`: Specify the Docker version.
@@ -120,8 +120,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_docker_syslog`: A boolean value, Enable or Disable send log to remote Syslog server.
 
 ##### K9s parameters
-* `kube_k9s.install`: A boolean value, whether Docker installs K9s.
-* `kube_k9s.version`: Specify the K9s version.
+* `kube_k9s_version`: Specify the K9s version.
 
 ##### Service Mesh
 * `environments`: Define the service environment.
@@ -152,7 +151,7 @@ See tests/inventory for an example.
     [Operator]
     dem-p-inf-mas01 ansible_host='10.101.4.43' kube_node_role='master'
     dem-p-inf-mas02 ansible_host='10.101.4.44' kube_node_role='master'
-    dem-p-inf-mas03 ansible_host='10.101.4.45' kube_node_role='master'
+    dem-p-inf-mas03 ansible_host='10.101.4.45'su kube_node_role='master'
     dem-p-inf-nod01 ansible_host='10.101.4.40'
     dem-p-inf-nod02 ansible_host='10.101.4.41'
     dem-p-inf-nod03 ansible_host='10.101.4.42'
@@ -207,9 +206,7 @@ kube_cni_tcp_arg:
 kube_cni_udp_arg:
   flannel_vxlan: '8472'
   flannel_debug: '8285'
-kube_k9s:
-  install: true
-  version: '0.24.2'
+kube_k9s_version:: '0.24.11'
 environments: 'prd'
 datacenter: 'dc01'
 domain: 'local'

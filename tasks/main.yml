@@ -57,8 +57,8 @@
     - name: Include Networking operation.
       include: 'network.yml'
     - name: Include unified logging layer addons.
-      include: '{{ kube_log_collector }}.yaml'
-      when: kube_log_collector is defined
+      include: '{{ kube_log_arg.collector }}.yaml'
+      when: kube_log_arg.enable | bool
     - name: Include Dashboard deploy operation.
       include: 'dashboard.yml'
       when: kube_dashboard_install | bool
@@ -178,5 +178,5 @@
 - name: Install K9s terminal UI.
   include: 'k9s.yml'
   when:
-    - kube_k9s.install | bool
+    - kube_k9s_version is defined
     - kube_node_role == 'master'
