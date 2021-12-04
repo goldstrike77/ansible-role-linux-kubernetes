@@ -56,11 +56,11 @@ kube_fluentd_gelf_port: '12201' # The input port number of your Graylog or Logst
 kube_fluentd_gelf_protocol: 'udp' # The input port protocol of your Graylog or Logstash node.
 
 # Components #
-kube_components: # Individual Kubernetes components.
+#kube_components: # Individual Kubernetes components.
 #  - 'falco'
-  - 'ingress-nginx'
-  - 'kube-state-metrics'
-  - 'metrics-server'
+#  - 'ingress-nginx'
+#  - 'kube-state-metrics'
+#  - 'metrics-server'
 
 # Docker parameters #
 kube_docker_version: '18.09.9' # Specify the Docker version.

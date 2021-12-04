@@ -73,6 +73,7 @@
   loop_control:
     loop_var: kube_components_item
   when:
+    - kube_components is defined
     - kube_node_role == 'master'
     - kube_servers[0] in ansible_default_ipv4.address
 
