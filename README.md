@@ -164,7 +164,7 @@ See tests/inventory for an example.
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-kube_version: '1.18.17'
+kube_version: '1.19.16'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
@@ -194,7 +194,7 @@ kube_components:
   - 'kube-state-metrics'
   - 'metrics-server'
 kube_docker_dept: true
-kube_docker_version: '18.09.9'
+kube_docker_version: '19.03.15'
 kube_port_tcp_arg:
   etcd: '2379-2380'
   api: '6443'
