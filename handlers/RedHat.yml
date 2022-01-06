@@ -1,8 +1,0 @@
----
-- name: Enable kubernetes service
-  systemd:
-    name: 'kubelet.service'
-    enabled: 'yes'
-    state: 'restarted'
-    daemon_reload: 'yes'
-  listen: Ensure kubelet service is enabled

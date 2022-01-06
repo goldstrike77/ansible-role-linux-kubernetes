@@ -7,6 +7,9 @@ kube_cgroup_driver: 'systemd' # Specifies the management of the container's cgro
 kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy in IPVS mode.
 #kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
 #kube_control_plane_port: '6443' # The port of the API Server load balancer advertise listening on.
+#kube_node_extra_labels: # Defined node labels.
+#  - 'kubernetes.azure.com/cluster=""'
+#  - 'longhorn/node=true'
 
 # Kubernetes networking #
 kube_cni: 'flannel' # Specify the Kubernetes CNI plugins, calico / flannel / canal.
@@ -17,7 +20,7 @@ kube_srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service 
 kube_docker_dept: true # A boolean to determine whether or not to install Docker at the same task.
 
 # Dashboard parameters #
-kube_dashboard_install: true # A boolean to determine whether or not to deploy kubernetes dashboard.
+kube_dashboard_install: false # A boolean to determine whether or not to deploy kubernetes dashboard.
 
 # Backup parameters #
 kube_backupset_arg:

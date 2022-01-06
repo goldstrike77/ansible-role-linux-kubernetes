@@ -46,6 +46,7 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.17
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.18
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.19
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.20
 - Network Plugin
   - [calico](https://github.com/projectcalico/calico) v3.13.4
   - [flannel](https://github.com/coreos/flannel) v0.14.0
@@ -72,6 +73,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_control_plane_endpoint`: The address or DNS and port of the load balancer.
 * `kube_control_plane_endpoint`: The address or DNS name of the API Server load balancer advertise listening on.
 * `kube_control_plane_port`: The port of the API Server load balancer advertise listening on.
+* `kube_node_extra_labels`: Defined node labels.
 
 ##### Kubernetes networking
 * `kube_cni`: Specify the Kubernetes CNI plugins, calico / flannel / canal.
@@ -151,10 +153,10 @@ See tests/inventory for an example.
     [Operator]
     dem-p-inf-mas01 ansible_host='10.101.4.43' kube_node_role='master'
     dem-p-inf-mas02 ansible_host='10.101.4.44' kube_node_role='master'
-    dem-p-inf-mas03 ansible_host='10.101.4.45'su kube_node_role='master'
-    dem-p-inf-nod01 ansible_host='10.101.4.40'
-    dem-p-inf-nod02 ansible_host='10.101.4.41'
-    dem-p-inf-nod03 ansible_host='10.101.4.42'
+    dem-p-inf-mas03 ansible_host='10.101.4.45' kube_node_role='master'
+    dem-p-inf-nod01 ansible_host='10.101.4.40' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true"]'
+    dem-p-inf-nod02 ansible_host='10.101.4.41' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true"]'
+    dem-p-inf-nod03 ansible_host='10.101.4.42' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true"]'
     
     [Operator:vars]
     kube_version='1.18.17'

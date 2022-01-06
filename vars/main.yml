@@ -31,9 +31,10 @@ kube_registry_mirrors: # Mirrors of docker image registry
 #  dockerhub: 'docker.mirrors.ustc.edu.cn'
 
 kube_kubelet_extra_args:
-  - 'runtime-cgroups=/systemd/system.slice'
-  - 'kubelet-cgroups=/systemd/system.slice'
+  - 'allowed-unsafe-sysctls="net.core.somaxconn,net.ipv4.ip_local_port_range"'
   - 'feature-gates=RotateKubeletServerCertificate=true'
+  - 'kubelet-cgroups=/systemd/system.slice'
+  - 'runtime-cgroups=/systemd/system.slice'
 
 kube_controller_manager_extra_args:
   - 'experimental-cluster-signing-duration=87600h0m0s'
