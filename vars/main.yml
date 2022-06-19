@@ -9,6 +9,12 @@ kube_module_dependent:
   - 'nf_conntrack_ipv4'
   - 'overlay'
 
+kube_trusted_network:
+  - 'flannel.1'
+  - 'tunl0'
+  - 'docker0'
+  - 'cni0'
+
 kube_kernel_parameters:
   - { variable: 'net.bridge.bridge-nf-call-iptables',   value: '1' }
   - { variable: 'net.bridge.bridge-nf-call-ip6tables',  value: '1', create: '{{ ansible_default_ipv6 | length > 0 }}' }

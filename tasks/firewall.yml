@@ -36,9 +36,7 @@
         permanent: 'yes'
         state: 'enabled'
         immediate: 'true'
-      loop:
-        - 'flannel.1'
-        - 'tunl0'
+      loop: '{{ kube_trusted_network }}'
     - name: Allow CIDR networking traffic.
       firewalld:
         zone: 'trusted'
