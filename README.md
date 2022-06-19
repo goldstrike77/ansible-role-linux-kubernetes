@@ -34,6 +34,7 @@ Kubernetes is an open-source container-orchestration system for automating appli
 This role will work on the following operating systems:
 
   * CentOS 7
+  * Rocky 8
 
 ### Kubernetes versions
 
@@ -49,7 +50,7 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.20
 - Network Plugin
   - [calico](https://github.com/projectcalico/calico) v3.13.4
-  - [flannel](https://github.com/coreos/flannel) v0.14.0
+  - [flannel](https://github.com/coreos/flannel) v0.18.1
   - [canal](https://github.com/projectcalico/canal) (given calico versions)
 - Components
   - [falco](https://github.com/falcosecurity/falco) v0.29.0
@@ -151,12 +152,12 @@ There are some variables in vars/main.yml:
 See tests/inventory for an example.
     
     [Operator]
-    dem-p-inf-mas01 ansible_host='10.101.4.43' kube_node_role='master'
-    dem-p-inf-mas02 ansible_host='10.101.4.44' kube_node_role='master'
-    dem-p-inf-mas03 ansible_host='10.101.4.45' kube_node_role='master'
-    dem-p-inf-nod01 ansible_host='10.101.4.40' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true"]'
-    dem-p-inf-nod02 ansible_host='10.101.4.41' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true"]'
-    dem-p-inf-nod03 ansible_host='10.101.4.42' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true"]'
+    dem-p-inf-mas01 ansible_host='10.101.4.43' kube_node_role='master' kube_node_extra_labels='["nodeType=master", "application=Platform"]'
+    dem-p-inf-mas02 ansible_host='10.101.4.44' kube_node_role='master' kube_node_extra_labels='["nodeType=master", "application=Platform"]'
+    dem-p-inf-mas03 ansible_host='10.101.4.45' kube_node_role='master' kube_node_extra_labels='["nodeType=master", "application=Platform"]'
+    dem-p-inf-nod01 ansible_host='10.101.4.40' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true", "application=Platform", "nodeType=slave"]'
+    dem-p-inf-nod02 ansible_host='10.101.4.41' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true", "application=Platform", "nodeType=slave"]'
+    dem-p-inf-nod03 ansible_host='10.101.4.42' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true", "application=Platform", "nodeType=slave"]'
     
     [Operator:vars]
     kube_version='1.18.17'
@@ -238,3 +239,4 @@ Please send your suggestions to make this role better.
 Please donate to the following monero address.
 
     46CHVMbb6wQV2PJYEbahb353SYGqXhcdFQVEWdCnHb6JaR5125h3kNQ6bcqLye5G7UF7qz6xL9qHLDSAY3baagfmLZABz75
+<p><img src="https://raw.githubusercontent.com/goldstrike77/goldstrike77.github.io/master/img/xmr_address.png" align="left" /></p>
