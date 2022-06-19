@@ -1,9 +1,9 @@
 ---
 kube_epel_repo_name: 'epel'
-kube_epel_repo_url: 'http://mirrors.tuna.tsinghua.edu.cn/epel/$releasever/$basearch/'
+kube_epel_repo_url: 'http://mirrors.aliyun.com/epel/$releasever{% if ansible_distribution_major_version | int > 7 %}/Everything{% endif %}/$basearch/'
 
 kube_repo_name: 'kubernetes'
-kube_repo_url: 'http://mirrors.tuna.tsinghua.edu.cn/kubernetes/yum/repos/kubernetes-el{{ ansible_distribution_major_version }}-{{ ansible_architecture }}/'
+kube_repo_url: 'http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64'
 kube_package:
   - 'ipvsadm'
   - 'iscsi-initiator-utils'
@@ -11,7 +11,4 @@ kube_package:
   - 'kubeadm-{{ kube_version }}-0'
   - 'kubectl-{{ kube_version }}-0'
   - 'kubelet-{{ kube_version }}-0'
-  - 'kubernetes-cni'
   - 'nfs-utils'
-  - 'python-openshift'
-  - 'python-pip'

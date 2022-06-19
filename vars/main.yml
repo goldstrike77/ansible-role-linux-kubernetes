@@ -5,6 +5,7 @@ kube_module_dependent:
   - 'ip_vs_rr'
   - 'ip_vs_sh'
   - 'ip_vs_wrr'
+  - 'nf_conntrack'
   - 'nf_conntrack_ipv4'
   - 'overlay'
 
