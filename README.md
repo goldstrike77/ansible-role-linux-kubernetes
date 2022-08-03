@@ -41,26 +41,11 @@ This role will work on the following operating systems:
 The following list of supported the kubernetes releases:
 
 - Core
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.14
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.15
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.16
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.17
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.18
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.19
-  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.20
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.22
 - Network Plugin
-  - [calico](https://github.com/projectcalico/calico) v3.13.4
-  - [flannel](https://github.com/coreos/flannel) v0.18.1
-  - [canal](https://github.com/projectcalico/canal) (given calico versions)
+  - [flannel](https://github.com/coreos/flannel) v0.19
 - Components
-  - [falco](https://github.com/falcosecurity/falco) v0.29.0
-  - [fluent-bit](https://github.com/fluent/fluent-bit-docker-image) v1.04
-  - [fluentd-elasticsearch](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch) v3.1.0
-  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.2.0
-  - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.3.6
-  - [kube-state-metrics](https://github.com/kubernetes/kube-state-metrics) v1.9.8
-  - [ingress-nginx](https://github.com/kubernetes/ingress-nginx) v0.47.0
-  - [k9s](https://github.com/derailed/k9s) v0.24.11
+  - [k9s](https://github.com/derailed/k9s)
 
 ## Role variables
 ### Main parameters #
@@ -160,14 +145,14 @@ See tests/inventory for an example.
     dem-p-inf-nod03 ansible_host='10.101.4.42' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true", "application=Platform", "nodeType=slave"]'
     
     [Operator:vars]
-    kube_version='1.18.17'
+    kube_version='1.22.12'
     kube_control_plane_endpoint='demo-prd-infra-k8s00-apiserver.service.dc01.local'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-kube_version: '1.19.16'
+kube_version: '1.22.12'
 kube_node_role: 'node'
 kube_cgroup_driver: 'systemd'
 kube_proxy_ipvs: true
@@ -209,7 +194,7 @@ kube_cni_tcp_arg:
 kube_cni_udp_arg:
   flannel_vxlan: '8472'
   flannel_debug: '8285'
-kube_k9s_version:: '0.24.11'
+kube_k9s_version: '0.25.21'
 environments: 'prd'
 datacenter: 'dc01'
 domain: 'local'

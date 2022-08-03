@@ -1,8 +1,4 @@
-{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}
-apiVersion: kubeadm.k8s.io/v1beta1
-{% else %}
 apiVersion: kubeadm.k8s.io/v1beta2
-{% endif %}
 bootstrapTokens:
 - groups:
   - system:bootstrappers:kubeadm:default-node-token
@@ -17,18 +13,13 @@ localAPIEndpoint:
   bindPort: {{ kube_port_tcp_arg.api }}
 nodeRegistration:
   criSocket: /var/run/dockershim.sock
+  imagePullPolicy: IfNotPresent
   name: {{ ansible_fqdn }}
-  taints:
-  - effect: NoSchedule
-    key: node-role.kubernetes.io/master
+  taints: null
 ---
 apiServer:
   timeoutForControlPlane: 10m0s
-{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}
-apiVersion: kubeadm.k8s.io/v1beta1
-{% else %}
 apiVersion: kubeadm.k8s.io/v1beta2
-{% endif %}
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
 controllerManager: {}

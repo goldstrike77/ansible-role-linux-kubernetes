@@ -1,7 +1,7 @@
 ---
 # General parameters #
 kube_is_install: false # A boolean to determine whether or not to install the Kubernetes.
-kube_version: '1.19.16' # Specify the Kubernetes version.
+kube_version: '1.22.12' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
 kube_cgroup_driver: 'systemd' # Specifies the management of the container's cgroups, cgroupfs or systemd.
 kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy in IPVS mode.
@@ -87,7 +87,7 @@ kube_cni_udp_arg:
   flannel_debug: '8285' # Debugging if your network and kernel prevent you from using VXLAN or host-gw.
 
 # K9s parameters #
-# kube_k9s_version: '0.24.11' # Specify the K9s version.
+kube_k9s_version: '0.25.21' # Specify the K9s version.
 
 # Service Mesh #
 environments: 'prd' # Define the service environment.
