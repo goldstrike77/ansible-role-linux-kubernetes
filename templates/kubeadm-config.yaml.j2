@@ -22,12 +22,17 @@ apiServer:
 apiVersion: kubeadm.k8s.io/v1beta2
 certificatesDir: /etc/kubernetes/pki
 clusterName: kubernetes
-controllerManager: {}
+controllerManager:
+  extraArgs:
+    address: 0.0.0.0
+    bind-address: 0.0.0.0
 dns:
   type: CoreDNS
 etcd:
   local:
     dataDir: /var/lib/etcd
+    extraArgs:
+      listen-metrics-urls: http://0.0.0.0:2381
 imageRepository: {{ kube_registry_mirrors['google'] }}/google_containers
 kind: ClusterConfiguration
 kubernetesVersion: v{{ kube_version }}
@@ -36,7 +41,10 @@ networking:
   dnsDomain: cluster.local
   podSubnet: "{{ kube_pod_cidr }}"
   serviceSubnet: "{{ kube_srv_cidr }}"
-scheduler: {}
+scheduler:
+  extraArgs:
+    address: 0.0.0.0
+    bind-address: 0.0.0.0
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1
 kind: KubeProxyConfiguration

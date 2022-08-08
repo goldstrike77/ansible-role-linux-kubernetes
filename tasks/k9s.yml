@@ -15,7 +15,7 @@
 
 - name: Install K9s.
   unarchive:
-    src: 'https://github.com/derailed/k9s/releases/download/v{{ kube_k9s.version }}/k9s_{{ ansible_system }}_{{ ansible_architecture }}.tar.gz'
+    src: 'https://github.com/derailed/k9s/releases/download/v{{ kube_k9s_version }}/k9s_{{ ansible_system }}_{{ ansible_architecture }}.tar.gz'
     dest: '/usr/local/bin'
     owner: 'root'
     group: 'root'
@@ -25,7 +25,7 @@
       - 'LICENSE'
     remote_src: 'yes'
     validate_certs: 'no'
-  when: kube_k9s_current_version.rc == 2 or kube_k9s.version not in kube_k9s_current_version.stdout
+  when: kube_k9s_current_version.rc == 2 or kube_k9s_version not in kube_k9s_current_version.stdout
   register: kube_k9s_status
   until: kube_k9s_status is succeeded
   retries: 5
