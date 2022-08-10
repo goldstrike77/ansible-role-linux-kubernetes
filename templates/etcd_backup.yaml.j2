@@ -11,13 +11,13 @@ spec:
       template:
         spec:
           nodeSelector:
-            nodeType: master
+            node-role.kubernetes.io/master: ""
           tolerations:
             - key: node-role.kubernetes.io/master
               effect: NoSchedule
           containers:
           - name: backup
-            image: {{ kube_registry_mirrors['google'] }}/google_containers/etcd:{{ kube_etcd_image_version.stdout_lines[0] }}
+            image: registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.3.17-0
             env:
             - name: ETCDCTL_API
               value: "3"
