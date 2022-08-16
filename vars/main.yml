@@ -39,6 +39,7 @@ kube_registry_mirrors: # Mirrors of docker image registry
 
 kube_kubelet_extra_args:
   - 'allowed-unsafe-sysctls="net.core.somaxconn,net.ipv4.ip_local_port_range"'
+  - 'container-runtime-endpoint=/run/containerd/containerd.sock'
   - 'feature-gates=RotateKubeletServerCertificate=true'
   - 'kubelet-cgroups=/systemd/system.slice'
   - 'runtime-cgroups=/systemd/system.slice'
