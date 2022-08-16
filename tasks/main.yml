@@ -116,7 +116,7 @@
 
 - name: Set the kubeadm control plane join command.
   set_fact:
-    kube_plan_join_command: "{{ kuber_join_command_result.stdout }} --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-control-plane{% else %}control-plane{% endif %} --certificate-key {{ kuber_control_plane_certs.stdout_lines[2] }} --ignore-preflight-errors=all"
+    kube_plan_join_command: "{{ kuber_join_command_result.stdout }} --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-control-plane{% else %}control-plane{% endif %} --certificate-key {{ kuber_control_plane_certs.stdout_lines[2] }} --ignore-preflight-errors=all --cri-socket /run/containerd/containerd.sock"
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true
@@ -156,7 +156,7 @@
 
 - name: Set the kubeadm work node join command.
   set_fact:
-    kube_node_join_command: "{{ kuber_join_command_result.stdout }} --ignore-preflight-errors=all"
+    kube_node_join_command: "{{ kuber_join_command_result.stdout }} --ignore-preflight-errors=all --cri-socket /run/containerd/containerd.sock"
   when: kuber_join_command_result.stdout is defined
   delegate_to: '{{ item }}'
   delegate_facts: true

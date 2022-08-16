@@ -12,7 +12,7 @@ localAPIEndpoint:
   advertiseAddress: {{ ansible_default_ipv4.address }}
   bindPort: {{ kube_port_tcp_arg.api }}
 nodeRegistration:
-  criSocket: /var/run/dockershim.sock
+  criSocket: unix:///run/containerd/containerd.sock
   imagePullPolicy: IfNotPresent
   name: {{ ansible_fqdn }}
   taints: null

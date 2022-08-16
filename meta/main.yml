@@ -60,7 +60,7 @@ dependencies:
       docker_version: '{{ kube_docker_version }}'
       docker_edition: '{{ kube_docker_edition }}'
       docker_channel: '{{ kube_docker_channel }}'
-      docker_native_cgroupdriver: '{{ kube_cgroup_driver }}'
+      docker_native_cgroupdriver: 'systemd'
       docker_path: '{{ kube_docker_path }}'
       docker_bip: '{{ kube_docker_bip | default("172.17.0.1/16") }}'
       syslog: '{{ kube_docker_syslog | bool }}'

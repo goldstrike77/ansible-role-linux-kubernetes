@@ -54,7 +54,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### General parameters
 * `kube_version`: Specify the Kubernetes version.
 * `kube_node_role`: Type of nodes in cluster, master or node.
-* `kube_cgroup_driver`: Specifies the management of the container's cgroups, cgroupfs or systemd.
 * `kube_strictarp`: A boolean to determine whether or not to enable strict ARP.
 * `kube_proxy_ipvs`: A boolean to determine whether or not to run kube-proxy in IPVS mode.
 * `kube_control_plane_endpoint`: The address or DNS and port of the load balancer.
@@ -155,7 +154,6 @@ You can also use the group_vars or the host_vars files for setting the variables
 ```yaml
 kube_version: '1.22.12'
 kube_node_role: 'node'
-kube_cgroup_driver: 'systemd'
 kube_strictarp: true
 kube_proxy_ipvs: true
 kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local'
