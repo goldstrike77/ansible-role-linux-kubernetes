@@ -56,7 +56,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_node_role`: Type of nodes in cluster, master or node.
 * `kube_strictarp`: A boolean to determine whether or not to enable strict ARP.
 * `kube_proxy_ipvs`: A boolean to determine whether or not to run kube-proxy in IPVS mode.
-* `kube_control_plane_endpoint`: The address or DNS and port of the load balancer.
 * `kube_control_plane_endpoint`: The address or DNS name of the API Server load balancer advertise listening on.
 * `kube_control_plane_port`: The port of the API Server load balancer advertise listening on.
 * `kube_node_extra_labels`: Defined node labels.
