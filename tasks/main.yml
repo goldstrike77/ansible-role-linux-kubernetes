@@ -47,10 +47,6 @@
 - name: Force the handler to run immediately.
   meta: flush_handlers
 
-- name: Include images pull tasks.
-  include: 'images.yml'
-  when: kube_node_role == 'master'
-
 - name: Check if master has already been initialized.
   stat:
     path: '/etc/kubernetes/admin.conf'
