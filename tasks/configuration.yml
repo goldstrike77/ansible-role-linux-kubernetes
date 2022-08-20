@@ -1,0 +1,34 @@
+---
+- name: Remove swapfile from /etc/fstab.
+  mount:
+    path: '{{ item }}'
+    fstype: 'swap'
+    state: 'absent'
+  loop:
+    - 'none'
+    - 'swap'
+  changed_when: false
+  failed_when: false
+
+- name: Disable swap.
+  command: 'swapoff -a'
+  when: ansible_swaptotal_mb > 0
+
+- name: Installs necessary runtime module.
+  modprobe:
+    name: '{{ item }}'
+    state: 'present'
+  loop: '{{ kube_module_dependent }}'
+  changed_when: false
+  failed_when: false
+
+- name: Configure kernel parameters.
+  sysctl:
+    name: '{{ item.variable }}'
+    value: '{{ item.value }}'
+    state: 'present'
+    reload: 'yes'
+    sysctl_set: 'yes'
+    sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
+  loop: '{{ kube_kernel_parameters }}'
+  when: item.create | default(true) | bool

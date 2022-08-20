@@ -18,4 +18,3 @@
     path: '/tmp/{{ kube_cni }}.yaml'
     state: 'absent'
   when: kube_template_clean | bool
-

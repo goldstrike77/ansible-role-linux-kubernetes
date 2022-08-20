@@ -43,8 +43,9 @@ The following list of supported the kubernetes releases:
 - Core
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.22
 - Network Plugin
-  - [flannel](https://github.com/coreos/flannel) v0.19
+  - [flannel](https://github.com/coreos/flannel) v0.19.1
 - Components
+  - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.6.1
   - [k9s](https://github.com/derailed/k9s)
 
 ## Role variables
@@ -54,6 +55,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### General parameters
 * `kube_version`: Specify the Kubernetes version.
 * `kube_node_role`: Type of nodes in cluster, master or node.
+* `kube_clustername`: Specify the Kubernetes cluster name.
 * `kube_strictarp`: A boolean to determine whether or not to enable strict ARP.
 * `kube_proxy_ipvs`: A boolean to determine whether or not to run kube-proxy in IPVS mode.
 * `kube_control_plane_endpoint`: The address or DNS name of the API Server load balancer advertise listening on.
@@ -61,7 +63,7 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_node_extra_labels`: Defined node labels.
 
 ##### Kubernetes networking
-* `kube_cni`: Specify the Kubernetes CNI plugins, calico / flannel / canal.
+* `kube_cni`: Specify the Kubernetes CNI plugins.
 * `kube_pod_cidr`: Specify range of IP addresses for the pod network.
 * `kube_srv_cidr`: Use alternative range of IP address for service VIPs.
 
@@ -75,25 +77,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_backupset_arg.cloud_bwlimit`: Controls the bandwidth limit.
 * `kube_backupset_arg.cloud_event`: Define transfer events.
 * `kube_backupset_arg.cloud_config`: Specify the cloud storage configuration.
-
-##### Logging layer
-* `kube_log_collector`: Define log collector, fluentd-elastic or fluentd-gelf.
-
-##### Fluentd Elasticsearch parameters
-* `kube_fluentd_elastic_hosts`: The hostname list of your Elasticsearch node.
-* `kube_fluentd_elastic_port`: The port number of your Elasticsearch node.
-* `kube_fluentd_elastic_user`: The login username to connect to the Elasticsearch node.
-* `kube_fluentd_elastic_pass`: The login password to connect to the Elasticsearch node.
-* `kube_fluentd_elastic_scheme`: Specify https if your Elasticsearch endpoint supports SSL (default: http)
-* `kube_fluentd_elastic_prefix`: The prefix index name to write events when specifying logstash_format.
-
-##### Fluentd Gelf parameters
-* `kube_fluentd_gelf_host`: The hostname of your Graylog or Logstash node.
-* `kube_fluentd_gelf_port`: The input port number of your Graylog or Logstash node.
-* `kube_fluentd_gelf_protocol`: The input port protocol of your Graylog or Logstash node.
-
-##### Components
-* `kube_components`: Individual Kubernetes components.
 
 ##### Role dependencies
 * `kube_docker_dept`: A boolean to determine whether or not to install Docker at the same task.
@@ -153,6 +136,7 @@ You can also use the group_vars or the host_vars files for setting the variables
 ```yaml
 kube_version: '1.22.12'
 kube_node_role: 'node'
+kube_clustername: 'kubernetes'
 kube_strictarp: true
 kube_proxy_ipvs: true
 kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local'
@@ -171,15 +155,6 @@ kube_backupset_arg:
     account: 'blobuser'
     key: 'base64encodedkey=='
     endpoint: 'blob.core.chinacloudapi.cn'
-kube_log_collector: 'fluentd-gelf'
-kube_fluentd_gelf_host: 'demo-prd-infra-monitor-logstash.service.dc01.local'
-kube_fluentd_gelf_port: '12201'
-kube_fluentd_gelf_protocol: 'udp'
-kube_components:
-  - 'falco'
-  - 'ingress-nginx'
-  - 'kube-state-metrics'
-  - 'metrics-server'
 kube_docker_dept: true
 kube_docker_version: '19.03.15'
 kube_port_tcp_arg:

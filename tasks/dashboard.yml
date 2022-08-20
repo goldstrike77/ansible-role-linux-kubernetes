@@ -1,20 +1,14 @@
 ---
-- name: Create Kubernetes dashboard folder.
-  file:
-    path: '/tmp/dashboard'
-    state: 'directory'
-
 - name: Kubernetes dashboard manifest file transfer.
-  template:
-    src: 'dashboard/{{ item | basename }}'
-    dest: '/tmp/dashboard/{{ item | basename }}'
+  copy:
+    src: 'dashboard.yml'
+    dest: '/tmp/dashboard.yml'
     owner: 'root'
     group: 'root'
     mode: '0644'
-  loop: "{{ lookup('fileglob', '../templates/dashboard/*.yaml', wantlist=True) }}"
 
 - name: Enable the Kubernetes Web Dashboard.
-  command: 'kubectl create -f "/tmp/dashboard"'
+  command: 'kubectl create -f "/tmp/dashboard.yml"'
   environment:
     KUBECONFIG: '/etc/kubernetes/admin.conf'
     no_proxy: '*'
@@ -38,7 +32,7 @@
 
 - name: Remove the kubernetes dashboard configuration.
   file:
-    path: '/tmp/dashboard'
+    path: '/tmp/dashboard.yml'
     state: 'absent'
   when: kube_template_clean | bool
 

@@ -58,43 +58,6 @@
     state: 'absent'
   when: kube_template_clean | bool
 
-- name: Watch ServiceAccount file transfer.
-  copy:
-    src: 'grafana-prometheus-scraper.yaml'
-    dest: '/tmp/grafana-prometheus-scraper.yaml'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
-
-- name: Apply the Watch ServiceAccount manifest.
-  command: 'kubectl apply -f /tmp/grafana-prometheus-scraper.yaml'
-  environment:
-    no_proxy: '*'
-    KUBECONFIG: '/etc/kubernetes/admin.conf'
-
-- name: Get watch ServiceAccount access token.
-  shell: "kubectl -n default describe secret $(kubectl -n default get secret | grep grafana-prometheus-scraper | awk '{print $1}') | grep 'token:' | sed 's/.*://' | sed 's/^[ \t]*//g'"
-  environment:
-    KUBECONFIG: '/etc/kubernetes/admin.conf'
-    no_proxy: '*'
-  no_log: true
-  register: kube_prometheus_token
-
-- name: Prometheus access token outputs.
-  copy:
-    content: '{{ kube_prometheus_token.stdout_lines[0] }}'
-    dest: '/tmp/prometheus.token'
-    owner: 'root'
-    group: 'root'
-    mode: '0600'
-  no_log: true
-
-- name: Remove the Watch ServiceAccount configuration file.
-  file:
-    path: '/tmp/grafana-prometheus-scraper.yaml'
-    state: 'absent'
-  when: kube_template_clean | bool
-
 - name: Kubelet certificates autoapprove manifest file transfer.
   copy:
     src: 'kubelet_cert_update.yaml'

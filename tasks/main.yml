@@ -1,48 +1,12 @@
 ---
-- name: Remove swapfile from /etc/fstab.
-  mount:
-    path: '{{ item }}'
-    fstype: 'swap'
-    state: 'absent'
-  loop:
-    - 'none'
-    - 'swap'
-  changed_when: false
-  failed_when: false
-
-- name: Disable swap.
-  command: 'swapoff -a'
-  when: ansible_swaptotal_mb > 0
-
-- name: Installs necessary runtime module.
-  modprobe:
-    name: '{{ item }}'
-    state: 'present'
-  loop: '{{ kube_module_dependent }}'
-  changed_when: false
-  failed_when: false
-
-- name: Configure kernel parameters.
-  sysctl:
-    name: '{{ item.variable }}'
-    value: '{{ item.value }}'
-    state: 'present'
-    reload: 'yes'
-    sysctl_set: 'yes'
-    sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
-  loop: '{{ kube_kernel_parameters }}'
-  when: item.create | default(true) | bool
+- name: Include configuration tasks.
+  include: 'configuration.yml'
 
 - name: Include firewall tasks.
   include: 'firewall.yml'
 
 - name: Include tasks for specific OS.
   include: '{{ ansible_distribution_file_variety }}.yml'
-
-- name: Reload the kubelet service.
-  shell: echo ''
-  notify: 'Ensure kubelet service is enabled'
-  when: kube_soft_update is changed or kube_conf_update is changed
 
 - name: Force the handler to run immediately.
   meta: flush_handlers
@@ -59,9 +23,6 @@
       include: 'init.yml'
     - name: Include Networking operation.
       include: 'network.yml'
-    - name: Include unified logging layer addons.
-      include: '{{ kube_log_arg.collector }}.yaml'
-      when: kube_log_arg.enable | bool
     - name: Include Dashboard deploy operation.
       include: 'dashboard.yml'
       when: kube_dashboard_install | bool
@@ -69,16 +30,6 @@
     - kube_node_role == 'master'
     - kube_servers[0] in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
-
-- name: Include components deploy operation.
-  include: 'components.yml'
-  loop: '{{ kube_components }}'
-  loop_control:
-    loop_var: kube_components_item
-  when:
-    - kube_components is defined
-    - kube_node_role == 'master'
-    - kube_servers[0] in ansible_default_ipv4.address
 
 - name: Reload the control plane certificate.
   command: "kubeadm init phase upload-certs --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-upload-certs{% else %}upload-certs{% endif %}"
@@ -132,8 +83,7 @@
     owner: '{{ ansible_user }}'
     group: '{{ ansible_user }}'
     mode: '0755'
-  when:
-    - kube_node_role == 'master'
+  when: kube_node_role == 'master'
 
 - name: Symlink the kubectl admin.conf.
   copy:
@@ -143,8 +93,7 @@
     group: '{{ ansible_user }}'
     mode: '0644'
     remote_src: 'yes'
-  when:
-    - kube_node_role == 'master'
+  when: kube_node_role == 'master'
 
 - name: Include backup operation.
   include: 'backup.yml'
@@ -169,15 +118,6 @@
   when:
     - kube_node_role == 'node'
     - not kube_join_stat.stat.exists | bool
-
-- name: Registered with HashiCorp Consul.
-  include: 'register.yml'
-  when:
-    - kube_node_role == 'master'
-    - kube_servers[0] in ansible_default_ipv4.address
-    - kube_components is defined
-    - exporter_is_install | bool
-    - consul_public_register | bool
 
 - name: Install K9s terminal UI.
   include: 'k9s.yml'

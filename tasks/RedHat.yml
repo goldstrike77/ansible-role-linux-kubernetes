@@ -52,6 +52,7 @@
   until: kube_soft_update is succeeded
   retries: 5
   delay: 2
+  notify: 'Ensure kubelet service is enabled'
 
 - name: kubelet services file transfer.
   template:
@@ -61,3 +62,4 @@
     group: 'root'
     mode: '0644'
   register: kube_conf_update
+  notify: 'Ensure kubelet service is enabled'
