@@ -13,9 +13,10 @@ kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy 
 #  - 'longhorn/node=true'
 
 # Kubernetes networking #
-kube_cni: 'flannel' # Specify the Kubernetes CNI plugins.
-kube_pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
-kube_srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
+kube_cni:
+  provider: 'flannel' # Specify the Kubernetes CNI plugins.
+  pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
+  srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
 
 # Backup parameters #
 kube_backupset_arg:

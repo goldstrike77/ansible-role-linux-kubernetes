@@ -40,8 +40,8 @@ kubernetesVersion: v{{ kube_version }}
 controlPlaneEndpoint: "{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}:{{ kube_control_plane_port | default('6443') }}{% else %}{{ ansible_default_ipv4.address }}:{{ kube_port_tcp_arg.api }}{% endif %}"
 networking:
   dnsDomain: cluster.local
-  podSubnet: "{{ kube_pod_cidr }}"
-  serviceSubnet: "{{ kube_srv_cidr }}"
+  podSubnet: "{{ kube_cni.pod_cidr }}"
+  serviceSubnet: "{{ kube_cni.srv_cidr }}"
 scheduler:
   extraArgs:
     address: 0.0.0.0

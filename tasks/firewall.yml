@@ -52,8 +52,8 @@
         state: 'enabled'
         immediate: 'true'
       loop:
-        - '{{ kube_pod_cidr | default("10.244.0.0/16") }}'
-        - '{{ kube_srv_cidr | default("10.96.0.0/12") }}'
+        - '{{ kube_cni.pod_cidr | default("10.244.0.0/16") }}'
+        - '{{ kube_cni.srv_cidr | default("10.96.0.0/12") }}'
     - name: Enable IP masquerading.
       firewalld:
         masquerade: 'yes'

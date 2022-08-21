@@ -62,27 +62,17 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_control_plane_port`: The port of the API Server load balancer advertise listening on.
 * `kube_node_extra_labels`: Defined node labels.
 
-##### Kubernetes networking
-* `kube_cni`: Specify the Kubernetes CNI plugins.
-* `kube_pod_cidr`: Specify range of IP addresses for the pod network.
-* `kube_srv_cidr`: Use alternative range of IP address for service VIPs.
+##### Container Network Interface
+* `kube_cni`: Specify the Kubernetes Container Network Interface parameters.
 
-##### Backup parameters
-* `kube_backupset_arg.keep`: Backup retention cycle in days.
-* `kube_backupset_arg.cloud_rsync`: Whether rsync for cloud storage.
-* `kube_backupset_arg.cloud_drive`: Specify the cloud storage providers, azureblob / s3 for minio.
-* `kube_backupset_arg.cloud_bwlimit`: Controls the bandwidth limit.
-* `kube_backupset_arg.cloud_event`: Define transfer events.
-* `kube_backupset_arg.cloud_config`: Specify the cloud storage configuration.
-
-# CRI parameters #
+##### Container Runtime Interface
 * `kube_cri`: Specify the Kubernetes Container Runtime Interface parameters.
 
-# Components #
-* `kube_components`: Individual Kubernetes components.
+##### Backup
+* `kube_backupset_arg`: Specify the Kubernetes etcd snapshot parameters.
 
-##### K9s parameters
-* `kube_k9s_version`: Specify the K9s version.
+##### Components
+* `kube_components`: Individual Kubernetes components.
 
 ##### Service Mesh
 * `environments`: Define the service environment.
@@ -132,9 +122,10 @@ kube_strictarp: true
 kube_proxy_ipvs: true
 kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local'
 kube_control_plane_port: '6443'
-kube_cni: 'flannel'
-kube_pod_cidr: '10.244.0.0/16'
-kube_srv_cidr: '10.96.0.0/12'
+kube_cni:
+  provider: 'flannel'
+  pod_cidr: '10.244.0.0/16'
+  srv_cidr: '10.96.0.0/12'
 kube_backupset_arg:
   keep: '5'
   cloud_rsync: true
