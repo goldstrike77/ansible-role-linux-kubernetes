@@ -138,6 +138,8 @@ kube_backupset_arg:
     endpoint: 'blob.core.chinacloudapi.cn'
 kube_cri: 'containerd'
 kube_components:
+  - 'dashboard'
+  - 'metrics-server'
 kube_port_tcp_arg:
   etcd: '2379-2380'
   api: '6443'
