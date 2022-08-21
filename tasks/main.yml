@@ -1,9 +1,15 @@
 ---
+- name: Include OS-specific variables.
+  include_vars: '{{ ansible_distribution_file_variety }}.yml'
+
 - name: Include configuration tasks.
   include: 'configuration.yml'
 
 - name: Include firewall tasks.
   include: 'firewall.yml'
+
+- name: Include CRI tasks.
+  include: '{{ kube_cri.plugin }}.yml'
 
 - name: Include tasks for specific OS.
   include: '{{ ansible_distribution_file_variety }}.yml'
@@ -23,13 +29,17 @@
       include: 'init.yml'
     - name: Include Networking operation.
       include: 'network.yml'
-    - name: Include Dashboard deploy operation.
-      include: 'dashboard.yml'
-      when: kube_dashboard_install | bool
   when:
     - kube_node_role == 'master'
     - kube_servers[0] in ansible_default_ipv4.address
     - not kube_init_stat.stat.exists | bool
+
+- name: Include components deploy operation.
+  include: 'components.yml'
+  when:
+    - kube_components is defined
+    - kube_node_role == 'master'
+    - kube_servers[0] in ansible_default_ipv4.address
 
 - name: Reload the control plane certificate.
   command: "kubeadm init phase upload-certs --{% if kube_version.split('.')[0] == '1' and kube_version.split('.')[1] == '14' %}experimental-upload-certs{% else %}upload-certs{% endif %}"
@@ -118,9 +128,3 @@
   when:
     - kube_node_role == 'node'
     - not kube_join_stat.stat.exists | bool
-
-- name: Install K9s terminal UI.
-  include: 'k9s.yml'
-  when:
-    - kube_k9s_version is defined
-    - kube_node_role == 'master'

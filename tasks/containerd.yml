@@ -1,0 +1,90 @@
+---
+- name: Create Containerd image directory.
+  file:
+    path: '{{ kube_cri.path }}/containerd/logs'
+    state: 'directory'
+    owner: 'root'
+    group: 'root'
+    mode: '0711'
+
+- name: Create containerd logs symbolic link.
+  file:
+    src: '{{ kube_cri.path }}/containerd/logs'
+    dest: '/var/log/pods'
+    state: 'link'
+
+- name: Add Containerd YUM repositories.
+  yum_repository:
+    name: '{{ kube_cri_containerd_repo_name }}'
+    description: '{{ kube_cri_containerd_repo_name }} YUM repository'
+    file: '{{ kube_cri_containerd_repo_name }}'
+    baseurl: '{{ kube_cri_containerd_repo_url }}'
+    gpgcheck: 'no'
+    sslverify: 'no'
+    timeout: '60'
+  when: ansible_distribution_file_variety == 'RedHat'
+
+- name: Install the Containerd packages.
+  package:
+    name: '{{ kube_cri_containerd_package }}'
+    state: 'present'
+    validate_certs: 'no'
+    disable_gpg_check: 'yes'
+  register: kube_cri_yum_status
+  until: kube_cri_yum_status is succeeded
+  retries: 5
+  delay: 2
+  notify: Ensure Containerd service is enabled
+
+- name: Containerd configureation.
+  template:
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+    force: 'yes'
+    src: 'config.toml.j2'
+    dest: '/etc/containerd/config.toml'
+  notify: Ensure Containerd service is enabled
+
+- name: Check register client are accessible from current host.
+  uri:
+    url: '{{ consul_public_http_prot }}://{{ item }}:{{ consul_public_http_port }}/v1/agent/service/register'
+    method: 'GET'
+    timeout: '5'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ item }}'
+  loop: '{{ consul_public_clients }}'
+  changed_when: false
+  failed_when: false
+  register: check_consul_reg
+  when:
+    - exporter_is_install | bool
+    - consul_public_register | bool
+
+- name: Register containerd exporter.
+  uri:
+    url: '{{ consul_public_http_prot }}://{{ item.client }}:{{ consul_public_http_port }}/v1/agent/service/register'
+    method: 'PUT'
+    body: '{"tags":["prometheus","exporter"],"ID":"{{ ansible_hostname | lower }}_containerd_exporter","name":"containerd_exporter","address":"{{ ansible_default_ipv4.address }}","port":{{ kube_cri.metrics }},"meta":{"application":"Container","metrics_path":"/v1/metrics","instance":"{{ ansible_hostname | lower }}","project":"{{ group_names[-1] | title | regex_replace("_", "-") }}","customer":"{{ customer | title | regex_replace("_", "-") }}","group":"{{ group_names[0] | title | regex_replace("_", "-") }}","datacenter":"{{ datacenter | lower }}","domain":"{{ domain | lower }}","environment":"{{ environments | lower }}"{% if tags is defined %},{{ tags | to_json | regex_replace("{") | regex_replace("}") }}{% endif %}}}'
+    body_format: 'json'
+    status_code: '200'
+    headers:
+      X-Consul-Token: '{{ consul_public_exporter_token }}'
+      X-Requested-By: '{{ ansible_default_ipv4.address }}'
+      cache-control: 'no-cache'
+    validate_certs: 'no'
+  environment:
+    no_proxy: '{{ item.client }}'
+  loop: "{{ check_consul_reg.results | json_query('[*].{client:item,status:status}') }}"
+  when: 
+    - item.status == 405
+    - exporter_is_install | bool
+    - consul_public_register | bool
+  register: register_status
+  until: register_status.status == 200
+  retries: 3
+  delay: 3
+  no_log: true
+  changed_when: false
+  failed_when: false

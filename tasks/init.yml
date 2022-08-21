@@ -86,8 +86,3 @@
     regexp: '    - --{{ item }}'
     line: '    - --{{ item }}'
   loop: '{{ kube_controller_manager_extra_args }}'
-
-- name: Sleep for 10 seconds for wait kube controller manager reload.
-  wait_for:
-    timeout: 10
-  delegate_to: 'localhost'

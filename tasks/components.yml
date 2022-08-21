@@ -1,0 +1,25 @@
+---
+- name: Kubernetes components manifest file transfer.
+  copy:
+    src: '{{ item }}.yml'
+    dest: '/tmp/{{ item }}.yml'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  loop: '{{ kube_components }}'
+
+- name: Apply the components manifest.
+  command: 'kubectl apply -f /tmp/{{ item }}.yml'
+  environment:
+    no_proxy: '*'
+    KUBECONFIG: '/etc/kubernetes/admin.conf'
+  loop: '{{ kube_components }}'
+  changed_when: false
+  failed_when: false
+
+- name: Remove kubernetes components folder.
+  file:
+    path: '/tmp/{{ item }}.yml'
+    state: 'absent'
+  loop: '{{ kube_components }}'
+  when: kube_template_clean | bool

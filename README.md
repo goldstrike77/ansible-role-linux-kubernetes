@@ -27,7 +27,7 @@ __Table of Contents__
 
 ## Overview
 Kubernetes is an open-source container-orchestration system for automating application deployment, scaling, and management. It was originally designed by Google, and is now maintained by the Cloud Native Computing Foundation. This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and cluster configuration with some common operational features, very easy to deploy if you use HashiCorp Consul as DNS-based service discovery.
->__There are two file that record token for prometheus and dashboard in /tmp folder at first master node, Burn after reading!__
+>__There is a file that records the token for the dashboard in /tmp folder at the first master node, Burn after reading!__
 
 ## Requirements
 ### Operating systems
@@ -46,7 +46,7 @@ The following list of supported the kubernetes releases:
   - [flannel](https://github.com/coreos/flannel) v0.19.1
 - Components
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.6.1
-  - [k9s](https://github.com/derailed/k9s)
+  - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.6.1
 
 ## Role variables
 ### Main parameters #
@@ -67,9 +67,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_pod_cidr`: Specify range of IP addresses for the pod network.
 * `kube_srv_cidr`: Use alternative range of IP address for service VIPs.
 
-##### Dashboard parameters
-* `kube_dashboard_install`: A boolean to determine whether or not to deploy kubernetes dashboard.
-
 ##### Backup parameters
 * `kube_backupset_arg.keep`: Backup retention cycle in days.
 * `kube_backupset_arg.cloud_rsync`: Whether rsync for cloud storage.
@@ -78,16 +75,11 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 * `kube_backupset_arg.cloud_event`: Define transfer events.
 * `kube_backupset_arg.cloud_config`: Specify the cloud storage configuration.
 
-##### Role dependencies
-* `kube_docker_dept`: A boolean to determine whether or not to install Docker at the same task.
+# CRI parameters #
+* `kube_cri`: Specify the Kubernetes Container Runtime Interface parameters.
 
-##### Docker parameters
-* `kube_docker_version`: Specify the Docker version.
-* `kube_docker_edition`: Specify the Docker edition.
-* `kube_docker_channel`: Define Docker distribution.
-* `kube_docker_path`: Specify the Docker data folder.
-* `kube_docker_bip`: Specify the Docker network bridge IP.
-* `kube_docker_syslog`: A boolean value, Enable or Disable send log to remote Syslog server.
+# Components #
+* `kube_components`: Individual Kubernetes components.
 
 ##### K9s parameters
 * `kube_k9s_version`: Specify the K9s version.
@@ -111,7 +103,6 @@ There are some variables in vars/main.yml:
 ## Dependencies
 - Ansible versions >= 2.8
 - Python >= 2.7.5
-- [Docker](https://github.com/goldstrike77/ansible-role-linux-docker.git)
 
 ## Example
 
@@ -144,7 +135,6 @@ kube_control_plane_port: '6443'
 kube_cni: 'flannel'
 kube_pod_cidr: '10.244.0.0/16'
 kube_srv_cidr: '10.96.0.0/12'
-kube_dashboard_install: true
 kube_backupset_arg:
   keep: '5'
   cloud_rsync: true
@@ -155,8 +145,8 @@ kube_backupset_arg:
     account: 'blobuser'
     key: 'base64encodedkey=='
     endpoint: 'blob.core.chinacloudapi.cn'
-kube_docker_dept: true
-kube_docker_version: '19.03.15'
+kube_cri: 'containerd'
+kube_components:
 kube_port_tcp_arg:
   etcd: '2379-2380'
   api: '6443'

@@ -1,7 +1,4 @@
 ---
-- name: Include OS-specific variables.
-  include_vars: '{{ ansible_distribution_file_variety }}.yml'
-
 - name: Add EPEL YUM repositories.
   yum_repository:
     name: '{{ kube_epel_repo_name }}'
@@ -61,5 +58,4 @@
     owner: 'root'
     group: 'root'
     mode: '0644'
-  register: kube_conf_update
   notify: 'Ensure kubelet service is enabled'

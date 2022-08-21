@@ -12,3 +12,8 @@ kube_package:
   - 'kubectl-{{ kube_version }}-0'
   - 'kubelet-{{ kube_version }}-0'
   - 'nfs-utils'
+
+kube_cri_containerd_repo_name: 'docker-ce'
+kube_cri_containerd_repo_url: "http://mirrors.aliyun.com/docker-ce/linux/centos/$releasever/$basearch/stable/"
+kube_cri_containerd_package:
+  - 'containerd.io'

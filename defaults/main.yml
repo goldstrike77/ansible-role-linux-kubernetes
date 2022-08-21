@@ -17,12 +17,6 @@ kube_cni: 'flannel' # Specify the Kubernetes CNI plugins.
 kube_pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
 kube_srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
 
-# Role dependencies #
-kube_docker_dept: true # A boolean to determine whether or not to install Docker at the same task.
-
-# Dashboard parameters #
-kube_dashboard_install: false # A boolean to determine whether or not to deploy kubernetes dashboard.
-
 # Backup parameters #
 kube_backupset_arg:
   keep: '5' # Backup retention cycle in days.
@@ -40,13 +34,16 @@ kube_backupset_arg:
 #    secret_key: 'h9KekbhETGC1UNMcbSrWZCOrBgopdgNJWIeAo28i'
 #    endpoint: 'https://demo-storage-production-other-minio.service.dc01.local:9001'
 
-# Docker parameters #
-kube_docker_version: '19.03.15' # Specify the Docker version.
-kube_docker_edition: 'ce' # Specify the Docker edition.
-kube_docker_channel: 'stable' # Define Docker distribution.
-kube_docker_path: '/data' # Specify the Docker data folder.
-kube_docker_bip: '172.17.0.1/16' # Specify the Docker network bridge IP.
-kube_docker_syslog: false # A boolean value, Enable or Disable send log to remote Syslog server.
+# CRI parameters #
+kube_cri:
+  plugin: 'containerd' # Specify the Kubernetes Container Runtime Interface.
+  path: '/data' # Specify containerd root directory.
+  metrics: '1338'
+
+# Components #
+#kube_components: # Individual Kubernetes components.
+#  - 'dashboard'
+#  - 'metrics-server'
 
 # Listen port #
 kube_port_tcp_arg:
@@ -60,9 +57,6 @@ kube_cni_tcp_arg:
 kube_cni_udp_arg:
   flannel_vxlan: '8472' # Use in-kernel VXLAN to encapsulate the packets.
   flannel_debug: '8285' # Debugging if your network and kernel prevent you from using VXLAN or host-gw.
-
-# K9s parameters #
-kube_k9s_version: '0.25.21' # Specify the K9s version.
 
 # Service Mesh #
 environments: 'prd' # Define the service environment.

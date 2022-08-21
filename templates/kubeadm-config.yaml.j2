@@ -33,7 +33,7 @@ etcd:
     dataDir: /var/lib/etcd
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
-      quota-backend-bytes: 8589934592
+      quota-backend-bytes: "8589934592"
 imageRepository: {{ kube_registry_mirrors['google'] }}/google_containers
 kind: ClusterConfiguration
 kubernetesVersion: v{{ kube_version }}

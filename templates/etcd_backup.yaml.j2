@@ -38,5 +38,5 @@ spec:
               type: DirectoryOrCreate
           - name: backup
             hostPath:
-              path: {{ kube_docker_path }}/backup/etcd
+              path: {{ kube_cri.path }}/backup/etcd
               type: DirectoryOrCreate

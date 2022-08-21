@@ -12,3 +12,11 @@
     state: 'restarted'
     daemon_reload: 'yes'
   listen: Ensure kubelet service is enabled
+
+- name: Reloading the Docker service
+  systemd:
+    name: 'containerd.service'
+    enabled: 'yes'
+    state: 'restarted'
+    daemon_reload: 'yes'
+  listen: Ensure Containerd service is enabled
