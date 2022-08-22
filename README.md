@@ -27,7 +27,6 @@ __Table of Contents__
 
 ## Overview
 Kubernetes is an open-source container-orchestration system for automating application deployment, scaling, and management. It was originally designed by Google, and is now maintained by the Cloud Native Computing Foundation. This Ansible role installs Kubernetes on linux operating system, including establishing a filesystem structure and cluster configuration with some common operational features, very easy to deploy if you use HashiCorp Consul as DNS-based service discovery.
->__There is a file that records the token for the dashboard in /tmp folder at the first master node, Burn after reading!__
 
 ## Requirements
 ### Operating systems
@@ -108,14 +107,14 @@ See tests/inventory for an example.
     dem-p-inf-nod03 ansible_host='10.101.4.42' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true", "application=Platform", "nodeType=slave"]'
     
     [Operator:vars]
-    kube_version='1.22.12'
+    kube_version='1.22.13'
     kube_control_plane_endpoint='demo-prd-infra-k8s00-apiserver.service.dc01.local'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-kube_version: '1.22.12'
+kube_version: '1.22.13'
 kube_node_role: 'node'
 kube_clustername: 'kubernetes'
 kube_strictarp: true
