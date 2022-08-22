@@ -130,6 +130,9 @@ spec:
       labels:
         k8s-app: metrics-server
     spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
       containers:
       - args:
         - --cert-dir=/tmp

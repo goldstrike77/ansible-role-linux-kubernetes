@@ -1,9 +1,6 @@
 ---
 - name: Kubernetes etcd backup cronjob operations.
   block:
-    - name: Get kubernetes etcd containers image version.
-      shell: '/bin/kubeadm config images list --kubernetes-version=v{{ kube_version }} | grep etcd | cut -f2 -d "/" | cut -f2 -d ":"'
-      register: kube_etcd_image_version
     - name: Kubernetes etcd backup configuration file transfer.
       template:
         src: 'etcd_backup.yaml.j2'

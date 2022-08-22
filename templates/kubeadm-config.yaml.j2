@@ -19,6 +19,34 @@ nodeRegistration:
 ---
 apiServer:
   timeoutForControlPlane: 10m0s
+  extraArgs:
+    v: "2"
+    logtostderr: "false"
+    log-dir: "{{ kube_cri.path }}/log/kubernetes"
+    audit-log-maxage: "20"
+    audit-log-maxbackup: "10"
+    audit-log-maxsize: "100"
+    audit-log-path: "{{ kube_cri.path }}/log/kube-audit/audit.log"
+    audit-policy-file: "/etc/kubernetes/audit-policy.yaml"
+    authorization-mode: "Node,RBAC"
+    event-ttl: "720h"
+    runtime-config: "api/all=true"
+    service-node-port-range: "{{ kube_port_tcp_arg.node | default('30000-32767') }}"
+    service-cluster-ip-range: "{{ kube_cni.srv_cidr | default('kube_cni.srv_cidr') }}"
+  extraVolumes:
+  - name: "k8s-log"
+    hostPath: "{{ kube_cri.path }}/log/kubernetes"
+    mountPath: "{{ kube_cri.path }}/log/kubernetes"
+    pathType: "DirectoryOrCreate"
+  - name: "audit-config"
+    hostPath: "/etc/kubernetes/audit-policy.yaml"
+    mountPath: "/etc/kubernetes/audit-policy.yaml"
+    readOnly: true
+    pathType: "File"
+  - name: "audit-log"
+    hostPath: "{{ kube_cri.path }}/log/kube-audit"
+    mountPath: "{{ kube_cri.path }}/log/kube-audit"
+    pathType: "DirectoryOrCreate" 
 apiVersion: kubeadm.k8s.io/v1beta2
 certificatesDir: /etc/kubernetes/pki
 clusterName: {{ kube_clustername | default("kubernetes") }}

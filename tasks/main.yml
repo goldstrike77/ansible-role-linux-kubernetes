@@ -23,6 +23,17 @@
   register: kube_init_stat
   when: kube_node_role == 'master'
 
+- name: Kubernetes Audit policy file transfer.
+  copy:
+    src: 'audit-policy.yaml'
+    dest: '/etc/kubernetes/audit-policy.yaml'
+    owner: 'root'
+    group: 'root'
+    mode: '0600'
+  when:
+    - kube_node_role == 'master'
+    - not kube_init_stat.stat.exists | bool
+
 - name: Kubernetes master initialization operations.
   block:
     - name: Initialize Kubernetes.
