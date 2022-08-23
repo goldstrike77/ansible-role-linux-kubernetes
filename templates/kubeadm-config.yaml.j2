@@ -83,3 +83,21 @@ mode: ipvs
 ipvs:
   strictARP: {{ kube_strictarp | bool | default(false) | to_json }}
 {% endif %}
+---
+apiVersion: kubelet.config.k8s.io/v1beta1
+kind: KubeletConfiguration
+allowedUnsafeSysctls: ["{{ kube_kubelet.unsafesysctls | list | join('","') }}"]
+cgroupDriver: systemd
+cgroupsPerQOS: true
+clusterDomain: "{{ kube_kubelet.clusterdomain }}"
+containerLogMaxFiles: {{ kube_kubelet.logmaxfiles }}
+containerLogMaxSize: "{{ kube_kubelet.logmaxsize }}"
+failSwapOn: false
+kubeAPIBurst: {{ kube_kubelet.kubeapiburst }}
+kubeAPIQPS: {{ kube_kubelet.kubeapiqps }}
+kubeletCgroups: "/systemd/system.slice"
+kubeReservedCgroup: "/systemd/system.slice"
+maxPods: {{ kube_kubelet.maxpods }}
+rotateCertificates: true
+serializeImagePulls: {{ kube_kubelet.serializeimagepulls | bool | to_json }}
+systemReservedCgroup: "/systemd/system.slice"

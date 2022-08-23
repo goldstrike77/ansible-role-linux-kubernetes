@@ -38,19 +38,14 @@ kube_registry_mirrors: # Mirrors of docker image registry
 #  dockerhub: 'docker.mirrors.ustc.edu.cn'
 
 kube_kubelet_extra_args:
-  - 'allowed-unsafe-sysctls="net.core.somaxconn,net.ipv4.ip_local_port_range"'
-  - 'container-log-max-files=10'
-  - 'container-log-max-size=20Mi'
   - 'container-runtime-endpoint=/run/containerd/containerd.sock'
-  - 'feature-gates=RotateKubeletServerCertificate=true'
-  - 'kubelet-cgroups=/systemd/system.slice'
   - 'runtime-cgroups=/systemd/system.slice'
 
 kube_controller_manager_extra_args:
   - 'experimental-cluster-signing-duration=87600h0m0s'
   - 'feature-gates=RotateKubeletServerCertificate=true'
 
-kube_template_clean: true
+kube_template_clean: false
 
 kube_servers: "\
   {% set _kube_servers = [] %}\

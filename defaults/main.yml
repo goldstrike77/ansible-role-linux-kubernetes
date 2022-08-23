@@ -24,6 +24,19 @@ kube_cri:
   path: '/data' # Specify containerd root directory.
   metrics: '1338' # Listening port for exporter.
 
+# Kubelet parameters #
+kube_kubelet: # Specify the Kubelet's configuration parameters.
+  clusterdomain: 'cluster.local'
+  kubeapiburst: 20
+  kubeapiqps: 15
+  logmaxfiles: '10'
+  logmaxsize: '20Mi'
+  maxpods: '110'
+  serializeimagepulls: false
+  unsafesysctls:
+    - 'net.core.somaxconn'
+    - 'net.ipv4.ip_local_port_range'
+
 # Backup parameters #
 kube_backupset_arg:
   keep: '5' # Backup retention cycle in days.

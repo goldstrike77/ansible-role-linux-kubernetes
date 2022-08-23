@@ -67,6 +67,9 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### Container Runtime Interface
 * `kube_cri`: Specify the Kubernetes Container Runtime Interface parameters.
 
+##### Kubelet parameters
+* `kube_kubelet`: Specify the Kubelet's configuration parameters.
+
 ##### Backup
 * `kube_backupset_arg`: Specify the Kubernetes etcd snapshot parameters.
 
@@ -125,6 +128,21 @@ kube_cni:
   provider: 'flannel'
   pod_cidr: '10.244.0.0/16'
   srv_cidr: '10.96.0.0/12'
+kube_cri:
+  plugin: 'containerd'
+  path: '/data'
+  metrics: '1338'
+kube_kubelet:
+  clusterdomain: 'cluster.local'
+  kubeapiburst: 20
+  kubeapiqps: 15
+  logmaxfiles: '10'
+  logmaxsize: '20Mi'
+  maxpods: '110'
+  serializeimagepulls: false
+  unsafesysctls:
+    - 'net.core.somaxconn'
+    - 'net.ipv4.ip_local_port_range'
 kube_backupset_arg:
   keep: '5'
   cloud_rsync: true
@@ -135,7 +153,6 @@ kube_backupset_arg:
     account: 'blobuser'
     key: 'base64encodedkey=='
     endpoint: 'blob.core.chinacloudapi.cn'
-kube_cri: 'containerd'
 kube_components:
   - 'dashboard'
   - 'metrics-server'
