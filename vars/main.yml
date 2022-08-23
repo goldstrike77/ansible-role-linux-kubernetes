@@ -11,8 +11,6 @@ kube_module_dependent:
 
 kube_trusted_network:
   - 'flannel.1'
-  - 'tunl0'
-  - 'docker0'
   - 'cni0'
 
 kube_kernel_parameters:

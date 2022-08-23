@@ -12,11 +12,17 @@ kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy 
 #  - 'kubernetes.azure.com/cluster=""'
 #  - 'longhorn/node=true'
 
-# Kubernetes networking #
+# Container Network Interface parameters #
 kube_cni:
   provider: 'flannel' # Specify the Kubernetes CNI plugins.
   pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
   srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
+
+# Container Runtime Interface parameters #
+kube_cri:
+  plugin: 'containerd' # Specify the Kubernetes Container Runtime Interface.
+  path: '/data' # Specify containerd root directory.
+  metrics: '1338' # Listening port for exporter.
 
 # Backup parameters #
 kube_backupset_arg:
@@ -34,12 +40,6 @@ kube_backupset_arg:
 #    access_key: 'JPTNJFUFB6UKLUXMRKZT'
 #    secret_key: 'h9KekbhETGC1UNMcbSrWZCOrBgopdgNJWIeAo28i'
 #    endpoint: 'https://demo-storage-production-other-minio.service.dc01.local:9001'
-
-# CRI parameters #
-kube_cri:
-  plugin: 'containerd' # Specify the Kubernetes Container Runtime Interface.
-  path: '/data' # Specify containerd root directory.
-  metrics: '1338'
 
 # Components #
 #kube_components: # Individual Kubernetes components.
