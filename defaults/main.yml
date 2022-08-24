@@ -59,6 +59,14 @@ kube_backupset_arg:
 #  - 'dashboard'
 #  - 'metrics-server'
 
+# Registry Endpoint #
+#kube_registry_mirrors: # Specify the image registry mirrors for containerd.
+#  quay:
+#    - 'https://quay.mirrors.ustc.edu.cn'
+#  dockerio:
+#    - 'https://mirror.baidubce.com'
+#    - 'https://hub-mirror.c.163.com'
+
 # Listen port #
 kube_port_tcp_arg:
   etcd: '2379-2380' # etcd server client API.

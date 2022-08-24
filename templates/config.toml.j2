@@ -151,6 +151,14 @@ version = 2
       [plugins."io.containerd.grpc.v1.cri".registry.headers]
 
       [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+{% if kube_registry_mirrors.dockerio is defined %}
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+            endpoint = ["{{ kube_registry_mirrors.dockerio | list | join('","') }}"]
+{% endif %}
+{% if kube_registry_mirrors.quay is defined %}
+        [plugins."io.containerd.grpc.v1.cri".registry.mirrors."quay.io"]
+            endpoint = ["{{ kube_registry_mirrors.quay | list | join('","') }}"]
+{% endif %}
 
     [plugins."io.containerd.grpc.v1.cri".x509_key_pair_streaming]
       tls_cert_file = ""

@@ -76,6 +76,9 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### Components
 * `kube_components`: Individual Kubernetes components.
 
+##### Registry Endpoint
+* `kube_registry_mirrors`: Specify the image registry mirrors for containerd.
+
 ##### Service Mesh
 * `environments`: Define the service environment.
 * `datacenter`: Define the DataCenter.
@@ -156,6 +159,12 @@ kube_backupset_arg:
 kube_components:
   - 'dashboard'
   - 'metrics-server'
+kube_registry_mirrors:
+  quay:
+    - 'https://quay.mirrors.ustc.edu.cn'
+  dockerio:
+    - 'https://mirror.baidubce.com'
+    - 'https://hub-mirror.c.163.com'
 kube_port_tcp_arg:
   etcd: '2379-2380'
   api: '6443'

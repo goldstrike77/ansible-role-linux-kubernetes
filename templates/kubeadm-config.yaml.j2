@@ -62,7 +62,7 @@ etcd:
     extraArgs:
       listen-metrics-urls: http://0.0.0.0:2381
       quota-backend-bytes: "8589934592"
-imageRepository: {{ kube_registry_mirrors['google'] }}/google_containers
+imageRepository: registry.aliyuncs.com/google_containers
 kind: ClusterConfiguration
 kubernetesVersion: v{{ kube_version }}
 controlPlaneEndpoint: "{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}:{{ kube_control_plane_port | default('6443') }}{% else %}{{ ansible_default_ipv4.address }}:{{ kube_port_tcp_arg.api }}{% endif %}"

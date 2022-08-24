@@ -13,7 +13,7 @@
     daemon_reload: 'yes'
   listen: Ensure kubelet service is enabled
 
-- name: Reloading the Docker service
+- name: Reloading the Containerd service
   systemd:
     name: 'containerd.service'
     enabled: 'yes'
