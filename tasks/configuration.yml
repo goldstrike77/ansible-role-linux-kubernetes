@@ -19,8 +19,14 @@
     name: '{{ item }}'
     state: 'present'
   loop: '{{ kube_module_dependent }}'
-  changed_when: false
-  failed_when: false
+
+- name: Dependents runtime module loaded file transfer.
+  template:
+    src: 'crio.conf.j2'
+    dest: '/etc/modules-load.d/crio.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
 
 - name: Configure kernel parameters.
   sysctl:
