@@ -28,7 +28,7 @@ apiServer:
     audit-log-maxsize: "{{ kube_audit.logmaxsize }}"
     audit-log-path: "{{ kube_cri.path }}/log/kube-audit/audit.log"
     audit-policy-file: "/etc/kubernetes/audit-policy.yaml"
-    audit-log-truncate-enabled: true
+    audit-log-truncate-enabled: "true"
     audit-log-truncate-max-batch-size: "{{ kube_audit.logtruncatemaxbatchsize }}"
     audit-log-truncate-max-event-size: "{{ kube_audit.logtruncatemaxeventsize }}"
     authorization-mode: "Node,RBAC"
