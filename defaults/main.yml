@@ -3,7 +3,6 @@
 kube_is_install: false # A boolean to determine whether or not to install the Kubernetes.
 kube_version: '1.22.13' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
-kube_clustername: 'kubernetes' # Specify the Kubernetes cluster name.
 kube_strictarp: true # A boolean to determine whether or not to enable strict ARP.
 kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy in IPVS mode.
 #kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
@@ -26,6 +25,7 @@ kube_cri:
 
 # Kubelet parameters #
 kube_kubelet: # Specify the Kubelet's configuration parameters.
+  clustername: 'kubernetes'
   clusterdomain: 'cluster.local'
   kubeapiburst: 20
   kubeapiqps: 15
@@ -36,6 +36,14 @@ kube_kubelet: # Specify the Kubelet's configuration parameters.
   unsafesysctls:
     - 'net.core.somaxconn'
     - 'net.ipv4.ip_local_port_range'
+
+# Auditing parameters #
+kube_audit: # Specify the auditing configuration parameters.
+  logmaxage: '20'
+  logmaxbackup: '10'
+  logmaxsize: '100'
+  logtruncatemaxbatchsize: '32768'
+  logtruncatemaxeventsize: '32768'
 
 # Backup parameters #
 kube_backupset_arg:

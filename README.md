@@ -54,8 +54,6 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 ##### General parameters
 * `kube_version`: Specify the Kubernetes version.
 * `kube_node_role`: Type of nodes in cluster, master or node.
-* `kube_clustername`: Specify the Kubernetes cluster name.
-* `kube_strictarp`: A boolean to determine whether or not to enable strict ARP.
 * `kube_proxy_ipvs`: A boolean to determine whether or not to run kube-proxy in IPVS mode.
 * `kube_control_plane_endpoint`: The address or DNS name of the API Server load balancer advertise listening on.
 * `kube_control_plane_port`: The port of the API Server load balancer advertise listening on.
@@ -69,6 +67,9 @@ There are some variables in defaults/main.yml which can (Or needs to) be overrid
 
 ##### Kubelet parameters
 * `kube_kubelet`: Specify the Kubelet's configuration parameters.
+
+##### Auditing parameters
+* `kube_audit`: Specify the auditing configuration parameters.
 
 ##### Backup
 * `kube_backupset_arg`: Specify the Kubernetes etcd snapshot parameters.
@@ -122,7 +123,6 @@ You can also use the group_vars or the host_vars files for setting the variables
 ```yaml
 kube_version: '1.22.13'
 kube_node_role: 'node'
-kube_clustername: 'kubernetes'
 kube_strictarp: true
 kube_proxy_ipvs: true
 kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local'
@@ -136,6 +136,7 @@ kube_cri:
   path: '/data'
   metrics: '1338'
 kube_kubelet:
+  clustername: 'kubernetes'
   clusterdomain: 'cluster.local'
   kubeapiburst: 20
   kubeapiqps: 15
@@ -146,6 +147,12 @@ kube_kubelet:
   unsafesysctls:
     - 'net.core.somaxconn'
     - 'net.ipv4.ip_local_port_range'
+kube_audit:
+  logmaxage: '20'
+  logmaxbackup: '10'
+  logmaxsize: '100'
+  logtruncatemaxbatchsize: '32768'
+  logtruncatemaxeventsize: '32768'
 kube_backupset_arg:
   keep: '5'
   cloud_rsync: true

@@ -23,16 +23,19 @@ apiServer:
     v: "2"
     logtostderr: "false"
     log-dir: "{{ kube_cri.path }}/log/kubernetes"
-    audit-log-maxage: "20"
-    audit-log-maxbackup: "10"
-    audit-log-maxsize: "100"
+    audit-log-maxage: "{{ kube_audit.logmaxage }}"
+    audit-log-maxbackup: "{{ kube_audit.logmaxbackup }}"
+    audit-log-maxsize: "{{ kube_audit.logmaxsize }}"
     audit-log-path: "{{ kube_cri.path }}/log/kube-audit/audit.log"
     audit-policy-file: "/etc/kubernetes/audit-policy.yaml"
+    audit-log-truncate-enabled: true
+    audit-log-truncate-max-batch-size: "{{ kube_audit.logtruncatemaxbatchsize }}"
+    audit-log-truncate-max-event-size: "{{ kube_audit.logtruncatemaxeventsize }}"
     authorization-mode: "Node,RBAC"
     event-ttl: "720h"
     runtime-config: "api/all=true"
     service-node-port-range: "{{ kube_port_tcp_arg.node | default('30000-32767') }}"
-    service-cluster-ip-range: "{{ kube_cni.srv_cidr | default('kube_cni.srv_cidr') }}"
+    service-cluster-ip-range: "{{ kube_cni.srv_cidr | default('10.96.0.0/12') }}"
   extraVolumes:
   - name: "k8s-log"
     hostPath: "{{ kube_cri.path }}/log/kubernetes"
@@ -49,7 +52,7 @@ apiServer:
     pathType: "DirectoryOrCreate" 
 apiVersion: kubeadm.k8s.io/v1beta2
 certificatesDir: /etc/kubernetes/pki
-clusterName: {{ kube_clustername | default("kubernetes") }}
+clusterName: {{ kube_kubelet.clustername | default("kubernetes") }}
 controllerManager:
   extraArgs:
     address: 0.0.0.0
@@ -67,9 +70,9 @@ kind: ClusterConfiguration
 kubernetesVersion: v{{ kube_version }}
 controlPlaneEndpoint: "{% if kube_control_plane_endpoint is defined %}{{ kube_control_plane_endpoint | lower }}:{{ kube_control_plane_port | default('6443') }}{% else %}{{ ansible_default_ipv4.address }}:{{ kube_port_tcp_arg.api }}{% endif %}"
 networking:
-  dnsDomain: cluster.local
-  podSubnet: "{{ kube_cni.pod_cidr }}"
-  serviceSubnet: "{{ kube_cni.srv_cidr }}"
+  dnsDomain: "{{ kube_kubelet.clusterdomain | default('cluster.local') }}"
+  podSubnet: "{{ kube_cni.pod_cidr | default('10.244.0.0/16') }}"
+  serviceSubnet: "{{ kube_cni.srv_cidr | default('10.96.0.0/12') }}"
 scheduler:
   extraArgs:
     address: 0.0.0.0
@@ -89,7 +92,7 @@ kind: KubeletConfiguration
 allowedUnsafeSysctls: ["{{ kube_kubelet.unsafesysctls | list | join('","') }}"]
 cgroupDriver: systemd
 cgroupsPerQOS: true
-clusterDomain: "{{ kube_kubelet.clusterdomain }}"
+clusterDomain: "{{ kube_kubelet.clusterdomain | default('cluster.local') }}"
 containerLogMaxFiles: {{ kube_kubelet.logmaxfiles }}
 containerLogMaxSize: "{{ kube_kubelet.logmaxsize }}"
 failSwapOn: false
