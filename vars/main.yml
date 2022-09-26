@@ -35,7 +35,7 @@ kube_controller_manager_extra_args:
   - 'experimental-cluster-signing-duration=87600h0m0s'
   - 'feature-gates=RotateKubeletServerCertificate=true'
 
-kube_template_clean: false
+kube_template_clean: true
 
 kube_servers: "\
   {% set _kube_servers = [] %}\

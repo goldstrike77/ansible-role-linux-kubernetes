@@ -93,14 +93,16 @@ allowedUnsafeSysctls: ["{{ kube_kubelet.unsafesysctls | list | join('","') }}"]
 cgroupDriver: systemd
 cgroupsPerQOS: true
 clusterDomain: "{{ kube_kubelet.clusterdomain | default('cluster.local') }}"
-containerLogMaxFiles: {{ kube_kubelet.logmaxfiles }}
-containerLogMaxSize: "{{ kube_kubelet.logmaxsize }}"
+containerLogMaxFiles: {{ kube_kubelet.logmaxfiles | default(10) }}
+containerLogMaxSize: "{{ kube_kubelet.logmaxsize | default('20Mi') }}"
 failSwapOn: false
-kubeAPIBurst: {{ kube_kubelet.kubeapiburst }}
-kubeAPIQPS: {{ kube_kubelet.kubeapiqps }}
+kubeAPIBurst: {{ kube_kubelet.kubeapiburst | default(20) }}
+kubeAPIQPS: {{ kube_kubelet.kubeapiqps | default(15) }}
 kubeletCgroups: "/systemd/system.slice"
 kubeReservedCgroup: "/systemd/system.slice"
-maxPods: {{ kube_kubelet.maxpods }}
+imageGCHighThresholdPercent: {{ kube_kubelet.imagegchighthresholdpercent | default(85) }}
+imageGCLowThresholdPercent: {{ kube_kubelet.imagegclowthresholdpercent | default(80) }}
+maxPods: {{ kube_kubelet.maxpods | default(110) }}
 rotateCertificates: true
 serializeImagePulls: {{ kube_kubelet.serializeimagepulls | bool | to_json }}
 systemReservedCgroup: "/systemd/system.slice"

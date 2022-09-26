@@ -1,7 +1,7 @@
 ---
 # General parameters #
 kube_is_install: false # A boolean to determine whether or not to install the Kubernetes.
-kube_version: '1.22.13' # Specify the Kubernetes version.
+kube_version: '1.22.15' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
 kube_strictarp: true # A boolean to determine whether or not to enable strict ARP.
 kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy in IPVS mode.
@@ -31,6 +31,8 @@ kube_kubelet: # Specify the Kubelet's configuration parameters.
   kubeapiqps: 15
   logmaxfiles: '10'
   logmaxsize: '20Mi'
+  imagegchighthresholdpercent: '70'
+  imagegclowthresholdpercent: '50'
   maxpods: '110'
   serializeimagepulls: false
   unsafesysctls:
