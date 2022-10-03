@@ -19,6 +19,8 @@
     name: '{{ item }}'
     state: 'present'
   loop: '{{ kube_module_dependent }}'
+  changed_when: false
+  failed_when: false
 
 - name: Dependents runtime module loaded file transfer.
   template:

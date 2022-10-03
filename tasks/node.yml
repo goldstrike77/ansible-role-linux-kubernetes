@@ -2,6 +2,7 @@
 - name: Join node to Kubernetes master.
   shell: >
     {{ kube_node_join_command }}
+    --node-name {{ ansible_fqdn | lower }}
     creates=/etc/kubernetes/kubelet.conf
   environment:
     no_proxy: '*'

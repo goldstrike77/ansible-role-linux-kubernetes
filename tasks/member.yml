@@ -2,6 +2,7 @@
 - name: Join to Kubernetes control plane.
   shell: >
     {{ kube_plan_join_command }}
+    --node-name {{ ansible_fqdn | lower }}
     creates=/etc/kubernetes/kubelet.conf
   environment:
     no_proxy: '*'
