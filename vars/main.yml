@@ -15,25 +15,26 @@ kube_trusted_network:
 
 kube_kernel_parameters:
   - { variable: 'kernel.perf_event_paranoid', value: '-1' }
-  - { variable: 'net.bridge.bridge-nf-call-ip6tables', value: '1', create: '{{ ansible_default_ipv6 | length > 0 }}' }
   - { variable: 'net.bridge.bridge-nf-call-arptables', value: '1' }
+  - { variable: 'net.bridge.bridge-nf-call-ip6tables', value: '1', create: '{{ ansible_all_ipv6_addresses | length > 0 }}' }
   - { variable: 'net.bridge.bridge-nf-call-iptables', value: '1' }
   - { variable: 'net.core.somaxconn', value: '65535' }
+  - { variable: 'net.ipv4.conf.all.arp_announce', value: '2' }
+  - { variable: 'net.ipv4.conf.all.arp_ignore', value: '1' }
   - { variable: 'net.ipv4.ip_forward', value: '1' }
   - { variable: 'net.ipv4.ip_local_port_range', value: '1025 65535' }
   - { variable: 'net.ipv4.neigh.default.gc_stale_time', value: '120' }
   - { variable: 'net.ipv4.neigh.default.gc_thresh1', value: '4096' }
   - { variable: 'net.ipv4.neigh.default.gc_thresh2', value: '6144' }
   - { variable: 'net.ipv4.neigh.default.gc_thresh3', value: '8192' }
-  - { variable: 'net.ipv6.conf.all.forwarding', value: '1', create: '{{ ansible_default_ipv6 | length > 0 }}' }
+  - { variable: 'net.ipv6.conf.all.forwarding', value: '1', create: '{{ ansible_all_ipv6_addresses | length > 0 }}' }
 
 kube_kubelet_extra_args:
   - 'container-runtime-endpoint=/run/containerd/containerd.sock'
   - 'runtime-cgroups=/systemd/system.slice'
 
 kube_controller_manager_extra_args:
-  - 'experimental-cluster-signing-duration=87600h0m0s'
-  - 'feature-gates=RotateKubeletServerCertificate=true'
+  - 'cluster-signing-duration=87600h0m0s'
 
 kube_template_clean: false
 

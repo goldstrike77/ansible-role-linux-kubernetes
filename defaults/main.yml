@@ -1,7 +1,7 @@
 ---
 # General parameters #
 kube_is_install: false # A boolean to determine whether or not to install the Kubernetes.
-kube_version: '1.22.15' # Specify the Kubernetes version.
+kube_version: '1.23.12' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
 kube_strictarp: true # A boolean to determine whether or not to enable strict ARP.
 kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy in IPVS mode.
@@ -81,7 +81,7 @@ kube_backupset_arg:
 kube_port_tcp_arg:
   etcd: '2379-2380' # etcd server client API.
   api: '6443' # Kubernetes API Server.
-  kube: '10250-10256' # All of kubelet services.
+  kube: '10250-10259' # All of kubelet services.
   node: '30000-32767' # Default range for external service ports.
 kube_cni_tcp_arg:
   calico_bgp: '179' # Calico networking with BGP.
@@ -89,6 +89,10 @@ kube_cni_tcp_arg:
 kube_cni_udp_arg:
   flannel_vxlan: '8472' # Use in-kernel VXLAN to encapsulate the packets.
   flannel_debug: '8285' # Debugging if your network and kernel prevent you from using VXLAN or host-gw.
+kube_lb_arg:
+  metallb_monitoring: '7472'
+  metallb_memberlist: '7946'
+  purelb_memberlist: '7934'
 
 # Service Mesh #
 environments: 'prd' # Define the service environment.

@@ -16,6 +16,8 @@ nodeRegistration:
   imagePullPolicy: IfNotPresent
   name: {{ ansible_fqdn }}
   taints: null
+  kubeletExtraArgs:
+    volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
 ---
 apiServer:
   timeoutForControlPlane: 10m0s
@@ -50,13 +52,14 @@ apiServer:
     hostPath: "{{ kube_cri.path }}/log/kube-audit"
     mountPath: "{{ kube_cri.path }}/log/kube-audit"
     pathType: "DirectoryOrCreate" 
-apiVersion: kubeadm.k8s.io/v1beta2
+apiVersion: kubeadm.k8s.io/v1beta3
 certificatesDir: /etc/kubernetes/pki
 clusterName: {{ kube_kubelet.clustername | default("kubernetes") }}
 controllerManager:
   extraArgs:
     address: 0.0.0.0
     bind-address: 0.0.0.0
+    flex-volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
 dns:
   type: CoreDNS
 etcd:
@@ -106,3 +109,9 @@ maxPods: {{ kube_kubelet.maxpods | default(110) }}
 rotateCertificates: true
 serializeImagePulls: {{ kube_kubelet.serializeimagepulls | bool | to_json }}
 systemReservedCgroup: "/systemd/system.slice"
+---
+apiVersion: kubeadm.k8s.io/v1beta3
+kind: JoinConfiguration
+nodeRegistration:
+  kubeletExtraArgs:
+    volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"

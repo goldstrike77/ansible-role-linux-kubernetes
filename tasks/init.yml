@@ -86,3 +86,8 @@
     regexp: '    - --{{ item }}'
     line: '    - --{{ item }}'
   loop: '{{ kube_controller_manager_extra_args }}'
+
+- name: Wait for kube controller manager reload.
+  wait_for:
+    port: 10257
+    delay: 10

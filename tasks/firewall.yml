@@ -36,6 +36,22 @@
         state: 'enabled'
         immediate: 'true'
       loop: '{{ kube_cni_udp_arg | dict2items }}'
+    - name: Allow Service Load Balancer Controller tcp traffic.
+      firewalld:
+        port: '{{ item.value }}/tcp'
+        zone: 'public'
+        permanent: 'yes'
+        state: 'enabled'
+        immediate: 'true'
+      loop: '{{ kube_lb_arg | dict2items }}'
+    - name: Allow Service Load Balancer Controller udp traffic.
+      firewalld:
+        port: '{{ item.value }}/udp'
+        zone: 'public'
+        permanent: 'yes'
+        state: 'enabled'
+        immediate: 'true'
+      loop: '{{ kube_lb_arg | dict2items }}'
     - name: Allow flannel virtual networking traffic.
       firewalld:
         zone: 'trusted'
