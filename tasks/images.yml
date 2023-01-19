@@ -1,6 +1,6 @@
 ---
 - name: Get kubernetes control plane containers image list.
-  shell: "/bin/kubeadm config images list --kubernetes-version=v1.23.12 | awk -F '/' '{print $NF}'"
+  shell: "/bin/kubeadm config images list --kubernetes-version=v{{ kube_version }} | awk -F '/' '{print $NF}'"
   register: kube_control_plane_image_list
 
 - name: Pull an kubernetes control plane containers image.
