@@ -1,1 +1,1 @@
-KUBELET_EXTRA_ARGS=--{{ ' --'.join(vars["kube_kubelet_extra_args"]) }}
+KUBELET_EXTRA_ARGS=--{{ ' --'.join(vars["kube_kubelet_extra_args"]) }}{% if kube_cri.path is defined %} --root-dir={{ kube_cri.path }}/kubelet{% endif %}

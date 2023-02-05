@@ -40,3 +40,12 @@
     sysctl_file: '/etc/sysctl.d/20-sysctl.conf'
   loop: '{{ kube_kernel_parameters }}'
   when: item.create | default(true) | bool
+
+#- name: Create kubelet files root directory.
+#  file:
+#    path: '{{ kube_cri.path }}/kubelet'
+#    state: 'directory'
+#    owner: 'root'
+#    group: 'root'
+#    mode: '0711'
+#  when: kube_cri.path is defined
