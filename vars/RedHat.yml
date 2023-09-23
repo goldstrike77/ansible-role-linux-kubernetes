@@ -6,6 +6,7 @@ kube_repo_name: 'kubernetes'
 kube_repo_url: 'http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64'
 kube_package:
   - 'ipvsadm'
+  - 'iproute-tc'
   - 'iscsi-initiator-utils'
   - 'kernel-devel-{{ ansible_kernel }}'
   - 'kubeadm-{{ kube_version }}-0'

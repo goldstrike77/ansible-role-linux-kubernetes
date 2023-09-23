@@ -57,7 +57,7 @@ certificatesDir: /etc/kubernetes/pki
 clusterName: {{ kube_kubelet.clustername | default("kubernetes") }}
 controllerManager:
   extraArgs:
-    address: 0.0.0.0
+#    address: 0.0.0.0
     bind-address: 0.0.0.0
     flex-volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
 dns:
@@ -78,7 +78,7 @@ networking:
   serviceSubnet: "{{ kube_cni.srv_cidr | default('10.96.0.0/12') }}"
 scheduler:
   extraArgs:
-    address: 0.0.0.0
+#    address: 0.0.0.0
     bind-address: 0.0.0.0
 ---
 apiVersion: kubeproxy.config.k8s.io/v1alpha1

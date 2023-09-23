@@ -42,8 +42,9 @@ The following list of supported the kubernetes releases:
 - Core
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.22
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.23
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.24
 - Network Plugin
-  - [flannel](https://github.com/coreos/flannel) v0.20.2
+  - [flannel](https://github.com/coreos/flannel) v0.22.3
 - Components
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.6.1
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.6.1
@@ -115,14 +116,14 @@ See tests/inventory for an example.
     dem-p-inf-nod03 ansible_host='10.101.4.42' kube_node_extra_labels='["kubernetes.azure.com/cluster=true", "longhorn/node=true", "application=Platform", "nodeType=slave"]'
     
     [Operator:vars]
-    kube_version='1.23.12'
+    kube_version='1.24.17'
     kube_control_plane_endpoint='demo-prd-infra-k8s00-apiserver.service.dc01.local'
 
 ### Combination of group vars and playbook
 You can also use the group_vars or the host_vars files for setting the variables needed for this role. File you should change: group_vars/all or host_vars/`group_name`.
 
 ```yaml
-kube_version: '1.23.12'
+kube_version: '1.24.17'
 kube_node_role: 'node'
 kube_strictarp: true
 kube_proxy_ipvs: true
