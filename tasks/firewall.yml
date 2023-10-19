@@ -39,7 +39,7 @@
     - name: Allow Service Load Balancer Controller tcp traffic.
       firewalld:
         port: '{{ item.value }}/tcp'
-        zone: 'public'
+        zone: 'trusted'
         permanent: 'yes'
         state: 'enabled'
         immediate: 'true'
@@ -47,7 +47,7 @@
     - name: Allow Service Load Balancer Controller udp traffic.
       firewalld:
         port: '{{ item.value }}/udp'
-        zone: 'public'
+        zone: 'trusted'
         permanent: 'yes'
         state: 'enabled'
         immediate: 'true'

@@ -45,6 +45,7 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.24
 - Network Plugin
   - [flannel](https://github.com/coreos/flannel) v0.22.3
+  - [calico](https://github.com/projectcalico/calico) v3.26.3
 - Components
   - [kubernetes-dashboard](https://github.com/kubernetes/dashboard) v2.6.1
   - [metrics-server](https://github.com/kubernetes-sigs/metrics-server) v0.6.1

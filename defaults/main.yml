@@ -89,6 +89,9 @@ kube_cni_tcp_arg:
 kube_cni_udp_arg:
   flannel_vxlan: '8472' # Use in-kernel VXLAN to encapsulate the packets.
   flannel_debug: '8285' # Debugging if your network and kernel prevent you from using VXLAN or host-gw.
+  calico_vxlan: '4789' # Calico networking with VXLAN enabled.
+  calico_ipv4_wireguard: '51820' # Calico networking with IPv4 Wireguard enabled.
+  calico_ipv6_wireguard: '51821' # Calico networking with IPv6 Wireguard enabled.
 kube_lb_arg:
   metallb_monitoring: '7472'
   metallb_memberlist: '7946'
