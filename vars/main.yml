@@ -35,6 +35,7 @@ kube_kubelet_extra_args:
 
 kube_controller_manager_extra_args:
   - 'cluster-signing-duration=87600h0m0s'
+  - 'allocate-node-cidrs'
 
 kube_template_clean: false
 

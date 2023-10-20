@@ -131,6 +131,7 @@ kube_proxy_ipvs: true
 kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local'
 kube_control_plane_port: '6443'
 kube_cni:
+  enable: true
   provider: 'flannel'
   pod_cidr: '10.244.0.0/16'
   srv_cidr: '10.96.0.0/12'

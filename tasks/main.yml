@@ -44,6 +44,7 @@
       include: 'init.yml'
     - name: Include Networking operation.
       include: 'network.yml'
+      when: kube_cni.enable | bool
   when:
     - kube_node_role == 'master'
     - kube_servers[0] in ansible_default_ipv4.address

@@ -13,6 +13,7 @@ kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy 
 
 # Container Network Interface parameters #
 kube_cni:
+  enable: true # A boolean to determine whether or not to install the Container Network Interface.
   provider: 'flannel' # Specify the Kubernetes CNI plugins.
   pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
   srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
