@@ -2,7 +2,7 @@
 - name: Join node to Kubernetes master.
   shell: >
     {{ kube_node_join_command }}
-    --node-name {{ ansible_fqdn | lower }}
+    --node-name {{ ansible_nodename | lower }}
     creates=/etc/kubernetes/kubelet.conf
   environment:
     no_proxy: '*'
@@ -16,7 +16,7 @@
     seconds: 5
 
 - name: Kubernetes node labele applied.
-  command: 'kubectl label nodes {{ ansible_fqdn | lower }} --overwrite datacenter="{{ datacenter | default("dc01") | lower }}" domain="{{ domain | default("local") | lower }}" environment="{{ environments | default("prd") | lower }}" project="{{ group_names[-1] | title | regex_replace("_", "-") }}" group="{{ group_names[0] | title | regex_replace("_", "-") }}" customer="{{ customer | title | regex_replace("_", "-") }}"{% if kube_node_extra_labels is defined %} {{ " ".join(vars["kube_node_extra_labels"]) }}{% endif %}'
+  command: 'kubectl label nodes {{ ansible_nodename | lower }} --overwrite datacenter="{{ datacenter | default("dc01") | lower }}" domain="{{ domain | default("local") | lower }}" environment="{{ environments | default("prd") | lower }}" project="{{ group_names[-1] | title | regex_replace("_", "-") }}" group="{{ group_names[0] | title | regex_replace("_", "-") }}" customer="{{ customer | title | regex_replace("_", "-") }}"{% if kube_node_extra_labels is defined %} {{ " ".join(vars["kube_node_extra_labels"]) }}{% endif %}'
   environment:
     no_proxy: '*'
     KUBECONFIG: '/etc/kubernetes/kubelet.conf'

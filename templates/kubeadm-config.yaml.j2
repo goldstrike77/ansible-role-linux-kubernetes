@@ -14,10 +14,19 @@ localAPIEndpoint:
 nodeRegistration:
   criSocket: unix:///run/containerd/containerd.sock
   imagePullPolicy: IfNotPresent
-  name: {{ ansible_fqdn }}
+  name: {{ ansible_nodename }}
   taints: null
   kubeletExtraArgs:
     volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+{% if kube_cloud_provider_external | bool %}
+    cloud-provider: external
+{% endif %}
+{% if kube_skip_phases is defined %}
+skipPhases:
+{% for item in kube_skip_phases %}
+  - {{ item }}
+{% endfor %}
+{% endif %}
 ---
 apiServer:
   timeoutForControlPlane: 10m0s
@@ -113,3 +122,6 @@ kind: JoinConfiguration
 nodeRegistration:
   kubeletExtraArgs:
     volume-plugin-dir: "/opt/libexec/kubernetes/kubelet-plugins/volume/exec/"
+{% if kube_cloud_provider_external | bool %}
+    cloud-provider: external
+{% endif %}

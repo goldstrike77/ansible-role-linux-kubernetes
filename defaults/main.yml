@@ -5,6 +5,9 @@ kube_version: '1.24.17' # Specify the Kubernetes version.
 kube_node_role: 'node' # Type of nodes in cluster, master or node.
 kube_strictarp: true # A boolean to determine whether or not to enable strict ARP.
 kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy in IPVS mode.
+kube_cloud_provider_external: false # A boolean to determine whether or not to specify that the cloud-provider is external.
+#kube_skip_phases: # Allow skipping a list of phases during kubeadm init/join command execution.
+#  - 'addon/kube-proxy'
 #kube_control_plane_endpoint: 'demo-prd-infra-k8s00-apiserver.service.dc01.local' # The address or DNS name of the API Server load balancer advertise listening on.
 #kube_control_plane_port: '6443' # The port of the API Server load balancer advertise listening on.
 #kube_node_extra_labels: # Defined node labels.
