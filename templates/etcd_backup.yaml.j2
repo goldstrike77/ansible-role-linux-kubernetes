@@ -23,8 +23,10 @@ spec:
           tolerations:
             - key: node-role.kubernetes.io/master
               effect: NoSchedule
+              operator: Exists
             - key: node-role.kubernetes.io/control-plane
               effect: NoSchedule
+              operator: Exists
           containers:
           - name: backup
             image: registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.3.17-0
