@@ -32,8 +32,8 @@ apiServer:
   timeoutForControlPlane: 10m0s
   extraArgs:
     v: "2"
-    logtostderr: "false"
-    log-dir: "{{ kube_cri.path }}/log/kubernetes"
+#    logtostderr: "false"
+#    log-dir: "{{ kube_cri.path }}/log/kubernetes"
     audit-log-maxage: "{{ kube_audit.logmaxage }}"
     audit-log-maxbackup: "{{ kube_audit.logmaxbackup }}"
     audit-log-maxsize: "{{ kube_audit.logmaxsize }}"

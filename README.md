@@ -43,6 +43,7 @@ The following list of supported the kubernetes releases:
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.22
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.23
   - [kubernetes](https://github.com/kubernetes/kubernetes) v1.24
+  - [kubernetes](https://github.com/kubernetes/kubernetes) v1.27
 - Network Plugin
   - [flannel](https://github.com/coreos/flannel) v0.22.3
   - [calico](https://github.com/projectcalico/calico) v3.26.3
