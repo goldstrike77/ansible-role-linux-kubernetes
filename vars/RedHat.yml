@@ -8,7 +8,7 @@ kube_package:
   - 'ipvsadm'
   - 'iproute-tc'
   - 'iscsi-initiator-utils'
-  - 'kernel-devel-{{ ansible_kernel }}'
+  - 'kernel-devel'
   - 'kubeadm-{{ kube_version }}-0'
   - 'kubectl-{{ kube_version }}-0'
   - 'kubelet-{{ kube_version }}-0'
