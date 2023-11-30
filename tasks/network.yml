@@ -1,20 +1,20 @@
 ---
 - name: Kubernetes networking cni manifest transfer.
   template:
-    src: '{{ kube_cni.provider }}.yaml.j2'
-    dest: '/tmp/{{ kube_cni.provider }}.yaml'
-    owner: 'root'
-    group: 'root'
-    mode: '0644'
+    src: "{{ kube_cni.provider }}.yaml.j2"
+    dest: "/tmp/{{ kube_cni.provider | default('flannel') }}.yaml"
+    owner: "root"
+    group: "root"
+    mode: "0644"
 
 - name: Apply networking manifest.
-  command: 'kubectl apply -f "/tmp/{{ kube_cni.provider }}.yaml"'
+  command: 'kubectl apply -f "/tmp/{{ kube_cni.provider | default("flannel") }}.yaml"'
   environment:
-    no_proxy: '*'
-    KUBECONFIG: '/etc/kubernetes/admin.conf'
+    no_proxy: "*"
+    KUBECONFIG: "/etc/kubernetes/admin.conf"
 
 - name: Remove networking cni manifest transfer.
   file:
-    path: '/tmp/{{ kube_cni.provider }}.yaml'
-    state: 'absent'
+    path: '/tmp/{{ kube_cni.provider | default("flannel") }}.yaml'
+    state: "absent"
   when: kube_template_clean | bool
