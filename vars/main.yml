@@ -28,6 +28,7 @@ kube_kernel_parameters:
   - { variable: 'net.ipv4.neigh.default.gc_thresh2', value: '6144' }
   - { variable: 'net.ipv4.neigh.default.gc_thresh3', value: '8192' }
   - { variable: 'net.ipv6.conf.all.forwarding', value: '1', create: '{{ ansible_all_ipv6_addresses | length > 0 }}' }
+  - { variable: 'vm.max_map_count', value: '262144' }
 
 kube_kubelet_extra_args:
   - 'container-runtime-endpoint=/run/containerd/containerd.sock'

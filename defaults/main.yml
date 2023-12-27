@@ -1,8 +1,8 @@
 ---
 # General parameters #
 kube_is_install: false # A boolean to determine whether or not to install the Kubernetes.
-kube_version: '1.24.17' # Specify the Kubernetes version.
-kube_node_role: 'node' # Type of nodes in cluster, master or node.
+kube_version: "1.24.17" # Specify the Kubernetes version.
+kube_node_role: "node" # Type of nodes in cluster, master or node.
 kube_strictarp: true # A boolean to determine whether or not to enable strict ARP.
 kube_proxy_ipvs: true # A boolean to determine whether or not to run kube-proxy in IPVS mode.
 kube_cloud_provider_external: false # A boolean to determine whether or not to specify that the cloud-provider is external.
@@ -17,52 +17,52 @@ kube_cloud_provider_external: false # A boolean to determine whether or not to s
 # Container Network Interface parameters #
 kube_cni:
   enable: true # A boolean to determine whether or not to install the Container Network Interface.
-  provider: 'flannel' # Specify the Kubernetes CNI plugins.
-  pod_cidr: '10.244.0.0/16' # Specify range of IP addresses for the pod network.
-  srv_cidr: '10.96.0.0/12' # Use alternative range of IP address for service VIPs.
+  provider: "flannel" # Specify the Kubernetes CNI plugins.
+  pod_cidr: "10.244.0.0/16" # Specify range of IP addresses for the pod network.
+  srv_cidr: "10.96.0.0/12" # Use alternative range of IP address for service VIPs.
 
 # Container Runtime Interface parameters #
 kube_cri:
-  plugin: 'containerd' # Specify the Kubernetes Container Runtime Interface.
-  path: '/data' # Specify containerd root directory.
-  metrics: '1338' # Listening port for exporter.
+  plugin: "containerd" # Specify the Kubernetes Container Runtime Interface.
+  path: "/data" # Specify containerd root directory.
+  metrics: "1338" # Listening port for exporter.
 
 # Kubelet parameters #
 kube_kubelet: # Specify the Kubelet's configuration parameters.
-  clustername: 'kubernetes'
-  clusterdomain: 'cluster.local'
+  clustername: "kubernetes"
+  clusterdomain: "cluster.local"
   kubeapiburst: 20
   kubeapiqps: 15
-  logmaxfiles: '10'
-  logmaxsize: '20Mi'
-  imagegchighthresholdpercent: '70'
-  imagegclowthresholdpercent: '50'
-  maxpods: '110'
+  logmaxfiles: "10"
+  logmaxsize: "20Mi"
+  imagegchighthresholdpercent: "70"
+  imagegclowthresholdpercent: "50"
+  maxpods: "110"
   serializeimagepulls: false
   unsafesysctls:
-    - 'net.core.somaxconn'
-    - 'net.ipv4.ip_local_port_range'
+    - "net.core.somaxconn"
+    - "net.ipv4.ip_local_port_range"
 
 # Auditing parameters #
 kube_audit: # Specify the auditing configuration parameters.
-  logmaxage: '20'
-  logmaxbackup: '10'
-  logmaxsize: '100'
-  logtruncatemaxbatchsize: '32768'
-  logtruncatemaxeventsize: '32768'
+  logmaxage: "20"
+  logmaxbackup: "10"
+  logmaxsize: "100"
+  logtruncatemaxbatchsize: "32768"
+  logtruncatemaxeventsize: "32768"
 
 # Backup parameters #
 kube_backupset_arg:
-  keep: '5' # Backup retention cycle in days.
+  keep: "5" # Backup retention cycle in days.
   cloud_rsync: false # Whether rsync for cloud storage.
-  cloud_drive: 'azureblob' # Specify the cloud storage providers, azureblob / s3 for minio.
-  cloud_bwlimit: '10M' # Controls the bandwidth limit.
-  cloud_event: 'sync' # Define transfer events.
+  cloud_drive: "azureblob" # Specify the cloud storage providers, azureblob / s3 for minio.
+  cloud_bwlimit: "10M" # Controls the bandwidth limit.
+  cloud_event: "sync" # Define transfer events.
   cloud_config: # Specify the cloud storage configuration.
-# azureblob #
-    account: 'blobuser' # Storage Account Name.
-    key: 'base64encodedkey==' # Storage Account Key.
-    endpoint: 'blob.core.chinacloudapi.cn' # Endpoint for the service.
+    # azureblob #
+    account: "blobuser" # Storage Account Name.
+    key: "base64encodedkey==" # Storage Account Key.
+    endpoint: "blob.core.chinacloudapi.cn" # Endpoint for the service.
 # s3 #
 #    access_key: 'JPTNJFUFB6UKLUXMRKZT'
 #    secret_key: 'h9KekbhETGC1UNMcbSrWZCOrBgopdgNJWIeAo28i'
@@ -83,29 +83,33 @@ kube_backupset_arg:
 
 # Listen port #
 kube_port_tcp_arg:
-  etcd: '2379-2380' # etcd server client API.
-  api: '6443' # Kubernetes API Server.
-  kube: '10250-10259' # All of kubelet services.
-  node: '30000-32767' # Default range for external service ports.
+  etcd: "2379-2381" # etcd server client API.
+  api: "6443" # Kubernetes API Server.
+  kube: "10249-10259" # All of kubelet services.
+  node: "30000-32767" # Default range for external service ports.
+  exporter: "9100" # prometheus node-exporter metrics.
 kube_cni_tcp_arg:
-  calico_bgp: '179' # Calico networking with BGP.
-  calico_typha: '5473' # Calico networking with Typha.
+  cilium_health: "4240-4250" # Cilium cluster health checks.
+  cilium_metrics: "9962-9964" # Cilium-agent Prometheus metrics.
+  calico_bgp: "179" # Calico networking with BGP.
+  calico_typha: "5473" # Calico networking with Typha.
 kube_cni_udp_arg:
-  flannel_vxlan: '8472' # Use in-kernel VXLAN to encapsulate the packets.
-  flannel_debug: '8285' # Debugging if your network and kernel prevent you from using VXLAN or host-gw.
-  calico_vxlan: '4789' # Calico networking with VXLAN enabled.
-  calico_ipv4_wireguard: '51820' # Calico networking with IPv4 Wireguard enabled.
-  calico_ipv6_wireguard: '51821' # Calico networking with IPv6 Wireguard enabled.
+  cilium_wireguard: "51871" # Cilium WireGuard encryption tunnel endpoint.
+  flannel_vxlan: "8472" # Use in-kernel VXLAN to encapsulate the packets.
+  flannel_debug: "8285" # Debugging if your network and kernel prevent you from using VXLAN or host-gw.
+  calico_vxlan: "4789" # Calico networking with VXLAN enabled.
+  calico_ipv4_wireguard: "51820" # Calico networking with IPv4 Wireguard enabled.
+  calico_ipv6_wireguard: "51821" # Calico networking with IPv6 Wireguard enabled.
 kube_lb_arg:
-  metallb_monitoring: '7472'
-  metallb_memberlist: '7946'
-  purelb_memberlist: '7934'
+  metallb_monitoring: "7472"
+  metallb_memberlist: "7946"
+  purelb_memberlist: "7934"
 
 # Service Mesh #
-environments: 'prd' # Define the service environment.
-datacenter: 'dc01' # Define the DataCenter.
-domain: 'local' # Define the Domain.
-customer: 'demo' # Define the customer name.
+environments: "prd" # Define the service environment.
+datacenter: "dc01" # Define the DataCenter.
+domain: "local" # Define the Domain.
+customer: "demo" # Define the customer name.
 #tags: # Define the service custom label.
 #  subscription: 'default'
 #  owner: 'nobody'
@@ -114,8 +118,8 @@ customer: 'demo' # Define the customer name.
 #  region: 'China'
 exporter_is_install: false # Whether to install prometheus exporter.
 consul_public_register: false # Whether register a exporter service with public consul client.
-consul_public_exporter_token: '00000000-0000-0000-0000-000000000000' # Public Consul client ACL token.
-consul_public_http_prot: 'https' # The consul Hypertext Transfer Protocol.
-consul_public_http_port: '8500' # The consul HTTP API port.
+consul_public_exporter_token: "00000000-0000-0000-0000-000000000000" # Public Consul client ACL token.
+consul_public_http_prot: "https" # The consul Hypertext Transfer Protocol.
+consul_public_http_port: "8500" # The consul HTTP API port.
 consul_public_clients: # List of public consul clients.
-  - '127.0.0.1'
+  - "127.0.0.1"
